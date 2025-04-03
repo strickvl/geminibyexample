@@ -1,59 +1,85 @@
 {
   "examples": [
     {
-      "id": "001-hello-world",
-      "title": "Hello world",
-      "description": "Our first program will print the classic \"hello world\"\nmessage.",
+      "id": "001-basic-generation",
+      "title": "Simple generation",
+      "description": "",
       "order": 1,
       "code_segments": [
         {
-          "code": "\n\ndef main():\n",
-          "display_code": "\n\ndef main():\n",
+          "code": "\n",
+          "display_code": "\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 4,
+          "start_line": 2,
           "line_range": [
-            4,
+            2,
+            2
+          ]
+        },
+        {
+          "code": "# Our first example demonstrates how to use the Gemini API\n# to generate content with a simple prompt.\n",
+          "display_code": "",
+          "annotation": "Our first example demonstrates how to use the Gemini API\nto generate content with a simple prompt.",
+          "is_comment": true,
+          "start_line": 3,
+          "line_range": [
+            3,
+            4
+          ],
+          "target_line_range": [
+            5,
             6
           ]
         },
         {
-          "code": "    # The print function outputs text to the console\n",
+          "code": "from google import genai\n\n",
+          "display_code": "from google import genai\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            6
+          ]
+        },
+        {
+          "code": "# Best practice: store your API key in an environment variable\n# and load it from there.\n",
           "display_code": "",
-          "annotation": "The print function outputs text to the console",
+          "annotation": "Best practice: store your API key in an environment variable\nand load it from there.",
           "is_comment": true,
           "start_line": 7,
           "line_range": [
             7,
-            7
+            8
           ],
           "target_line_range": [
-            8,
-            12
+            9,
+            14
           ]
         },
         {
-          "code": "    print(\"hello world\")\n\n\nif __name__ == \"__main__\":\n    main()\n",
-          "display_code": "    print(\"hello world\")\n\n\nif __name__ == \"__main__\":\n    main()\n",
+          "code": "client = genai.Client(api_key=\"YOUR_API_KEY\")\n\nresponse = client.models.generate_content(\n    model=\"gemini-2.0-flash\", contents=\"Explain how AI works in a few words\"\n)\nprint(response.text)\n",
+          "display_code": "client = genai.Client(api_key=\"YOUR_API_KEY\")\n\nresponse = client.models.generate_content(\n    model=\"gemini-2.0-flash\", contents=\"Explain how AI works in a few words\"\n)\nprint(response.text)\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 8,
+          "start_line": 9,
           "line_range": [
-            8,
-            12
+            9,
+            14
           ]
         }
       ],
       "shell_segments": [
         {
-          "explanation": "use `python`.",
-          "command": "python hello.py",
-          "output": "hello world"
+          "explanation": "First, install the Google Generative AI library",
+          "command": "pip install google-generative-ai",
+          "output": ""
         },
         {
-          "explanation": "Sometimes we'll want to run the program with arguments.",
-          "command": "python hello.py --verbose",
-          "output": "hello world\nVerbose mode: enabled"
+          "explanation": "Then run the program with Python",
+          "command": "python basic-generation.py",
+          "output": "AI works by learning patterns from data, then using those patterns to make predictions or generate new content. It processes information through neural networks that mimic human brain connections, identifying features and relationships to perform tasks like recognition, prediction, and generation."
         }
       ]
     },
