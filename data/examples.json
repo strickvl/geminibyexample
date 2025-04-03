@@ -2,34 +2,19 @@
   "examples": [
     {
       "id": "001-hello-world",
-      "title": "Our first program will print the classic \"hello world\"",
-      "description": "message. Here's the full source code.",
+      "title": "Hello world",
+      "description": "Our first program will print the classic \"hello world\"\nmessage.",
       "order": 1,
       "code_segments": [
-        {
-          "code": "# Our first program will print the classic \"hello world\"\n# message. Here's the full source code.\n",
-          "display_code": "",
-          "annotation": "Our first program will print the classic \"hello world\"\nmessage. Here's the full source code.",
-          "is_comment": true,
-          "start_line": 1,
-          "line_range": [
-            1,
-            2
-          ],
-          "target_line_range": [
-            3,
-            5
-          ]
-        },
         {
           "code": "\n\ndef main():\n",
           "display_code": "\n\ndef main():\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 3,
+          "start_line": 4,
           "line_range": [
-            3,
-            5
+            4,
+            6
           ]
         },
         {
@@ -37,14 +22,14 @@
           "display_code": "",
           "annotation": "The print function outputs text to the console",
           "is_comment": true,
-          "start_line": 6,
+          "start_line": 7,
           "line_range": [
-            6,
-            6
+            7,
+            7
           ],
           "target_line_range": [
-            7,
-            11
+            8,
+            12
           ]
         },
         {
@@ -52,10 +37,10 @@
           "display_code": "    print(\"hello world\")\n\n\nif __name__ == \"__main__\":\n    main()\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 7,
+          "start_line": 8,
           "line_range": [
-            7,
-            11
+            8,
+            12
           ]
         }
       ],
@@ -78,21 +63,6 @@
       "description": "This example demonstrates the different value types in Python.",
       "order": 2,
       "code_segments": [
-        {
-          "code": "# Values in Python\n# This example demonstrates the different value types in Python.\n",
-          "display_code": "",
-          "annotation": "Values in Python\nThis example demonstrates the different value types in Python.",
-          "is_comment": true,
-          "start_line": 1,
-          "line_range": [
-            1,
-            2
-          ],
-          "target_line_range": [
-            3,
-            3
-          ]
-        },
         {
           "code": "\n",
           "display_code": "\n",
