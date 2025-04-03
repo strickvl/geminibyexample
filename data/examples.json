@@ -1,0 +1,304 @@
+{
+  "examples": [
+    {
+      "id": "001-hello-world",
+      "title": "Our first program will print the classic \"hello world\"",
+      "description": "message. Here's the full source code.",
+      "order": 1,
+      "code_segments": [
+        {
+          "code": "# Our first program will print the classic \"hello world\"\n# message. Here's the full source code.\n",
+          "display_code": "",
+          "annotation": "Our first program will print the classic \"hello world\"\nmessage. Here's the full source code.",
+          "is_comment": true,
+          "start_line": 1,
+          "line_range": [
+            1,
+            2
+          ],
+          "target_line_range": [
+            3,
+            5
+          ]
+        },
+        {
+          "code": "\n\ndef main():\n",
+          "display_code": "\n\ndef main():\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            5
+          ]
+        },
+        {
+          "code": "    # The print function outputs text to the console\n",
+          "display_code": "",
+          "annotation": "The print function outputs text to the console",
+          "is_comment": true,
+          "start_line": 6,
+          "line_range": [
+            6,
+            6
+          ],
+          "target_line_range": [
+            7,
+            11
+          ]
+        },
+        {
+          "code": "    print(\"hello world\")\n\n\nif __name__ == \"__main__\":\n    main()\n",
+          "display_code": "    print(\"hello world\")\n\n\nif __name__ == \"__main__\":\n    main()\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 7,
+          "line_range": [
+            7,
+            11
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "use `python`.",
+          "command": "python hello.py",
+          "output": "hello world"
+        },
+        {
+          "explanation": "Sometimes we'll want to run the program with arguments.",
+          "command": "python hello.py --verbose",
+          "output": "hello world\nVerbose mode: enabled"
+        }
+      ]
+    },
+    {
+      "id": "002-values",
+      "title": "Values in Python",
+      "description": "This example demonstrates the different value types in Python.",
+      "order": 2,
+      "code_segments": [
+        {
+          "code": "# Values in Python\n# This example demonstrates the different value types in Python.\n",
+          "display_code": "",
+          "annotation": "Values in Python\nThis example demonstrates the different value types in Python.",
+          "is_comment": true,
+          "start_line": 1,
+          "line_range": [
+            1,
+            2
+          ],
+          "target_line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Strings are sequences of Unicode characters.\n# They can be defined with single or double quotes.\n",
+          "display_code": "",
+          "annotation": "Strings are sequences of Unicode characters.\nThey can be defined with single or double quotes.",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            5
+          ],
+          "target_line_range": [
+            6,
+            8
+          ]
+        },
+        {
+          "code": "print(\"Hello, World\")\nprint(\"Hello with single quotes\")\n\n",
+          "display_code": "print(\"Hello, World\")\nprint(\"Hello with single quotes\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 6,
+          "line_range": [
+            6,
+            8
+          ]
+        },
+        {
+          "code": "# Numbers in Python can be integers or floating-point.\n",
+          "display_code": "",
+          "annotation": "Numbers in Python can be integers or floating-point.",
+          "is_comment": true,
+          "start_line": 9,
+          "line_range": [
+            9,
+            9
+          ],
+          "target_line_range": [
+            10,
+            12
+          ]
+        },
+        {
+          "code": "print(42)  # Integer\nprint(3.14159)  # Float\n\n",
+          "display_code": "print(42)  # Integer\nprint(3.14159)  # Float\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 10,
+          "line_range": [
+            10,
+            12
+          ]
+        },
+        {
+          "code": "# Booleans are represented by the values True and False.\n",
+          "display_code": "",
+          "annotation": "Booleans are represented by the values True and False.",
+          "is_comment": true,
+          "start_line": 13,
+          "line_range": [
+            13,
+            13
+          ],
+          "target_line_range": [
+            14,
+            16
+          ]
+        },
+        {
+          "code": "print(True)\nprint(False)\n\n",
+          "display_code": "print(True)\nprint(False)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 14,
+          "line_range": [
+            14,
+            16
+          ]
+        },
+        {
+          "code": "# None is Python's null value.\n",
+          "display_code": "",
+          "annotation": "None is Python's null value.",
+          "is_comment": true,
+          "start_line": 17,
+          "line_range": [
+            17,
+            17
+          ],
+          "target_line_range": [
+            18,
+            19
+          ]
+        },
+        {
+          "code": "print(None)\n\n",
+          "display_code": "print(None)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 18,
+          "line_range": [
+            18,
+            19
+          ]
+        },
+        {
+          "code": "# Python has several built-in collections:\n# Lists are ordered, mutable collections\n",
+          "display_code": "",
+          "annotation": "Python has several built-in collections:\nLists are ordered, mutable collections",
+          "is_comment": true,
+          "start_line": 20,
+          "line_range": [
+            20,
+            21
+          ],
+          "target_line_range": [
+            22,
+            24
+          ]
+        },
+        {
+          "code": "my_list = [1, 2, 3, \"four\", 5.0]\nprint(my_list)\n\n",
+          "display_code": "my_list = [1, 2, 3, \"four\", 5.0]\nprint(my_list)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 22,
+          "line_range": [
+            22,
+            24
+          ]
+        },
+        {
+          "code": "# Tuples are ordered, immutable collections\n",
+          "display_code": "",
+          "annotation": "Tuples are ordered, immutable collections",
+          "is_comment": true,
+          "start_line": 25,
+          "line_range": [
+            25,
+            25
+          ],
+          "target_line_range": [
+            26,
+            28
+          ]
+        },
+        {
+          "code": "my_tuple = (1, 2, \"three\")\nprint(my_tuple)\n\n",
+          "display_code": "my_tuple = (1, 2, \"three\")\nprint(my_tuple)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 26,
+          "line_range": [
+            26,
+            28
+          ]
+        },
+        {
+          "code": "# Dictionaries are key-value mappings\n",
+          "display_code": "",
+          "annotation": "Dictionaries are key-value mappings",
+          "is_comment": true,
+          "start_line": 29,
+          "line_range": [
+            29,
+            29
+          ],
+          "target_line_range": [
+            30,
+            31
+          ]
+        },
+        {
+          "code": "my_dict = {\"name\": \"Python\", \"version\": 3.9}\nprint(my_dict)\n",
+          "display_code": "my_dict = {\"name\": \"Python\", \"version\": 3.9}\nprint(my_dict)\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 30,
+          "line_range": [
+            30,
+            31
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "Run the values.py example to see all the different Python value types",
+          "command": "python values.py",
+          "output": "Hello, World\nHello with single quotes\n42\n3.14159\nTrue\nFalse\nNone\n[1, 2, 3, 'four', 5.0]\n(1, 2, 'three')\n{'name': 'Python', 'version': 3.9}"
+        },
+        {
+          "explanation": "You can also run Python in interactive mode to experiment with values",
+          "command": "python -c \"print('Hello from Python!'); print(1 + 2)\"",
+          "output": "Hello from Python!\n3"
+        }
+      ]
+    }
+  ]
+}
