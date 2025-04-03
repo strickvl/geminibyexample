@@ -158,22 +158,17 @@ def example_page(example_id: str):
     # Process code segments
     logger.info(f"Processing {len(example['code_segments'])} code segments")
 
-    # Extract intro paragraph if present
-    if (
-        example["code_segments"]
-        and example["code_segments"][0].get("annotation")
-        and not example["code_segments"][0].get("display_code")
-    ):
-        intro_text = example["code_segments"][0].get("annotation", "")
+    # We now rely on the build script to parse the first comment block
+    # as the page intro text. So no need to remove the first code segment here.
+    # Instead, we'll just check if example["description"] has content and render it.
+    if example.get("description"):
         main_content.children = (
             *main_content.children,
             P(
-                intro_text,
+                example["description"],
                 style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;",
             ),
         )
-        # Remove the intro paragraph from processing
-        example["code_segments"] = example["code_segments"][1:]
 
     # Create a container for the two-column layout
     content_container = Div(style="width: 100%;")
