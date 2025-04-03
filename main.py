@@ -219,7 +219,7 @@ def example_page(example_id: str):
         for segment in section["segments"]:
             combined_annotation = ""
             if section["header"]:
-                combined_annotation += f"{section['header']}\n"
+                combined_annotation += f"<div style='font-size: 0.9em; color: #666;'>{section['header']}</div>\n"
             annotation = segment.get("annotation", "")
             if annotation:
                 combined_annotation += annotation
