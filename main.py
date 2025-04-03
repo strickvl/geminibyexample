@@ -69,7 +69,7 @@ def index():
                 style="margin: 20px 0; color: #444; line-height: 1.6;",
             ),
             Div(*example_links, style="margin-top: 30px;"),
-            style="max-width: 800px; margin: 40px 0 0 50px; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.5; color: #222;",
+            style="max-width: 800px; margin: 40px 0 0 50px; padding: 0 0 50px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.5; color: #222;",
         ),
     )
 
@@ -94,138 +94,154 @@ def find_next_example(current_order):
 @rt("/{example_id}")
 def example_page(example_id: str):
     """Render an individual example page."""
+    logger.info(f"Loading example page for ID: {example_id}")
     example = find_example(example_id)
 
     if not example:
+        logger.warning(f"Example not found: {example_id}")
         return Titled(
             "Example Not Found - Gemini by Example",
             Div(
-                H1(
-                    "Example Not Found",
-                    style="font-size: 36px; font-weight: 500; margin-bottom: 20px; color: #333;",
+                # Navigation header with site title
+                Div(
+                    Div(
+                        A(
+                            "Gemini by Example",
+                            href="/",
+                            style="text-decoration: none; color: #375EAB; font-weight: 500; font-size: 20px;",
+                        ),
+                        style="margin-bottom: 10px;",
+                    ),
+                    H1(
+                        "Example Not Found",
+                        style="font-size: 36px; font-weight: 500; margin: 15px 0 25px 0; color: #333;",
+                    ),
+                    style="border-bottom: 1px solid #eee; padding-bottom: 15px; margin-bottom: 25px;",
                 ),
                 P(f"The example '{example_id}' was not found."),
                 P(A("Back to index", href="/")),
-                style="max-width: 800px; margin: 40px 0 0 50px; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.5; color: #222;",
+                style="max-width: 800px; margin: 40px 0 0 50px; padding: 0 0 50px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.5; color: #222;",
             ),
         )
+
+    logger.info(f"Example found: {example['title']} (Order: {example['order']})")
 
     # Find the next example for navigation
     next_example = find_next_example(example["order"])
+    if next_example:
+        logger.info(f"Next example: {next_example['title']}")
+    else:
+        logger.info("No next example found")
 
     # Build page content
-    content = [
-        H1(
-            example["title"],
-            " - ",
+    logger.info("Building page content")
+
+    # Main content wrapper
+    main_content = Div(
+        # Navigation header
+        Div(
             A(
                 "Gemini by Example",
                 href="/",
-                style="text-decoration: none; color: #375EAB;",
+                style="text-decoration: none; color: #375EAB; font-weight: 500; font-size: 20px;",
             ),
-            style="font-size: 36px; font-weight: 500; margin-bottom: 25px; color: #333;",
-        )
-    ]
-
-    # Create table for code and annotations
-    table = Div(
-        style="display: table; width: 100%; border-collapse: collapse; border: 1px solid #e0e0e0; margin: 20px 0;"
+            style="margin-bottom: 10px;",
+        ),
+        # Main title
+        H1(
+            example["title"],
+            style="font-size: 36px; font-weight: 500; margin: 0 0 25px 0; color: #333;",
+        ),
+        style="max-width: 800px; margin: 40px 0 0 50px; padding: 0 0 50px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.5; color: #222;",
     )
 
-    # Add code segments
+    # Process code segments
+    logger.info(f"Processing {len(example['code_segments'])} code segments")
+    code_blocks = []
+
+    # Build content sections
     for i, segment in enumerate(example["code_segments"]):
-        is_last = i == len(example["code_segments"]) - 1
-        border_style = "" if is_last else "border-bottom: 1px dashed #e0e0e0;"
-
-        # Create a row
-        row = Div(style="display: table-row;")
-
-        # Left column (annotation)
         annotation = segment.get("annotation", "")
-        row.children.append(
-            Div(
-                P(annotation) if annotation else "",
-                style=f"display: table-cell; width: 55%; padding: 10px 15px; border-right: 1px solid #e0e0e0; {border_style} vertical-align: top; color: #444;",
-            )
-        )
-
-        # Right column (code)
         code_text = segment.get("display_code", "").strip()
-        row.children.append(
-            Div(
-                Pre(
-                    Code(
-                        code_text,
-                        style="font-family: 'Menlo', 'Monaco', 'Consolas', monospace;",
-                    )
-                )
-                if code_text
-                else "",
-                style=f"display: table-cell; width: 45%; padding: 10px; background-color: #f8f8f8; {border_style} vertical-align: top;",
+
+        # Skip completely empty rows
+        if not annotation and not code_text:
+            logger.debug(f"Skipping empty segment {i+1}")
+            continue
+
+        is_annotation_only = bool(annotation and not code_text)
+
+        if is_annotation_only:
+            # For annotation-only segments, add a regular paragraph
+            code_blocks.append(
+                P(annotation, style="margin: 20px 0; color: #444; line-height: 1.6;")
             )
-        )
-
-        table.children.append(row)
-
-    content.append(table)
-
-    # Add shell commands if any
-    if example["shell_segments"]:
-        shell_table = Div(
-            style="display: table; width: 100%; border-collapse: collapse; border: 1px solid #e0e0e0; margin: 20px 0;"
-        )
-
-        for i, segment in enumerate(example["shell_segments"]):
-            is_last = i == len(example["shell_segments"]) - 1
-            border_style = "" if is_last else "border-bottom: 1px dashed #e0e0e0;"
-
-            # Create a row
-            row = Div(style="display: table-row;")
-
-            # Left column (explanation)
-            explanation = segment.get("explanation", "")
-            row.children.append(
+        else:
+            # For code segments, create a two-column layout
+            code_blocks.append(
                 Div(
-                    P(explanation) if explanation else "",
-                    style=f"display: table-cell; width: 55%; padding: 10px 15px; border-right: 1px solid #e0e0e0; {border_style} vertical-align: top; color: #444;",
+                    # Left column - explanation
+                    Div(
+                        P(annotation) if annotation else "",
+                        style="width: 55%; padding-right: 20px; vertical-align: top; display: table-cell; color: #444; line-height: 1.6;",
+                    ),
+                    # Right column - code
+                    Div(
+                        Pre(
+                            Code(
+                                code_text,
+                                style="font-family: 'Menlo', 'Monaco', 'Consolas', monospace;",
+                            ),
+                            style="margin: 0; padding: 10px; background-color: #f8f8f8; border-radius: 5px;",
+                        ),
+                        style="width: 45%; display: table-cell; vertical-align: top;",
+                    ),
+                    style="display: table; width: 100%; margin: 15px 0; border-top: 1px solid #eee; padding-top: 15px;",
                 )
             )
 
-            # Right column (command and output)
+    # Add code blocks to content
+    for block in code_blocks:
+        main_content.children = (*main_content.children, block)
+
+    # Process shell segments if any
+    shell_segments = example.get("shell_segments", [])
+    if shell_segments:
+        logger.info(f"Processing {len(shell_segments)} shell segments")
+
+        for i, segment in enumerate(shell_segments):
+            explanation = segment.get("explanation", "")
             command = segment.get("command", "")
             output = segment.get("output", "")
 
-            # Format command with special style for the prompt
-            cmd_parts = []
-            if command:
-                cmd_parts.append(Span("$ ", style="color: #999; user-select: none;"))
-                cmd_parts.append(Span(command, style="font-weight: normal;"))
-
-            cmd_content = (
-                Pre(
-                    *cmd_parts,
-                    "\n",
-                    output,
-                    style="font-family: 'Menlo', 'Monaco', 'Consolas', monospace; margin: 0;",
-                )
-                if command
-                else ""
-            )
-
-            row.children.append(
+            # Format shell section
+            shell_block = Div(
+                # Left column - explanation
                 Div(
-                    cmd_content,
-                    style=f"display: table-cell; width: 45%; padding: 10px; background-color: #f8f8f8; {border_style} vertical-align: top;",
-                )
+                    P(explanation) if explanation else "",
+                    style="width: 55%; padding-right: 20px; vertical-align: top; display: table-cell; color: #444; line-height: 1.6;",
+                ),
+                # Right column - command and output
+                Div(
+                    Pre(
+                        Span("$ ", style="color: #999; user-select: none;"),
+                        Span(command, style="font-weight: normal;") if command else "",
+                        "\n" if command and output else "",
+                        output,
+                        style="margin: 0; padding: 10px; background-color: #f8f8f8; border-radius: 5px; font-family: 'Menlo', 'Monaco', 'Consolas', monospace;",
+                    ),
+                    style="width: 45%; display: table-cell; vertical-align: top;",
+                ),
+                style="display: table; width: 100%; margin: 15px 0; border-top: 1px solid #eee; padding-top: 15px;",
             )
 
-            shell_table.children.append(row)
-
-        content.append(shell_table)
+            main_content.children = (*main_content.children, shell_block)
 
     # Add next example link if available
     if next_example:
-        content.append(
+        logger.info("Adding next example link")
+        main_content.children = (
+            *main_content.children,
             P(
                 "Next example: ",
                 A(
@@ -233,17 +249,13 @@ def example_page(example_id: str):
                     href=f"/{next_example['id']}",
                     style="color: #375EAB;",
                 ),
-                style="margin-top: 30px; font-weight: 500;",
-            )
+                style="margin-top: 30px; font-weight: 500; padding-top: 15px; border-top: 1px solid #eee;",
+            ),
         )
 
-    return Titled(
-        f"{example['title']} - Gemini by Example",
-        Div(
-            *content,
-            style="max-width: 800px; margin: 40px 0 0 50px; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.5; color: #222;",
-        ),
-    )
+    logger.info("Returning final page content")
+    # Set the browser title but don't duplicate the H1 on the page
+    return Title(f"{example['title']} - Gemini by Example"), main_content
 
 
 if __name__ == "__main__":
