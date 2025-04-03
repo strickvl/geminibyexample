@@ -152,90 +152,123 @@ def example_page(example_id: str):
             example["title"],
             style="font-size: 36px; font-weight: 500; margin: 0 0 25px 0; color: #333;",
         ),
-        style="max-width: 800px; margin: 40px 0 0 50px; padding: 0 0 50px 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.5; color: #222;",
+        style="max-width: 1200px; margin: 40px auto; padding: 0 20px 50px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.5; color: #222;",
     )
 
     # Process code segments
     logger.info(f"Processing {len(example['code_segments'])} code segments")
-    code_blocks = []
 
-    # Build content sections
-    for i, segment in enumerate(example["code_segments"]):
+    # Extract intro paragraph if present
+    if (
+        example["code_segments"]
+        and example["code_segments"][0].get("annotation")
+        and not example["code_segments"][0].get("display_code")
+    ):
+        intro_text = example["code_segments"][0].get("annotation", "")
+        main_content.children = (
+            *main_content.children,
+            P(
+                intro_text,
+                style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;",
+            ),
+        )
+        # Remove the intro paragraph from processing
+        example["code_segments"] = example["code_segments"][1:]
+
+    # Create a container for the two-column layout
+    content_container = Div(style="width: 100%;")
+    main_content.children = (*main_content.children, content_container)
+
+    # Group segments by section headers
+    sections = []
+    current_section = None
+    current_segments = []
+
+    for segment in example["code_segments"]:
         annotation = segment.get("annotation", "")
         code_text = segment.get("display_code", "").strip()
 
-        # Skip completely empty rows
+        # Skip completely empty segments
         if not annotation and not code_text:
-            logger.debug(f"Skipping empty segment {i+1}")
             continue
 
-        is_annotation_only = bool(annotation and not code_text)
-
-        if is_annotation_only:
-            # For annotation-only segments, add a regular paragraph
-            code_blocks.append(
-                P(annotation, style="margin: 20px 0; color: #444; line-height: 1.6;")
-            )
-        else:
-            # For code segments, create a two-column layout
-            code_blocks.append(
-                Div(
-                    # Left column - explanation
-                    Div(
-                        P(annotation) if annotation else "",
-                        style="width: 55%; padding-right: 20px; vertical-align: top; display: table-cell; color: #444; line-height: 1.6;",
-                    ),
-                    # Right column - code
-                    Div(
-                        Pre(
-                            Code(
-                                code_text,
-                                style="font-family: 'Menlo', 'Monaco', 'Consolas', monospace;",
-                            ),
-                            style="margin: 0; padding: 10px; background-color: #f8f8f8; border-radius: 5px;",
-                        ),
-                        style="width: 45%; display: table-cell; vertical-align: top;",
-                    ),
-                    style="display: table; width: 100%; margin: 15px 0; border-top: 1px solid #eee; padding-top: 15px;",
+        # If annotation with no code, it's a section header
+        if annotation and not code_text:
+            # Add previous section if exists
+            if current_section:
+                sections.append(
+                    {"header": current_section, "segments": current_segments}
                 )
+
+            # Start a new section
+            current_section = annotation
+            current_segments = []
+        else:
+            # Add to current section
+            current_segments.append(segment)
+
+    # Add the final section
+    if current_section and current_segments:
+        sections.append({"header": current_section, "segments": current_segments})
+
+    # Process each section
+    for i, section in enumerate(sections):
+        # Add divider if not first section
+        if i > 0:
+            content_container.children = (
+                *content_container.children,
+                Hr(style="border: none; border-top: 1px solid #eee; margin: 20px 0;"),
             )
 
-    # Add code blocks to content
-    for block in code_blocks:
-        main_content.children = (*main_content.children, block)
+        # We'll combine the header with the annotation for each segment
+        for segment in section["segments"]:
+            combined_annotation = ""
+            if section["header"]:
+                combined_annotation += f"{section['header']}\n"
+            annotation = segment.get("annotation", "")
+            if annotation:
+                combined_annotation += annotation
 
-    # Process shell segments if any
-    shell_segments = example.get("shell_segments", [])
-    if shell_segments:
-        logger.info(f"Processing {len(shell_segments)} shell segments")
+            code_text = segment.get("display_code", "").strip()
 
-        for i, segment in enumerate(shell_segments):
-            explanation = segment.get("explanation", "")
-            command = segment.get("command", "")
-            output = segment.get("output", "")
+            # If there's no code or annotation, skip
+            if not code_text and not combined_annotation:
+                continue
 
-            # Format shell section
-            shell_block = Div(
-                # Left column - explanation
-                Div(
-                    P(explanation) if explanation else "",
-                    style="width: 55%; padding-right: 20px; vertical-align: top; display: table-cell; color: #444; line-height: 1.6;",
-                ),
-                # Right column - command and output
-                Div(
+            # Create the row for two-column layout
+            example_row = Div(
+                style="display: flex; width: 100%; margin-bottom: 30px; gap: 30px;",
+                class_="example-row",
+            )
+
+            # Left col is annotation
+            if combined_annotation:
+                left_col = Div(
+                    NotStr(combined_annotation),
+                    style="flex: 1; min-width: 0; color: #444; line-height: 1.6;",
+                    class_="example-col",
+                )
+                example_row.children = (left_col,)
+
+            # Right col is code
+            if code_text:
+                right_col = Div(
                     Pre(
-                        Span("$ ", style="color: #999; user-select: none;"),
-                        Span(command, style="font-weight: normal;") if command else "",
-                        "\n" if command and output else "",
-                        output,
-                        style="margin: 0; padding: 10px; background-color: #f8f8f8; border-radius: 5px; font-family: 'Menlo', 'Monaco', 'Consolas', monospace;",
+                        Code(
+                            code_text,
+                            style="font-family: 'Menlo', 'Monaco', 'Consolas', monospace;",
+                        ),
+                        style="margin: 0; padding: 16px; background-color: #f8f8f8; border-radius: 5px; overflow-x: auto;",
                     ),
-                    style="width: 45%; display: table-cell; vertical-align: top;",
-                ),
-                style="display: table; width: 100%; margin: 15px 0; border-top: 1px solid #eee; padding-top: 15px;",
-            )
+                    style="flex: 2; min-width: 0;",
+                    class_="example-col",
+                )
+                if hasattr(example_row, "children"):
+                    example_row.children = (*example_row.children, right_col)
+                else:
+                    example_row.children = (right_col,)
 
-            main_content.children = (*main_content.children, shell_block)
+            content_container.children = (*content_container.children, example_row)
 
     # Add next example link if available
     if next_example:
@@ -254,8 +287,23 @@ def example_page(example_id: str):
         )
 
     logger.info("Returning final page content")
-    # Set the browser title but don't duplicate the H1 on the page
-    return Title(f"{example['title']} - Gemini by Example"), main_content
+    # Add stylesheet for better two-column layout
+    head_content = [
+        Title(f"{example['title']} - Gemini by Example"),
+        Style("""
+            @media (max-width: 768px) {
+                .example-row {
+                    flex-direction: column !important;
+                }
+                .example-col {
+                    width: 100% !important;
+                }
+            }
+        """),
+    ]
+
+    # Return both head content and main content
+    return head_content, main_content
 
 
 if __name__ == "__main__":
