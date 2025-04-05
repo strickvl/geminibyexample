@@ -93,7 +93,7 @@
         "029-rate-limits-retries",
         "030-async-requests",
         "031-embeddings",
-        "032-safety-filters",
+        "032-safety-filters"
       ]
     }
   ]

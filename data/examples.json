@@ -91,7 +91,9 @@
       ],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/text-generation"
-      ]
+      ],
+      "section_id": "001-basic-text",
+      "section_title": "Text"
     },
     {
       "id": "002-streaming-text",
@@ -230,7 +232,9 @@
       "image_data": [],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/text-generation"
-      ]
+      ],
+      "section_id": "001-basic-text",
+      "section_title": "Text"
     },
     {
       "id": "003-system-prompt",
@@ -369,7 +373,370 @@
       "image_data": [],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/text-generation#system-instructions"
-      ]
+      ],
+      "section_id": "001-basic-text",
+      "section_title": "Text"
+    },
+    {
+      "id": "019-reasoning-models",
+      "title": "Reasoning models",
+      "description": "This example demonstrates how to access the reasoning trace of a Gemini model\nand then the final text output.\nReasoning models are a new type of model that 'think' a little bit before\ngiving a final answer. The 'thinking' response is visible in Google AI Studio\nbut not as part of the response to an API call.",
+      "order": 19,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 7,
+          "line_range": [
+            7,
+            7
+          ]
+        },
+        {
+          "code": "# Import the Gemini API\n",
+          "display_code": "",
+          "annotation": "Import the Gemini API",
+          "is_comment": true,
+          "start_line": 8,
+          "line_range": [
+            8,
+            8
+          ],
+          "target_line_range": [
+            9,
+            11
+          ]
+        },
+        {
+          "code": "from google import genai\nimport os\n\n",
+          "display_code": "from google import genai\nimport os\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 9,
+          "line_range": [
+            9,
+            11
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 12,
+          "line_range": [
+            12,
+            12
+          ],
+          "target_line_range": [
+            13,
+            14
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 13,
+          "line_range": [
+            13,
+            14
+          ]
+        },
+        {
+          "code": "# Define a profound question about the universe\n",
+          "display_code": "",
+          "annotation": "Define a profound question about the universe",
+          "is_comment": true,
+          "start_line": 15,
+          "line_range": [
+            15,
+            15
+          ],
+          "target_line_range": [
+            16,
+            17
+          ]
+        },
+        {
+          "code": "prompt = \"If the universe is expanding, what is it expanding into? Show your reasoning.\"\n\n",
+          "display_code": "prompt = \"If the universe is expanding, what is it expanding into? Show your reasoning.\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 16,
+          "line_range": [
+            16,
+            17
+          ]
+        },
+        {
+          "code": "# Generate content with the Gemini model\n",
+          "display_code": "",
+          "annotation": "Generate content with the Gemini model",
+          "is_comment": true,
+          "start_line": 18,
+          "line_range": [
+            18,
+            18
+          ],
+          "target_line_range": [
+            19,
+            24
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=\"gemini-2.5-pro-exp-03-25\",\n    contents=prompt,\n)\n\nprint(response.text)\n",
+          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.5-pro-exp-03-25\",\n    contents=prompt,\n)\n\nprint(response.text)\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 19,
+          "line_range": [
+            19,
+            24
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library",
+          "command": "pip install google-genai",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python universe_reasoning.py",
+          "output": "This is a fantastic and very common question that gets to the heart of how we understand the universe based on Einstein's theory of General Relativity. The most accurate answer, according to our current understanding, is:\n**The universe isn't expanding *into* anything. Space itself is expanding.**\nHere's the reasoning:\n1.  **General Relativity's View of Spacetime:** Our everyday intuition thinks of space as a pre-existing, static container \u2013 like an empty room that things can move around *in*. General Relativity, however, describes spacetime not as a fixed background but as a dynamic entity. It can warp, bend (which we experience as gravity), and, crucially, *expand or contract*.\n2.  **Expansion is Intrinsic:** The expansion of the universe isn't like an explosion *within* a pre-existing void, where debris flies outwards *into* empty space. Instead, it's the very fabric of spacetime *itself* that is stretching. Imagine the space *between* galaxies is growing.\n3.  **Analogies (and their limitations):**\n    *   **The Rising Raisin Bread:** Imagine raisins (representing galaxies) embedded in dough (representing space). As the dough bakes and expands, all the raisins move further apart from each other. A raisin doesn't see itself as being at the center; it sees all other raisins moving away from it. Importantly, the *dough itself* is expanding.\n        *   *Limitation:* This analogy breaks down because the dough has edges and is expanding *into* the oven (an external space). Our universe, as far as we know, doesn't have an edge or an \"outside.\"\n    *   **The Expanding Balloon Surface:** Imagine drawing dots (galaxies) on the surface of a balloon. As you inflate the balloon, the rubber (space) stretches, and the distance between any two dots on the surface increases. From the perspective of any dot, all other dots are moving away. There is no \"center\" of expansion *on the surface* itself.\n        *   *Limitation:* The 2D surface of the balloon is expanding *into* the 3D space around it. General Relativity doesn't require our 3D space to be expanding into a higher-dimensional \"hyperspace.\" The expansion is an intrinsic property of our spacetime dimensions.\n4.  **No Center, No Edge:** Because space *itself* is expanding everywhere, there isn't a central point *from which* the universe is expanding. The Big Bang wasn't an explosion *at* a point *in* space; it was the beginning of the expansion *of* space, happening everywhere simultaneously. Consequently, there's no \"edge\" of the universe expanding outwards into a void.\n5.  **Infinite or Finite?**\n    *   If the universe is *infinite*, then it was always infinite. An expanding infinite universe simply becomes \"more infinite\" \u2013 the distances between objects grow, but it isn't expanding *into* anything because there's no outside to an infinite space.\n    *   If the universe is *finite* but unbounded (like the surface of the balloon, but in 3D), its total volume increases, but it still doesn't require an external space to expand into. It's self-contained.\n**In summary:** The concept of \"expanding into\" relies on the idea of an external space or container. According to General Relativity, the universe *is* the container (spacetime), and it's this container itself that is growing. There is no need for an \"outside\" for this expansion to occur."
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/thinking"
+      ],
+      "section_id": "001-basic-text",
+      "section_title": "Text"
+    },
+    {
+      "id": "020-structured-output",
+      "title": "Structured output",
+      "description": "This example shows how to generate structured data using a pydantic model to represent Cats with name, colour, and special ability.",
+      "order": 20,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import the Gemini API and pydantic\n",
+          "display_code": "",
+          "annotation": "Import the Gemini API and pydantic",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ],
+          "target_line_range": [
+            5,
+            9
+          ]
+        },
+        {
+          "code": "from google import genai\nfrom pydantic import BaseModel\nimport os\n\n\n",
+          "display_code": "from google import genai\nfrom pydantic import BaseModel\nimport os\n\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            9
+          ]
+        },
+        {
+          "code": "# Define a Pydantic model for a Cat\n",
+          "display_code": "",
+          "annotation": "Define a Pydantic model for a Cat",
+          "is_comment": true,
+          "start_line": 10,
+          "line_range": [
+            10,
+            10
+          ],
+          "target_line_range": [
+            11,
+            16
+          ]
+        },
+        {
+          "code": "class Cat(BaseModel):\n    name: str\n    colour: str\n    special_ability: str\n\n\n",
+          "display_code": "class Cat(BaseModel):\n    name: str\n    colour: str\n    special_ability: str\n\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 11,
+          "line_range": [
+            11,
+            16
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 17,
+          "line_range": [
+            17,
+            17
+          ],
+          "target_line_range": [
+            18,
+            19
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 18,
+          "line_range": [
+            18,
+            19
+          ]
+        },
+        {
+          "code": "# Define the prompt. Note: It asks for 3 cats\n",
+          "display_code": "",
+          "annotation": "Define the prompt. Note: It asks for 3 cats",
+          "is_comment": true,
+          "start_line": 20,
+          "line_range": [
+            20,
+            20
+          ],
+          "target_line_range": [
+            21,
+            22
+          ]
+        },
+        {
+          "code": "prompt = \"Generate data for 3 cats, including their name, colour and special ability.\"\n\n",
+          "display_code": "prompt = \"Generate data for 3 cats, including their name, colour and special ability.\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 21,
+          "line_range": [
+            21,
+            22
+          ]
+        },
+        {
+          "code": "# Call the API to generate content, specifying the response schema.\n# Note that it expects a `list` and not a `typing.List` object.\n# For some reason Gemini models are finicky about that.\n",
+          "display_code": "",
+          "annotation": "Call the API to generate content, specifying the response schema.\nNote that it expects a `list` and not a `typing.List` object.\nFor some reason Gemini models are finicky about that.",
+          "is_comment": true,
+          "start_line": 23,
+          "line_range": [
+            23,
+            25
+          ],
+          "target_line_range": [
+            26,
+            34
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash-lite\",\n    contents=prompt,\n    config={\n        \"response_mime_type\": \"application/json\",\n        \"response_schema\": list[Cat],\n    },\n)\n\n",
+          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash-lite\",\n    contents=prompt,\n    config={\n        \"response_mime_type\": \"application/json\",\n        \"response_schema\": list[Cat],\n    },\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 26,
+          "line_range": [
+            26,
+            34
+          ]
+        },
+        {
+          "code": "# Parse the json response to a list of Cat objects\n",
+          "display_code": "",
+          "annotation": "Parse the json response to a list of Cat objects",
+          "is_comment": true,
+          "start_line": 35,
+          "line_range": [
+            35,
+            35
+          ],
+          "target_line_range": [
+            36,
+            37
+          ]
+        },
+        {
+          "code": "my_cats: list[Cat] = response.parsed\n\n",
+          "display_code": "my_cats: list[Cat] = response.parsed\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 36,
+          "line_range": [
+            36,
+            37
+          ]
+        },
+        {
+          "code": "# Print the generated cat data\n",
+          "display_code": "",
+          "annotation": "Print the generated cat data",
+          "is_comment": true,
+          "start_line": 38,
+          "line_range": [
+            38,
+            38
+          ],
+          "target_line_range": [
+            39,
+            42
+          ]
+        },
+        {
+          "code": "for cat in my_cats:\n    print(\n        f\"Name: {cat.name}, Colour: {cat.colour}, Special Ability: {cat.special_ability}\"\n    )\n",
+          "display_code": "for cat in my_cats:\n    print(\n        f\"Name: {cat.name}, Colour: {cat.colour}, Special Ability: {cat.special_ability}\"\n    )\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 39,
+          "line_range": [
+            39,
+            42
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library and pydantic",
+          "command": "pip install google-genai pydantic",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python structured_cats.py",
+          "output": "Name: Aria, Colour: tortoiseshell, Special Ability: Can teleport short distances\nName: Blupus, Colour: ginger, Special Ability: Understands human speech\nName: Moonshine, Colour: black and white, Special Ability: Invisible at night"
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/structured-output?lang=python",
+        "https://ai.google.dev/gemini-api/docs/structured-output?lang=rest"
+      ],
+      "section_id": "001-basic-text",
+      "section_title": "Text"
     },
     {
       "id": "004-image-q-a",
@@ -591,7 +958,9 @@
       "image_data": [],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/vision?lang=python"
-      ]
+      ],
+      "section_id": "002-basic-images",
+      "section_title": "Images"
     },
     {
       "id": "005-image-generation",
@@ -788,7 +1157,9 @@
       ],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/image-generation"
-      ]
+      ],
+      "section_id": "002-basic-images",
+      "section_title": "Images"
     },
     {
       "id": "006-editing-images",
@@ -1011,7 +1382,9 @@
       ],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/image-generation#gemini-image-editing"
-      ]
+      ],
+      "section_id": "002-basic-images",
+      "section_title": "Images"
     },
     {
       "id": "007-bounding-boxes",
@@ -1228,7 +1601,9 @@
       "image_data": [],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/vision?lang=python#bbox"
-      ]
+      ],
+      "section_id": "002-basic-images",
+      "section_title": "Images"
     },
     {
       "id": "008-image-segmentation",
@@ -1711,7 +2086,9 @@
       ],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/vision?lang=python#image_segmentation"
-      ]
+      ],
+      "section_id": "002-basic-images",
+      "section_title": "Images"
     },
     {
       "id": "009-audio-q-a",
@@ -1902,7 +2279,9 @@
       "image_data": [],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/audio?lang=python"
-      ]
+      ],
+      "section_id": "003-basic-audio",
+      "section_title": "Audio"
     },
     {
       "id": "010-audio-transcription",
@@ -2119,7 +2498,9 @@
       "image_data": [],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/audio?lang=python"
-      ]
+      ],
+      "section_id": "003-basic-audio",
+      "section_title": "Audio"
     },
     {
       "id": "011-audio-summarization",
@@ -2310,7 +2691,9 @@
       "image_data": [],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/audio?lang=python"
-      ]
+      ],
+      "section_id": "003-basic-audio",
+      "section_title": "Audio"
     },
     {
       "id": "012-video-q-a",
@@ -2475,7 +2858,9 @@
       "image_data": [],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/vision?lang=python#prompting-video"
-      ]
+      ],
+      "section_id": "004-basic-video",
+      "section_title": "Video"
     },
     {
       "id": "013-video-summarization",
@@ -2640,7 +3025,9 @@
       "image_data": [],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/vision?lang=python#prompting-video"
-      ]
+      ],
+      "section_id": "004-basic-video",
+      "section_title": "Video"
     },
     {
       "id": "014-video-transcription",
@@ -2831,7 +3218,9 @@
       "image_data": [],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/vision?lang=python#prompting-video"
-      ]
+      ],
+      "section_id": "004-basic-video",
+      "section_title": "Video"
     },
     {
       "id": "015-youtube-video-summarization",
@@ -2996,7 +3385,9 @@
       "image_data": [],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/vision?lang=python#youtube"
-      ]
+      ],
+      "section_id": "004-basic-video",
+      "section_title": "Video"
     },
     {
       "id": "016-pdf-csv-analysis",
@@ -3292,7 +3683,9 @@
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/document-processing?lang=python",
         "https://ai.google.dev/gemini-api/docs/document-processing?lang=rest"
-      ]
+      ],
+      "section_id": "005-other-data-types",
+      "section_title": "PDFs and other data types"
     },
     {
       "id": "017-content-translation",
@@ -3510,7 +3903,9 @@
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/document-processing?lang=python",
         "https://ai.google.dev/gemini-api/docs/document-processing?lang=rest"
-      ]
+      ],
+      "section_id": "005-other-data-types",
+      "section_title": "PDFs and other data types"
     },
     {
       "id": "018-structured-data-extraction",
@@ -3780,364 +4175,9 @@
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/document-processing",
         "https://ai.google.dev/gemini-api/docs/structured-output?lang=python"
-      ]
-    },
-    {
-      "id": "019-reasoning-models",
-      "title": "Reasoning models",
-      "description": "This example demonstrates how to access the reasoning trace of a Gemini model\nand then the final text output.\nReasoning models are a new type of model that 'think' a little bit before\ngiving a final answer. The 'thinking' response is visible in Google AI Studio\nbut not as part of the response to an API call.",
-      "order": 19,
-      "code_segments": [
-        {
-          "code": "\n",
-          "display_code": "\n",
-          "annotation": "",
-          "is_comment": false,
-          "start_line": 7,
-          "line_range": [
-            7,
-            7
-          ]
-        },
-        {
-          "code": "# Import the Gemini API\n",
-          "display_code": "",
-          "annotation": "Import the Gemini API",
-          "is_comment": true,
-          "start_line": 8,
-          "line_range": [
-            8,
-            8
-          ],
-          "target_line_range": [
-            9,
-            11
-          ]
-        },
-        {
-          "code": "from google import genai\nimport os\n\n",
-          "display_code": "from google import genai\nimport os\n\n",
-          "annotation": "",
-          "is_comment": false,
-          "start_line": 9,
-          "line_range": [
-            9,
-            11
-          ]
-        },
-        {
-          "code": "# Initialize the Gemini client with your API key\n",
-          "display_code": "",
-          "annotation": "Initialize the Gemini client with your API key",
-          "is_comment": true,
-          "start_line": 12,
-          "line_range": [
-            12,
-            12
-          ],
-          "target_line_range": [
-            13,
-            14
-          ]
-        },
-        {
-          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
-          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
-          "annotation": "",
-          "is_comment": false,
-          "start_line": 13,
-          "line_range": [
-            13,
-            14
-          ]
-        },
-        {
-          "code": "# Define a profound question about the universe\n",
-          "display_code": "",
-          "annotation": "Define a profound question about the universe",
-          "is_comment": true,
-          "start_line": 15,
-          "line_range": [
-            15,
-            15
-          ],
-          "target_line_range": [
-            16,
-            17
-          ]
-        },
-        {
-          "code": "prompt = \"If the universe is expanding, what is it expanding into? Show your reasoning.\"\n\n",
-          "display_code": "prompt = \"If the universe is expanding, what is it expanding into? Show your reasoning.\"\n\n",
-          "annotation": "",
-          "is_comment": false,
-          "start_line": 16,
-          "line_range": [
-            16,
-            17
-          ]
-        },
-        {
-          "code": "# Generate content with the Gemini model\n",
-          "display_code": "",
-          "annotation": "Generate content with the Gemini model",
-          "is_comment": true,
-          "start_line": 18,
-          "line_range": [
-            18,
-            18
-          ],
-          "target_line_range": [
-            19,
-            24
-          ]
-        },
-        {
-          "code": "response = client.models.generate_content(\n    model=\"gemini-2.5-pro-exp-03-25\",\n    contents=prompt,\n)\n\nprint(response.text)\n",
-          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.5-pro-exp-03-25\",\n    contents=prompt,\n)\n\nprint(response.text)\n",
-          "annotation": "",
-          "is_comment": false,
-          "start_line": 19,
-          "line_range": [
-            19,
-            24
-          ]
-        }
       ],
-      "shell_segments": [
-        {
-          "explanation": "First, install the Google Generative AI library",
-          "command": "pip install google-genai",
-          "output": ""
-        },
-        {
-          "explanation": "Then run the program with Python",
-          "command": "python universe_reasoning.py",
-          "output": "This is a fantastic and very common question that gets to the heart of how we understand the universe based on Einstein's theory of General Relativity. The most accurate answer, according to our current understanding, is:\n**The universe isn't expanding *into* anything. Space itself is expanding.**\nHere's the reasoning:\n1.  **General Relativity's View of Spacetime:** Our everyday intuition thinks of space as a pre-existing, static container \u2013 like an empty room that things can move around *in*. General Relativity, however, describes spacetime not as a fixed background but as a dynamic entity. It can warp, bend (which we experience as gravity), and, crucially, *expand or contract*.\n2.  **Expansion is Intrinsic:** The expansion of the universe isn't like an explosion *within* a pre-existing void, where debris flies outwards *into* empty space. Instead, it's the very fabric of spacetime *itself* that is stretching. Imagine the space *between* galaxies is growing.\n3.  **Analogies (and their limitations):**\n    *   **The Rising Raisin Bread:** Imagine raisins (representing galaxies) embedded in dough (representing space). As the dough bakes and expands, all the raisins move further apart from each other. A raisin doesn't see itself as being at the center; it sees all other raisins moving away from it. Importantly, the *dough itself* is expanding.\n        *   *Limitation:* This analogy breaks down because the dough has edges and is expanding *into* the oven (an external space). Our universe, as far as we know, doesn't have an edge or an \"outside.\"\n    *   **The Expanding Balloon Surface:** Imagine drawing dots (galaxies) on the surface of a balloon. As you inflate the balloon, the rubber (space) stretches, and the distance between any two dots on the surface increases. From the perspective of any dot, all other dots are moving away. There is no \"center\" of expansion *on the surface* itself.\n        *   *Limitation:* The 2D surface of the balloon is expanding *into* the 3D space around it. General Relativity doesn't require our 3D space to be expanding into a higher-dimensional \"hyperspace.\" The expansion is an intrinsic property of our spacetime dimensions.\n4.  **No Center, No Edge:** Because space *itself* is expanding everywhere, there isn't a central point *from which* the universe is expanding. The Big Bang wasn't an explosion *at* a point *in* space; it was the beginning of the expansion *of* space, happening everywhere simultaneously. Consequently, there's no \"edge\" of the universe expanding outwards into a void.\n5.  **Infinite or Finite?**\n    *   If the universe is *infinite*, then it was always infinite. An expanding infinite universe simply becomes \"more infinite\" \u2013 the distances between objects grow, but it isn't expanding *into* anything because there's no outside to an infinite space.\n    *   If the universe is *finite* but unbounded (like the surface of the balloon, but in 3D), its total volume increases, but it still doesn't require an external space to expand into. It's self-contained.\n**In summary:** The concept of \"expanding into\" relies on the idea of an external space or container. According to General Relativity, the universe *is* the container (spacetime), and it's this container itself that is growing. There is no need for an \"outside\" for this expansion to occur."
-        }
-      ],
-      "image_data": [],
-      "documentation_links": [
-        "https://ai.google.dev/gemini-api/docs/thinking"
-      ]
-    },
-    {
-      "id": "020-structured-output",
-      "title": "Structured output",
-      "description": "This example shows how to generate structured data using a pydantic model to represent Cats with name, colour, and special ability.",
-      "order": 20,
-      "code_segments": [
-        {
-          "code": "\n",
-          "display_code": "\n",
-          "annotation": "",
-          "is_comment": false,
-          "start_line": 3,
-          "line_range": [
-            3,
-            3
-          ]
-        },
-        {
-          "code": "# Import the Gemini API and pydantic\n",
-          "display_code": "",
-          "annotation": "Import the Gemini API and pydantic",
-          "is_comment": true,
-          "start_line": 4,
-          "line_range": [
-            4,
-            4
-          ],
-          "target_line_range": [
-            5,
-            9
-          ]
-        },
-        {
-          "code": "from google import genai\nfrom pydantic import BaseModel\nimport os\n\n\n",
-          "display_code": "from google import genai\nfrom pydantic import BaseModel\nimport os\n\n\n",
-          "annotation": "",
-          "is_comment": false,
-          "start_line": 5,
-          "line_range": [
-            5,
-            9
-          ]
-        },
-        {
-          "code": "# Define a Pydantic model for a Cat\n",
-          "display_code": "",
-          "annotation": "Define a Pydantic model for a Cat",
-          "is_comment": true,
-          "start_line": 10,
-          "line_range": [
-            10,
-            10
-          ],
-          "target_line_range": [
-            11,
-            16
-          ]
-        },
-        {
-          "code": "class Cat(BaseModel):\n    name: str\n    colour: str\n    special_ability: str\n\n\n",
-          "display_code": "class Cat(BaseModel):\n    name: str\n    colour: str\n    special_ability: str\n\n\n",
-          "annotation": "",
-          "is_comment": false,
-          "start_line": 11,
-          "line_range": [
-            11,
-            16
-          ]
-        },
-        {
-          "code": "# Initialize the Gemini client with your API key\n",
-          "display_code": "",
-          "annotation": "Initialize the Gemini client with your API key",
-          "is_comment": true,
-          "start_line": 17,
-          "line_range": [
-            17,
-            17
-          ],
-          "target_line_range": [
-            18,
-            19
-          ]
-        },
-        {
-          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
-          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
-          "annotation": "",
-          "is_comment": false,
-          "start_line": 18,
-          "line_range": [
-            18,
-            19
-          ]
-        },
-        {
-          "code": "# Define the prompt. Note: It asks for 3 cats\n",
-          "display_code": "",
-          "annotation": "Define the prompt. Note: It asks for 3 cats",
-          "is_comment": true,
-          "start_line": 20,
-          "line_range": [
-            20,
-            20
-          ],
-          "target_line_range": [
-            21,
-            22
-          ]
-        },
-        {
-          "code": "prompt = \"Generate data for 3 cats, including their name, colour and special ability.\"\n\n",
-          "display_code": "prompt = \"Generate data for 3 cats, including their name, colour and special ability.\"\n\n",
-          "annotation": "",
-          "is_comment": false,
-          "start_line": 21,
-          "line_range": [
-            21,
-            22
-          ]
-        },
-        {
-          "code": "# Call the API to generate content, specifying the response schema.\n# Note that it expects a `list` and not a `typing.List` object.\n# For some reason Gemini models are finicky about that.\n",
-          "display_code": "",
-          "annotation": "Call the API to generate content, specifying the response schema.\nNote that it expects a `list` and not a `typing.List` object.\nFor some reason Gemini models are finicky about that.",
-          "is_comment": true,
-          "start_line": 23,
-          "line_range": [
-            23,
-            25
-          ],
-          "target_line_range": [
-            26,
-            34
-          ]
-        },
-        {
-          "code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash-lite\",\n    contents=prompt,\n    config={\n        \"response_mime_type\": \"application/json\",\n        \"response_schema\": list[Cat],\n    },\n)\n\n",
-          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash-lite\",\n    contents=prompt,\n    config={\n        \"response_mime_type\": \"application/json\",\n        \"response_schema\": list[Cat],\n    },\n)\n\n",
-          "annotation": "",
-          "is_comment": false,
-          "start_line": 26,
-          "line_range": [
-            26,
-            34
-          ]
-        },
-        {
-          "code": "# Parse the json response to a list of Cat objects\n",
-          "display_code": "",
-          "annotation": "Parse the json response to a list of Cat objects",
-          "is_comment": true,
-          "start_line": 35,
-          "line_range": [
-            35,
-            35
-          ],
-          "target_line_range": [
-            36,
-            37
-          ]
-        },
-        {
-          "code": "my_cats: list[Cat] = response.parsed\n\n",
-          "display_code": "my_cats: list[Cat] = response.parsed\n\n",
-          "annotation": "",
-          "is_comment": false,
-          "start_line": 36,
-          "line_range": [
-            36,
-            37
-          ]
-        },
-        {
-          "code": "# Print the generated cat data\n",
-          "display_code": "",
-          "annotation": "Print the generated cat data",
-          "is_comment": true,
-          "start_line": 38,
-          "line_range": [
-            38,
-            38
-          ],
-          "target_line_range": [
-            39,
-            42
-          ]
-        },
-        {
-          "code": "for cat in my_cats:\n    print(\n        f\"Name: {cat.name}, Colour: {cat.colour}, Special Ability: {cat.special_ability}\"\n    )\n",
-          "display_code": "for cat in my_cats:\n    print(\n        f\"Name: {cat.name}, Colour: {cat.colour}, Special Ability: {cat.special_ability}\"\n    )\n",
-          "annotation": "",
-          "is_comment": false,
-          "start_line": 39,
-          "line_range": [
-            39,
-            42
-          ]
-        }
-      ],
-      "shell_segments": [
-        {
-          "explanation": "First, install the Google Generative AI library and pydantic",
-          "command": "pip install google-genai pydantic",
-          "output": ""
-        },
-        {
-          "explanation": "Then run the program with Python",
-          "command": "python structured_cats.py",
-          "output": "Name: Aria, Colour: tortoiseshell, Special Ability: Can teleport short distances\nName: Blupus, Colour: ginger, Special Ability: Understands human speech\nName: Moonshine, Colour: black and white, Special Ability: Invisible at night"
-        }
-      ],
-      "image_data": [],
-      "documentation_links": [
-        "https://ai.google.dev/gemini-api/docs/structured-output?lang=python",
-        "https://ai.google.dev/gemini-api/docs/structured-output?lang=rest"
-      ]
+      "section_id": "005-other-data-types",
+      "section_title": "PDFs and other data types"
     },
     {
       "id": "021-tool-use-function-calling",
@@ -4745,7 +4785,9 @@
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/function-calling?example=weather",
         "https://ai.google.dev/gemini-api/docs/function-calling?example=meeting"
-      ]
+      ],
+      "section_id": "006-agentic",
+      "section_title": "Agentic behaviour"
     },
     {
       "id": "022-code-execution",
@@ -4891,7 +4933,9 @@
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/code-execution?lang=python",
         "https://ai.google.dev/gemini-api/docs/code-execution?lang=rest"
-      ]
+      ],
+      "section_id": "006-agentic",
+      "section_title": "Agentic behaviour"
     },
     {
       "id": "023-mcp-model-context-protocol",
@@ -5082,7 +5126,9 @@
       "image_data": [],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/function-calling?example=weather#use_model_context_protocol_mcp"
-      ]
+      ],
+      "section_id": "006-agentic",
+      "section_title": "Agentic behaviour"
     },
     {
       "id": "024-grounded-responses",
@@ -5331,7 +5377,9 @@
       ],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/grounding?lang=python"
-      ]
+      ],
+      "section_id": "006-agentic",
+      "section_title": "Agentic behaviour"
     },
     {
       "id": "025-model-context-windows",
@@ -5522,7 +5570,9 @@
       "image_data": [],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/tokens?lang=python"
-      ]
+      ],
+      "section_id": "007-tokens-context-windows",
+      "section_title": "Token counting & context windows"
     },
     {
       "id": "026-token-counting",
@@ -5739,7 +5789,9 @@
       "image_data": [],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/tokens?lang=python#text-tokens"
-      ]
+      ],
+      "section_id": "007-tokens-context-windows",
+      "section_title": "Token counting & context windows"
     },
     {
       "id": "027-calculate-input-tokens",
@@ -5873,7 +5925,9 @@
       "image_data": [],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/tokens?lang=python#multimodal-tokens"
-      ]
+      ],
+      "section_id": "007-tokens-context-windows",
+      "section_title": "Token counting & context windows"
     },
     {
       "id": "028-context-caching",
@@ -6195,7 +6249,9 @@
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/caching?lang=python",
         "https://ai.google.dev/api/caching"
-      ]
+      ],
+      "section_id": "007-tokens-context-windows",
+      "section_title": "Token counting & context windows"
     },
     {
       "id": "029-rate-limits-retries",
@@ -6388,7 +6444,9 @@
         "https://ai.google.dev/gemini-api/docs/text-generation",
         "https://ai.google.dev/gemini-api/docs/troubleshooting?lang=python",
         "https://ai.google.dev/gemini-api/docs/rate-limits?hl=en"
-      ]
+      ],
+      "section_id": "008-misc",
+      "section_title": "Miscellaneous"
     },
     {
       "id": "030-async-requests",
@@ -6605,7 +6663,9 @@
       "image_data": [],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/text-generation"
-      ]
+      ],
+      "section_id": "008-misc",
+      "section_title": "Miscellaneous"
     },
     {
       "id": "031-embeddings",
@@ -6797,7 +6857,9 @@
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/embeddings",
         "https://ai.google.dev/gemini-api/docs/embeddings#resthttps://ai.google.dev/gemini-api/docs/embeddings#resthttps://ai.google.dev/gemini-api/docs/embeddings#rest"
-      ]
+      ],
+      "section_id": "008-misc",
+      "section_title": "Miscellaneous"
     },
     {
       "id": "032-safety-filters",
@@ -6988,6 +7050,106 @@
       "image_data": [],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/safety-settings#python"
+      ],
+      "section_id": "008-misc",
+      "section_title": "Miscellaneous"
+    }
+  ],
+  "sections": [
+    {
+      "id": "001-basic-text",
+      "title": "Text",
+      "description": "",
+      "order": 1,
+      "examples": [
+        "001-basic-generation",
+        "002-streaming-text",
+        "003-system-prompt",
+        "019-reasoning-models",
+        "020-structured-output"
+      ]
+    },
+    {
+      "id": "002-basic-images",
+      "title": "Images",
+      "description": "",
+      "order": 2,
+      "examples": [
+        "004-image-q-a",
+        "005-image-generation",
+        "006-editing-images",
+        "007-bounding-boxes",
+        "008-image-segmentation"
+      ]
+    },
+    {
+      "id": "003-basic-audio",
+      "title": "Audio",
+      "description": "",
+      "order": 3,
+      "examples": [
+        "009-audio-q-a",
+        "010-audio-transcription",
+        "011-audio-summarization"
+      ]
+    },
+    {
+      "id": "004-basic-video",
+      "title": "Video",
+      "description": "",
+      "order": 4,
+      "examples": [
+        "012-video-q-a",
+        "013-video-summarization",
+        "014-video-transcription",
+        "015-youtube-video-summarization"
+      ]
+    },
+    {
+      "id": "005-other-data-types",
+      "title": "PDFs and other data types",
+      "description": "",
+      "order": 5,
+      "examples": [
+        "016-pdf-csv-analysis",
+        "017-content-translation",
+        "018-structured-data-extraction"
+      ]
+    },
+    {
+      "id": "006-agentic",
+      "title": "Agentic behaviour",
+      "description": "",
+      "order": 6,
+      "examples": [
+        "021-tool-use-function-calling",
+        "022-code-execution",
+        "023-mcp-model-context-protocol",
+        "024-grounded-responses"
+      ]
+    },
+    {
+      "id": "007-tokens-context-windows",
+      "title": "Token counting & context windows",
+      "description": "",
+      "order": 7,
+      "examples": [
+        "025-model-context-windows",
+        "026-token-counting",
+        "027-calculate-input-tokens",
+        "028-context-caching"
+      ]
+    },
+    {
+      "id": "008-misc",
+      "title": "Miscellaneous",
+      "description": "",
+      "order": 8,
+      "examples": [
+        "029-rate-limits-retries",
+        "030-async-requests",
+        "031-embeddings",
+        "032-safety-filters"
       ]
     }
   ]
