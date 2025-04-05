@@ -9,36 +9,55 @@ Gemini by Example provides step-by-step tutorials for learning how to use the Ge
 - Simple, commented examples that build from basic to advanced usage
 - Side-by-side code and explanations
 - Runnable shell commands with expected outputs
+- Examples organized by category
+- Support for images to illustrate concepts
 
 ## Project Structure
 
 ```
 geminibyexample/
-├── data/               # Processed data (examples.json)
-├── examples/           # Source examples (Python files with comments)
+├── data/               # Processed data files
+│   ├── examples.json   # Structured example data
+│   └── sections.json   # Section definitions for organizing examples
+├── examples/           # Source examples
 │   ├── 001-basic-generation/
+│   │   ├── basic-generation.py  # Python code with comments
+│   │   ├── basic-generation.sh  # Shell commands and output
+│   │   └── 01-image.png         # Optional example image
 │   ├── 002-values/
 │   └── ...
 ├── build_examples/     # Scripts to build data files
 │   └── build_examples.py
 ├── build_static_site.py # Generate static HTML site
-├── main.py             # FastHTML dynamic site
+├── docs/               # Generated static site (GitHub Pages)
 ├── templates/          # Site templates
-├── static/             # Static assets
-└── site/               # Generated static site (after running build_static_site.py)
+└── static/             # Static assets
 ```
+
+## Quickstart
+
+To build and preview the site locally:
+
+```bash
+# One command to build both examples data and static site
+python build_static_site.py
+
+# Open the generated site
+open docs/index.html
+```
+
+## Features
+
+- **Organized Sections**: Examples are grouped into logical sections
+- **Copy All Python**: Each example has a "Copy All Python" button to easily copy the complete code
+- **Annotated Code**: Line-by-line explanations paired with code
+- **Visual Examples**: Support for images to illustrate concepts
+- **Shell Commands**: Example commands with expected output
 
 ## Working with Examples
 
-### Adding a New Example
+Examples are Python files with special comment formatting:
 
-1. Create a new directory in `examples/` with a numeric prefix (e.g., `003-new-example/`)
-2. Add a Python file with the example code and detailed comments
-3. Add a shell script (`.sh`) with example commands to run the code
-
-The first comment block in the Python file will be used as the title and description.
-
-Example Python file format:
 ```python
 # Title of the Example
 # This is a description of what this example demonstrates.
@@ -50,43 +69,34 @@ code_here()
 more_code()
 ```
 
-### Building the Data
+- The first comment block becomes the title and description
+- Each comment block explains the code that follows it
+- Comments without following code create section headers
 
-After adding or modifying examples, rebuild the data file:
+For detailed instructions on creating new examples, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
-```bash
-python build_examples/build_examples.py
-```
+## Building the Site
 
-This processes all example directories and generates `data/examples.json` with the structured content.
-
-## Running the Site
-
-### Dynamic Site
-
-Run the dynamic site with FastHTML:
-
-```bash
-python main.py
-```
-
-This starts a local server that renders the examples dynamically.
-
-### Static Site Generation
-
-To build a static version of the site:
+Build both the examples data and static site with a single command:
 
 ```bash
 python build_static_site.py
 ```
 
-This generates a complete static site in the `site/` directory with:
-- An index page listing all examples
-- Individual pages for each example
-- All necessary assets and styling
-
-The static site can be hosted on any web server or static hosting service.
+This will:
+1. Process all examples and create `data/examples.json`
+2. Generate the static site in the `docs/` directory
+3. Copy all assets and images
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for detailed instructions on how to:
+
+- Add new examples
+- Create example categories
+- Include images
+- Format your code and comments
+
+## License
+
+MIT
