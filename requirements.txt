@@ -1,3 +1,4 @@
 uv
 pytest
 ruff
+rich
