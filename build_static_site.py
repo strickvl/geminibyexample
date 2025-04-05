@@ -313,13 +313,14 @@ def generate_index_html(examples, output_dir):
         # Page content
         f.write(f"""            <h1>{SITE_TITLE}</h1>
             <p style="margin: 20px 0; color: #444; line-height: 1.6;">
-                Gemini by Example is a hands-on introduction to Python using 
-                annotated example programs. Check out the 
+                Gemini by Example is a hands-on introduction to Google's Gemini
+                SDK and API using 
+                annotated code examples. Check out the 
                 <a href="{examples[0]['id']}/index.html">first example</a> 
                 or browse the full list below.
             </p>
             <p style="margin: 20px 0; color: #444; line-height: 1.6;">
-                Unless stated otherwise, examples here assume the latest Python version.
+                Examples here assume Python >=3.9.
             </p>
             <div style="margin-top: 30px;">
 """)
