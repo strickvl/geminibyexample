@@ -634,4 +634,18 @@ def generate_static_site() -> None:
 
 
 if __name__ == "__main__":
+    # First run the examples builder by importing it directly
+    logger.info("Running examples builder first...")
+    import sys
+    
+    # Add the build_examples directory to sys.path if needed
+    build_examples_dir = Path(__file__).parent / "build_examples"
+    if str(build_examples_dir) not in sys.path:
+        sys.path.append(str(build_examples_dir))
+    
+    # Import and run the main function from build_examples
+    from build_examples import main as build_examples_main
+    build_examples_main()
+    
+    # Then generate the static site
     generate_static_site()
