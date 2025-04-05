@@ -172,6 +172,7 @@ def generate_html_head(
             min-width: 0;
             color: #444;
             line-height: 1.6;
+            font-size: 1em;
         }
         .code {
             flex: 2;
@@ -663,8 +664,8 @@ def generate_example_html(
 
                 # Left column (explanation)
                 if explanation:
-                    f.write(f"""                <div class="docs">
-                    <p>{escape(explanation)}</p>
+                    f.write(f"""                <div class="docs" style='font-size: 0.9em; color: #666;'>
+                    {escape(explanation)}
                 </div>
 """)
 
