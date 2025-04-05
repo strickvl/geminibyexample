@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF and CSV data analysis and summarization - Gemini by Example</title>
+    <title>Reasoning models - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
     <style>
@@ -157,9 +157,9 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
                 <div>
                     <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
-                        <a href="../" style="text-decoration: none; color: #666;">PDFs and other data types</a>
+                        <a href="../" style="text-decoration: none; color: #666;">Text</a>
                     </div>
-                    <h1 style="margin: 0; margin-bottom: 10px;">PDF and CSV data analysis and summarization</h1>
+                    <h1 style="margin: 0; margin-bottom: 10px;">Reasoning models</h1>
                 </div>
                 <div style="position: relative; margin-top: 10px;">
                     <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
@@ -172,17 +172,19 @@
                 </div>
             </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
-                This example demonstrates how to use the Gemini API to analyze data from PDF and CSV files.
+                This example demonstrates how to access the reasoning trace of a Gemini model
+and then the final text output.
+Reasoning models are a new type of model that 'think' a little bit before
+giving a final answer. The 'thinking' response is visible in Google AI Studio
+but not as part of the response to an API call.
             </p>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Import necessary libraries</div>
+                    <div style='font-size: 0.9em; color: #666;'>Import the Gemini API</div>
 
                 </div>
                 <div class="code">
                     <pre><code>from google import genai
-from google.genai import types
-import httpx
 import os</code></pre>
                 </div>
             </div>
@@ -199,112 +201,33 @@ import os</code></pre>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>We start with the PDF analysis.
-Download the PDF file</div>
+                    <div style='font-size: 0.9em; color: #666;'>Define a profound question about the universe</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>pdf_url = &quot;https://www.princexml.com/samples/invoice/invoicesample.pdf&quot;
-pdf_data = httpx.get(pdf_url).content</code></pre>
+                    <pre><code>prompt = &quot;If the universe is expanding, what is it expanding into? Show your reasoning.&quot;</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Prompt to extract main players from the PDF</div>
+                    <div style='font-size: 0.9em; color: #666;'>Generate content with the Gemini model</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>pdf_prompt = (
-    &quot;Identify the main companies or entities mentioned in this invoice. &quot;
-    &quot;Summarize the data.&quot;
-)</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Generate content with the PDF and the prompt</div>
+                    <pre><code>response = client.models.generate_content(
+    model=&quot;gemini-2.5-pro-exp-03-25&quot;,
+    contents=prompt,
+)
 
-                </div>
-                <div class="code">
-                    <pre><code>pdf_response = client.models.generate_content(
-    model=&quot;gemini-2.0-flash&quot;,
-    contents=[
-        types.Part.from_bytes(data=pdf_data, mime_type=&quot;application/pdf&quot;),
-        pdf_prompt,
-    ],
-)</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Print the PDF analysis result</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>print(&quot;PDF Analysis Result:\n&quot;, pdf_response.text)</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Moving on to the CSV analysis now. You'll note that the process is very
-similar.
-You can also pass in code files, XML, RTF, Markdown, and more.
-We download the CSV file here.</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>csv_url = &quot;https://gist.githubusercontent.com/suellenstringer-hye/f2231b3383538bcb1a5b051c7908f5b7/raw/0f4e0733a434733cda8e749bbbf33a93c2b5bbde/test.csv&quot;
-csv_data = httpx.get(csv_url).content</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Prompt to analyze the CSV data</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>csv_prompt = &quot;Analyze this data and tell me about the contents. Summarize the data.&quot;</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Generate content with the CSV data and the prompt</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>csv_response = client.models.generate_content(
-    model=&quot;gemini-2.0-flash&quot;,
-    contents=[
-        types.Part.from_bytes(
-            data=csv_data,
-            mime_type=&quot;text/csv&quot;,
-        ),
-        csv_prompt,
-    ],
-)</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Print the CSV analysis result</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>print(&quot;\nCSV Analysis Result:\n&quot;, csv_response.text)</code></pre>
+print(response.text)</code></pre>
                 </div>
             </div>
             <hr>
             <h2>Running the Example</h2>
             <div class="row">
                 <div class="docs" style='font-size: 0.9em; color: #666;'>
-                    First, install the Google Generative AI library and httpx (for downloading files)
+                    First, install the Google Generative AI library
                 </div>
                 <div class="code">
                     <div class="buttons">
@@ -312,7 +235,7 @@ csv_data = httpx.get(csv_url).content</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai httpx pandas</span></span>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai</span></span>
 </code></pre>
                 </div>
             </div>
@@ -326,41 +249,32 @@ csv_data = httpx.get(csv_url).content</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python pdf_csv_analysis.py</span></span>
-PDF Analysis Result:
- The main company mentioned in the invoice is Sunny Farm.
-CSV Analysis Result:
- Okay, I&#x27;ve analyzed the provided data. Here&#x27;s a summary of its contents:
-**Data Format:**
-*   The data appears to be in CSV (Comma Separated Values) format.
-*   The first line is a header row defining the fields.
-*   Each subsequent line represents a record containing information about a person.
-**Fields Present:**
-The data includes the following fields for each person:
-1.  **first\_name:** The person&#x27;s first name.
-2.  **last\_name:** The person&#x27;s last name.
-3.  **company\_name:** The name of the company they are associated with.
-4.  **address:** The street address.
-5.  **city:** The city.
-6.  **county:** The county.
-7.  **state:** The state.
-8.  **zip:** The zip code.
-9.  **phone1:** The primary phone number.
-10. **phone2:** A secondary phone number.
-11. **email:** The email address.
-12. **web:** The website address (presumably for the associated company).</code></pre>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python universe_reasoning.py</span></span>
+This is a fantastic and very common question that gets to the heart of how we understand the universe based on Einstein&#x27;s theory of General Relativity. The most accurate answer, according to our current understanding, is:
+**The universe isn&#x27;t expanding *into* anything. Space itself is expanding.**
+Here&#x27;s the reasoning:
+1.  **General Relativity&#x27;s View of Spacetime:** Our everyday intuition thinks of space as a pre-existing, static container – like an empty room that things can move around *in*. General Relativity, however, describes spacetime not as a fixed background but as a dynamic entity. It can warp, bend (which we experience as gravity), and, crucially, *expand or contract*.
+2.  **Expansion is Intrinsic:** The expansion of the universe isn&#x27;t like an explosion *within* a pre-existing void, where debris flies outwards *into* empty space. Instead, it&#x27;s the very fabric of spacetime *itself* that is stretching. Imagine the space *between* galaxies is growing.
+3.  **Analogies (and their limitations):**
+    *   **The Rising Raisin Bread:** Imagine raisins (representing galaxies) embedded in dough (representing space). As the dough bakes and expands, all the raisins move further apart from each other. A raisin doesn&#x27;t see itself as being at the center; it sees all other raisins moving away from it. Importantly, the *dough itself* is expanding.
+        *   *Limitation:* This analogy breaks down because the dough has edges and is expanding *into* the oven (an external space). Our universe, as far as we know, doesn&#x27;t have an edge or an &quot;outside.&quot;
+    *   **The Expanding Balloon Surface:** Imagine drawing dots (galaxies) on the surface of a balloon. As you inflate the balloon, the rubber (space) stretches, and the distance between any two dots on the surface increases. From the perspective of any dot, all other dots are moving away. There is no &quot;center&quot; of expansion *on the surface* itself.
+        *   *Limitation:* The 2D surface of the balloon is expanding *into* the 3D space around it. General Relativity doesn&#x27;t require our 3D space to be expanding into a higher-dimensional &quot;hyperspace.&quot; The expansion is an intrinsic property of our spacetime dimensions.
+4.  **No Center, No Edge:** Because space *itself* is expanding everywhere, there isn&#x27;t a central point *from which* the universe is expanding. The Big Bang wasn&#x27;t an explosion *at* a point *in* space; it was the beginning of the expansion *of* space, happening everywhere simultaneously. Consequently, there&#x27;s no &quot;edge&quot; of the universe expanding outwards into a void.
+5.  **Infinite or Finite?**
+    *   If the universe is *infinite*, then it was always infinite. An expanding infinite universe simply becomes &quot;more infinite&quot; – the distances between objects grow, but it isn&#x27;t expanding *into* anything because there&#x27;s no outside to an infinite space.
+    *   If the universe is *finite* but unbounded (like the surface of the balloon, but in 3D), its total volume increases, but it still doesn&#x27;t require an external space to expand into. It&#x27;s self-contained.
+**In summary:** The concept of &quot;expanding into&quot; relies on the idea of an external space or container. According to General Relativity, the universe *is* the container (spacetime), and it&#x27;s this container itself that is growing. There is no need for an &quot;outside&quot; for this expansion to occur.</code></pre>
                 </div>
             </div>
             <hr>
             <h4>Further Information</h4>
             <ul style="font-size: 0.9em;">
-                <li><a href="https://ai.google.dev/gemini-api/docs/document-processing?lang=python"
+                <li><a href="https://ai.google.dev/gemini-api/docs/thinking"
                          target="_blank">Gemini docs link 1</a></li>
-                <li><a href="https://ai.google.dev/gemini-api/docs/document-processing?lang=rest"
-                         target="_blank">Gemini docs link 2</a></li>
             </ul>
             <p class="next">
-                Next example: <a href="../017-content-translation/">Translate documents</a>
+                Next example: <a href="../020-structured-output/">Structured output</a>
             </p>
         </main>
         <footer>

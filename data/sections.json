@@ -2,18 +2,20 @@
   "sections": [
     {
       "id": "001-basic-text",
-      "title": "Text basics",
+      "title": "Text",
       "description": "",
       "order": 1,
       "examples": [
         "001-basic-generation",
         "002-streaming-text",
-        "003-system-prompt"
+        "003-system-prompt",
+        "019-reasoning-models",
+        "020-structured-output"
       ]
     },
     {
       "id": "002-basic-images",
-      "title": "Images basics",
+      "title": "Images",
       "description": "",
       "order": 2,
       "examples": [
@@ -26,7 +28,7 @@
     },
     {
       "id": "003-basic-audio",
-      "title": "Audio basics",
+      "title": "Audio",
       "description": "",
       "order": 3,
       "examples": [
@@ -37,7 +39,7 @@
     },
     {
       "id": "004-basic-video",
-      "title": "Video basics",
+      "title": "Video",
       "description": "",
       "order": 4,
       "examples": [
@@ -56,6 +58,19 @@
         "016-pdf-csv-analysis",
         "017-content-translation",
         "018-structured-data-extraction"
+      ]
+    },
+    {
+      "id": "006-agentic",
+      "title": "Agentic behaviour",
+      "description": "",
+      "order": 6,
+      "examples": [
+        "021-tool-use-function-calling",
+        "022-code-execution",
+        "023-chat-with-data",
+        "024-mcp-model-context-protocol",
+        "025-grounded-responses"
       ]
     }
   ]

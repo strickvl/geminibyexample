@@ -10,6 +10,5 @@ $ wget https://cataas.com/cat -O cat.jpg
 $ python gemini-cat.py
 Response from URL Image:
  This looks like a British Shorthair cat.
-
 Response from Base64 Image:
  Yes, this cat appears to be fluffy.

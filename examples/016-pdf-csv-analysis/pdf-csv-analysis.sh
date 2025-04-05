@@ -5,21 +5,14 @@ $ pip install google-generative-ai httpx pandas
 $ python pdf_csv_analysis.py
 PDF Analysis Result:
  The main company mentioned in the invoice is Sunny Farm.
-
-
 CSV Analysis Result:
  Okay, I've analyzed the provided data. Here's a summary of its contents:
-
 **Data Format:**
-
 *   The data appears to be in CSV (Comma Separated Values) format.
 *   The first line is a header row defining the fields.
 *   Each subsequent line represents a record containing information about a person.
-
 **Fields Present:**
-
 The data includes the following fields for each person:
-
 1.  **first\_name:** The person's first name.
 2.  **last\_name:** The person's last name.
 3.  **company\_name:** The name of the company they are associated with.

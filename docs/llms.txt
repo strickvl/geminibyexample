@@ -5,21 +5,23 @@ It's organized by sections, with each example's Python code and terminal command
 
 ## Table of Contents
 
-* Text basics
+* Text
   * Simple text generation
   * Streaming text
   * System prompt
-* Images basics
+  * Reasoning models
+  * Structured output
+* Images
   * Image question answering
   * Image generation (Gemini and Imagen)
   * Edit an image
   * Bounding boxes
   * Image segmentation
-* Audio basics
+* Audio
   * Audio question answering
   * Audio transcription
   * Audio summarization
-* Video basics
+* Video
   * Video question answering
   * Video summarization
   * Video transcription
@@ -28,8 +30,10 @@ It's organized by sections, with each example's Python code and terminal command
   * PDF and CSV data analysis and summarization
   * Translate documents
   * Extract structured data from a PDF
+* Agentic behaviour
+  * Function calling & tool use
 
-## Text basics
+## Text
 
 ### Simple text generation
 
@@ -73,6 +77,13 @@ for chunk in response:
 $ pip install google-generative-ai
 $ python streaming-generation.py
 AI, or Artificial Intelligence, is a broad field of computer science focused on creating machines capable of performing tasks that typically require human intelligence. It involves developing algorithms and models that enable computers to learn from data, reason, solve problems, understand natural language, perceive their environment, and make decisions.
+AI can be achieved through various techniques, including:
+*   **Machine Learning (ML):** This is a core subfield of AI where machines learn from data without being explicitly programmed. ML algorithms can identify patterns, make predictions, and improve their performance over time with more data.
+*   **Deep Learning (DL):** A subfield of ML that uses artificial neural networks with multiple layers (deep neural networks) to analyze data and extract complex features. DL has been highly successful in areas like image recognition, natural language processing, and speech recognition.
+*   **Natural Language Processing (NLP):** Focuses on enabling computers to understand, interpret, and generate human language. NLP techniques are used in applications like chatbots, machine translation, and sentiment analysis.
+*   **Computer Vision:** Enables computers to "see" and interpret images and videos. Computer vision algorithms can identify objects, recognize faces, and analyze scenes.
+*   **Robotics:** Involves designing, constructing, operating, and applying robots. AI is often used in robotics to enable robots to perform tasks autonomously.
+AI is transforming various industries, including healthcare, finance, transportation, and manufacturing. It has the potential to solve complex problems and improve people's lives, but it also raises ethical and societal concerns that need to be addressed.
 ```
 
 For more information, see the original documentation:
@@ -104,7 +115,92 @@ Ahoy there, matey! What be on yer mind?
 For more information, see the original documentation:
 - https://ai.google.dev/gemini-api/docs/text-generation#system-instructions
 
-## Images basics
+### Reasoning models
+
+This example demonstrates how to access the reasoning trace of a Gemini model
+and then the final text output.
+Reasoning models are a new type of model that 'think' a little bit before
+giving a final answer. The 'thinking' response is visible in Google AI Studio
+but not as part of the response to an API call.
+
+```python
+from google import genai
+import os
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+prompt = "If the universe is expanding, what is it expanding into? Show your reasoning."
+response = client.models.generate_content(
+    model="gemini-2.5-pro-exp-03-25",
+    contents=prompt,
+)
+
+print(response.text)
+```
+
+```shell
+$ pip install google-generative-ai
+$ python universe_reasoning.py
+This is a fantastic and very common question that gets to the heart of how we understand the universe based on Einstein's theory of General Relativity. The most accurate answer, according to our current understanding, is:
+**The universe isn't expanding *into* anything. Space itself is expanding.**
+Here's the reasoning:
+1.  **General Relativity's View of Spacetime:** Our everyday intuition thinks of space as a pre-existing, static container – like an empty room that things can move around *in*. General Relativity, however, describes spacetime not as a fixed background but as a dynamic entity. It can warp, bend (which we experience as gravity), and, crucially, *expand or contract*.
+2.  **Expansion is Intrinsic:** The expansion of the universe isn't like an explosion *within* a pre-existing void, where debris flies outwards *into* empty space. Instead, it's the very fabric of spacetime *itself* that is stretching. Imagine the space *between* galaxies is growing.
+3.  **Analogies (and their limitations):**
+    *   **The Rising Raisin Bread:** Imagine raisins (representing galaxies) embedded in dough (representing space). As the dough bakes and expands, all the raisins move further apart from each other. A raisin doesn't see itself as being at the center; it sees all other raisins moving away from it. Importantly, the *dough itself* is expanding.
+        *   *Limitation:* This analogy breaks down because the dough has edges and is expanding *into* the oven (an external space). Our universe, as far as we know, doesn't have an edge or an "outside."
+    *   **The Expanding Balloon Surface:** Imagine drawing dots (galaxies) on the surface of a balloon. As you inflate the balloon, the rubber (space) stretches, and the distance between any two dots on the surface increases. From the perspective of any dot, all other dots are moving away. There is no "center" of expansion *on the surface* itself.
+        *   *Limitation:* The 2D surface of the balloon is expanding *into* the 3D space around it. General Relativity doesn't require our 3D space to be expanding into a higher-dimensional "hyperspace." The expansion is an intrinsic property of our spacetime dimensions.
+4.  **No Center, No Edge:** Because space *itself* is expanding everywhere, there isn't a central point *from which* the universe is expanding. The Big Bang wasn't an explosion *at* a point *in* space; it was the beginning of the expansion *of* space, happening everywhere simultaneously. Consequently, there's no "edge" of the universe expanding outwards into a void.
+5.  **Infinite or Finite?**
+    *   If the universe is *infinite*, then it was always infinite. An expanding infinite universe simply becomes "more infinite" – the distances between objects grow, but it isn't expanding *into* anything because there's no outside to an infinite space.
+    *   If the universe is *finite* but unbounded (like the surface of the balloon, but in 3D), its total volume increases, but it still doesn't require an external space to expand into. It's self-contained.
+**In summary:** The concept of "expanding into" relies on the idea of an external space or container. According to General Relativity, the universe *is* the container (spacetime), and it's this container itself that is growing. There is no need for an "outside" for this expansion to occur.
+```
+
+For more information, see the original documentation:
+- https://ai.google.dev/gemini-api/docs/thinking
+
+### Structured output
+
+This example shows how to generate structured data using a pydantic model to represent Cats with name, colour, and special ability.
+
+```python
+from google import genai
+from pydantic import BaseModel
+import os
+class Cat(BaseModel):
+    name: str
+    colour: str
+    special_ability: str
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+prompt = "Generate data for 3 cats, including their name, colour and special ability."
+response = client.models.generate_content(
+    model="gemini-2.0-flash-lite",
+    contents=prompt,
+    config={
+        "response_mime_type": "application/json",
+        "response_schema": list[Cat],
+    },
+)
+my_cats: list[Cat] = response.parsed
+for cat in my_cats:
+    print(
+        f"Name: {cat.name}, Colour: {cat.colour}, Special Ability: {cat.special_ability}"
+    )
+```
+
+```shell
+$ pip install google-generative-ai pydantic
+$ python structured_cats.py
+Name: Aria, Colour: tortoiseshell, Special Ability: Can teleport short distances
+Name: Blupus, Colour: ginger, Special Ability: Understands human speech
+Name: Moonshine, Colour: black and white, Special Ability: Invisible at night
+```
+
+For more information, see the original documentation:
+- https://ai.google.dev/gemini-api/docs/structured-output?lang=python
+- https://ai.google.dev/gemini-api/docs/structured-output?lang=rest
+
+## Images
 
 ### Image question answering
 
@@ -142,6 +238,8 @@ $ wget https://cataas.com/cat -O cat.jpg
 $ python gemini-cat.py
 Response from URL Image:
  This looks like a British Shorthair cat.
+Response from Base64 Image:
+ Yes, this cat appears to be fluffy.
 ```
 
 For more information, see the original documentation:
@@ -235,6 +333,7 @@ image = Image.open(BytesIO(part.inline_data.data))
 ```shell
 $ pip install google-generative-ai Pillow requests
 $ python edit_cat.py
+Image saved as cat_with_hat.png
 ```
 
 *This example includes images which can be viewed on the website.*
@@ -352,7 +451,7 @@ $ python cat_segmentation.py
 For more information, see the original documentation:
 - https://ai.google.dev/gemini-api/docs/vision?lang=python#image_segmentation
 
-## Audio basics
+## Audio
 
 ### Audio question answering
 
@@ -472,7 +571,7 @@ with home base and knowing the location of the American Red Cross in case of eme
 For more information, see the original documentation:
 - https://ai.google.dev/gemini-api/docs/audio?lang=python
 
-## Video basics
+## Video
 
 ### Video question answering
 
@@ -505,6 +604,8 @@ print(response.text)
 $ pip install google-generative-ai
 $ python video_question_answering.py
 Certainly! Here's a description of the tone and genre of the video clip:
+**Genre:**  Travel or scenery/ambient video
+**Tone:** Relaxed, peaceful, and observational. The video presents a serene view of a park next to a busy street. The presence of nature with the sounds of the city creates a tranquil atmosphere.
 ```
 
 For more information, see the original documentation:
@@ -581,6 +682,11 @@ print(response.text)
 $ pip install google-generative-ai
 $ python video_transcription.py
 Okay, here's the transcription and visual descriptions of the video:
+**Video Description:**
+The video pans up from a low angle showing a park with lush green trees.  Sunlight filters through the leaves. In the distance, cars and a bus can be seen on a road next to the park. There is a paved walkway and low bushes.
+**Timestamps:**
+*   **0:00** Camera starts panning up showing a park with trees and sunlight. 
+*   **0:04** The camera reaches its highest point in its view.
 ```
 
 For more information, see the original documentation:
@@ -613,6 +719,9 @@ print(response.text)
 $ pip install google-generative-ai
 $ python youtube-summarization.py
 Sure, here is a summary of the video!
+Thomas, the father, is sharing his son Max's story of having Alexander Disease, a rare ultra-rare genetic disorder. After having a difficult time conceiving and finally being successful and welcoming Max to their family, they were dealt a devastating blow when Max had his first seizure at a very young age. 
+Because of the seizure, Max had to go through a series of medical tests. Those tests showed that Max had Alexander Disease. After doing some research, the family was heartbroken, as the typical life expectancy for this disease is 5-10 years, and there is no treatment or cure.
+Thomas started researching more in-depth by summarizing scientific papers by using Gemini AI and has discovered a lead scientist and her team in New York that he connected with. He sends one to two emails a week to different scientists in order to get more studies underway for the disease. He doesn't want Max to be seen as having 'zero' chance and wants to be a dad and enjoy his time with Max. He will continue to strive to find a cure for Max!
 ```
 
 For more information, see the original documentation:
@@ -665,6 +774,26 @@ $ pip install google-generative-ai httpx pandas
 $ python pdf_csv_analysis.py
 PDF Analysis Result:
  The main company mentioned in the invoice is Sunny Farm.
+CSV Analysis Result:
+ Okay, I've analyzed the provided data. Here's a summary of its contents:
+**Data Format:**
+*   The data appears to be in CSV (Comma Separated Values) format.
+*   The first line is a header row defining the fields.
+*   Each subsequent line represents a record containing information about a person.
+**Fields Present:**
+The data includes the following fields for each person:
+1.  **first\_name:** The person's first name.
+2.  **last\_name:** The person's last name.
+3.  **company\_name:** The name of the company they are associated with.
+4.  **address:** The street address.
+5.  **city:** The city.
+6.  **county:** The county.
+7.  **state:** The state.
+8.  **zip:** The zip code.
+9.  **phone1:** The primary phone number.
+10. **phone2:** A secondary phone number.
+11. **email:** The email address.
+12. **web:** The website address (presumably for the associated company).
 ```
 
 For more information, see the original documentation:
@@ -703,6 +832,21 @@ $ python translate.py
   <h1 align="center">超越演示：生产级 AI 系统</h1>
   <h3 align="center">ZenML 将经过实战检验的 MLOps 实践带入您的 AI 应用，处理大规模的评估、监控和部署</h3>
 </div>
+<!-- 项目徽章 -->
+<!--
+*** 我使用 Markdown "引用样式" 链接以提高可读性。
+*** 引用链接用方括号 [ ] 括起来，而不是用括号 ( )。
+*** 请参阅本文档底部，了解贡献者网址、分支网址等的引用变量声明。 这是一个可选的、简洁的语法，您可以使用它。
+*** https://www.markdownguide.org/basic-syntax/#reference-style-links
+-->
+<div align="center">
+  <!-- 项目 Logo -->
+  <br />
+    <a href="https://zenml.io">
+      <img alt="ZenML Logo" src="docs/book/.gitbook/assets/header.png" alt="ZenML Logo">
+    </a>
+  <br />
+etc...
 ```
 
 For more information, see the original documentation:
@@ -809,4 +953,198 @@ $ python structured-data-extraction.py
 For more information, see the original documentation:
 - https://ai.google.dev/gemini-api/docs/document-processing
 - https://ai.google.dev/gemini-api/docs/structured-output?lang=python
+
+## Agentic behaviour
+
+### Function calling & tool use
+
+This example demonstrates how to use the Gemini API to call external functions.
+
+```python
+import os
+from datetime import datetime
+from google import genai
+from google.genai import types
+def get_current_temperature(location: str) -> dict:
+    """Gets the current temperature for a given location.
+
+    Note: This is a simplified mock implementation. In a real application,
+    this function would make an API call to a weather service provider.
+    """
+    sample_temperatures = {
+        "London": 16,
+        "New York": 23,
+        "Tokyo": 28,
+        "Sydney": 20,
+        "Paris": 18,
+        "Berlin": 17,
+        "Cairo": 32,
+        "Moscow": 10,
+    }
+    temp = sample_temperatures.get(location, 21)
+    return {"location": location, "temperature": temp, "unit": "Celsius"}
+def check_appointment_availability(date: str, time: str) -> dict:
+    """Checks if there's availability for an appointment at the given date and time."""
+    busy_slots = [
+        {"date": "2024-07-04", "times": ["14:00", "15:00", "16:00"]},
+        {"date": "2024-07-05", "times": ["09:00", "10:00", "11:00"]},
+        {"date": "2024-07-10", "times": ["13:00", "14:00"]},
+    ]
+
+    try:
+        datetime.strptime(date, "%Y-%m-%d")
+    except ValueError:
+        return {
+            "available": False,
+            "error": "Invalid date format. Please use YYYY-MM-DD.",
+        }
+
+    try:
+        datetime.strptime(time, "%H:%M")
+    except ValueError:
+        return {
+            "available": False,
+            "error": "Invalid time format. Please use HH:MM in 24-hour format.",
+        }
+
+    for slot in busy_slots:
+        if slot["date"] == date and time in slot["times"]:
+            return {
+                "available": False,
+                "message": f"The slot on {date} at {time} is already booked.",
+            }
+
+    return {
+        "available": True,
+        "message": f"The slot on {date} at {time} is available for booking.",
+    }
+print("\n--- Example 1: Basic Function Calling ---\n")
+weather_function = {
+    "name": "get_current_temperature",
+    "description": "Gets the current temperature for a given location.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "location": {
+                "type": "string",
+                "description": "The city name, e.g. San Francisco",
+            },
+        },
+        "required": ["location"],
+    },
+}
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+tools = types.Tool(function_declarations=[weather_function])
+config = types.GenerateContentConfig(tools=[tools])
+response = client.models.generate_content(
+    model="gemini-2.0-flash-lite",
+    contents="What's the temperature in London?",
+    config=config,
+)
+function_call = response.candidates[0].content.parts[0].function_call
+print(f"Function to call: {function_call.name}")
+print(f"Arguments: {function_call.args}")
+result = get_current_temperature(**function_call.args)
+print(f"Function result: {result}")
+response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents=[
+        {
+            "parts": [
+                {
+                    "function_response": {
+                        "name": function_call.name,
+                        "response": result,
+                    }
+                }
+            ]
+        }
+    ],
+)
+print(f"Model's final response: {response.text}")
+print("\n--- Example 2: Parallel Function Calling (Weather and Appointments) ---\n")
+weather_function = {
+    "name": "get_current_temperature",
+    "description": "Gets the current temperature for a given location.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "location": {
+                "type": "string",
+                "description": "The city name, e.g. London",
+            },
+        },
+        "required": ["location"],
+    },
+}
+appointment_function = {
+    "name": "check_appointment_availability",
+    "description": "Checks if there's availability for an appointment at the given date and time.",
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "date": {
+                "type": "string",
+                "description": "Date to check (YYYY-MM-DD)",
+            },
+            "time": {
+                "type": "string",
+                "description": "Time to check (HH:MM) in 24-hour format",
+            },
+        },
+        "required": ["date", "time"],
+    },
+}
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+tools = [types.Tool(function_declarations=[weather_function, appointment_function])]
+config = {
+    "tools": tools,
+    "temperature": 0.1,
+}
+chat = client.chats.create(model="gemini-2.0-flash-lite", config=config)
+response = chat.send_message(
+    "I'm planning to visit Paris on July 4th at 2 PM. What's the weather like there and is that slot available for an appointment?"
+)
+results = {}
+for fn in response.function_calls:
+    args_str = ", ".join(f"{key}={val}" for key, val in fn.args.items())
+    print(f"{fn.name}({args_str})")
+if fn.name == "get_current_temperature":
+        result = get_current_temperature(**fn.args)
+    elif fn.name == "check_appointment_availability":
+        result = check_appointment_availability(**fn.args)
+    else:
+        result = {"error": f"Unknown function: {fn.name}"}
+results[fn.name] = result
+    print(f"Result: {result}\n")
+function_responses = []
+for fn_name, result in results.items():
+    function_responses.append({"name": fn_name, "response": result})
+if function_responses:
+    print("Sending all function results back to the model...\n")
+    response = chat.send_message(str(function_responses))
+    print(f"Model's final response:\n{response.text}")
+```
+
+```shell
+$ pip install google-generative-ai requests
+$ python function_calling_weather_calendar.py
+--- Example 1: Basic Function Calling ---
+Function to call: get_current_temperature
+Arguments: {'location': 'London'}
+Function result: {'location': 'London', 'temperature': 16, 'unit': 'Celsius'}
+Model's final response: OK. The current temperature in London is 16 degrees Celsius.
+--- Example 2: Parallel Function Calling (Weather and Appointments) ---
+get_current_temperature(location=Paris)
+Result: {'location': 'Paris', 'temperature': 18, 'unit': 'Celsius'}
+check_appointment_availability(time=14:00, date=2024-07-04)
+Result: {'available': False, 'message': 'The slot on 2024-07-04 at 14:00 is already booked.'}
+Sending all function results back to the model...
+Model's final response:
+The current temperature in Paris is 18 degrees Celsius. The appointment slot on July 4th at 2 PM is not available.
+```
+
+For more information, see the original documentation:
+- https://ai.google.dev/gemini-api/docs/function-calling?example=weather
+- https://ai.google.dev/gemini-api/docs/function-calling?example=meeting
 

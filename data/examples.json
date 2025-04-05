@@ -93,7 +93,7 @@
         "https://ai.google.dev/gemini-api/docs/text-generation"
       ],
       "section_id": "001-basic-text",
-      "section_title": "Text basics"
+      "section_title": "Text"
     },
     {
       "id": "002-streaming-text",
@@ -226,7 +226,7 @@
         {
           "explanation": "Then run the program with Python",
           "command": "python streaming-generation.py",
-          "output": "AI, or Artificial Intelligence, is a broad field of computer science focused on creating machines capable of performing tasks that typically require human intelligence. It involves developing algorithms and models that enable computers to learn from data, reason, solve problems, understand natural language, perceive their environment, and make decisions."
+          "output": "AI, or Artificial Intelligence, is a broad field of computer science focused on creating machines capable of performing tasks that typically require human intelligence. It involves developing algorithms and models that enable computers to learn from data, reason, solve problems, understand natural language, perceive their environment, and make decisions.\nAI can be achieved through various techniques, including:\n*   **Machine Learning (ML):** This is a core subfield of AI where machines learn from data without being explicitly programmed. ML algorithms can identify patterns, make predictions, and improve their performance over time with more data.\n*   **Deep Learning (DL):** A subfield of ML that uses artificial neural networks with multiple layers (deep neural networks) to analyze data and extract complex features. DL has been highly successful in areas like image recognition, natural language processing, and speech recognition.\n*   **Natural Language Processing (NLP):** Focuses on enabling computers to understand, interpret, and generate human language. NLP techniques are used in applications like chatbots, machine translation, and sentiment analysis.\n*   **Computer Vision:** Enables computers to \"see\" and interpret images and videos. Computer vision algorithms can identify objects, recognize faces, and analyze scenes.\n*   **Robotics:** Involves designing, constructing, operating, and applying robots. AI is often used in robotics to enable robots to perform tasks autonomously.\nAI is transforming various industries, including healthcare, finance, transportation, and manufacturing. It has the potential to solve complex problems and improve people's lives, but it also raises ethical and societal concerns that need to be addressed."
         }
       ],
       "image_data": [],
@@ -234,7 +234,7 @@
         "https://ai.google.dev/gemini-api/docs/text-generation"
       ],
       "section_id": "001-basic-text",
-      "section_title": "Text basics"
+      "section_title": "Text"
     },
     {
       "id": "003-system-prompt",
@@ -375,7 +375,368 @@
         "https://ai.google.dev/gemini-api/docs/text-generation#system-instructions"
       ],
       "section_id": "001-basic-text",
-      "section_title": "Text basics"
+      "section_title": "Text"
+    },
+    {
+      "id": "019-reasoning-models",
+      "title": "Reasoning models",
+      "description": "This example demonstrates how to access the reasoning trace of a Gemini model\nand then the final text output.\nReasoning models are a new type of model that 'think' a little bit before\ngiving a final answer. The 'thinking' response is visible in Google AI Studio\nbut not as part of the response to an API call.",
+      "order": 19,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 7,
+          "line_range": [
+            7,
+            7
+          ]
+        },
+        {
+          "code": "# Import the Gemini API\n",
+          "display_code": "",
+          "annotation": "Import the Gemini API",
+          "is_comment": true,
+          "start_line": 8,
+          "line_range": [
+            8,
+            8
+          ],
+          "target_line_range": [
+            9,
+            11
+          ]
+        },
+        {
+          "code": "from google import genai\nimport os\n\n",
+          "display_code": "from google import genai\nimport os\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 9,
+          "line_range": [
+            9,
+            11
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 12,
+          "line_range": [
+            12,
+            12
+          ],
+          "target_line_range": [
+            13,
+            14
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 13,
+          "line_range": [
+            13,
+            14
+          ]
+        },
+        {
+          "code": "# Define a profound question about the universe\n",
+          "display_code": "",
+          "annotation": "Define a profound question about the universe",
+          "is_comment": true,
+          "start_line": 15,
+          "line_range": [
+            15,
+            15
+          ],
+          "target_line_range": [
+            16,
+            17
+          ]
+        },
+        {
+          "code": "prompt = \"If the universe is expanding, what is it expanding into? Show your reasoning.\"\n\n",
+          "display_code": "prompt = \"If the universe is expanding, what is it expanding into? Show your reasoning.\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 16,
+          "line_range": [
+            16,
+            17
+          ]
+        },
+        {
+          "code": "# Generate content with the Gemini model\n",
+          "display_code": "",
+          "annotation": "Generate content with the Gemini model",
+          "is_comment": true,
+          "start_line": 18,
+          "line_range": [
+            18,
+            18
+          ],
+          "target_line_range": [
+            19,
+            24
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=\"gemini-2.5-pro-exp-03-25\",\n    contents=prompt,\n)\n\nprint(response.text)\n",
+          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.5-pro-exp-03-25\",\n    contents=prompt,\n)\n\nprint(response.text)\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 19,
+          "line_range": [
+            19,
+            24
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library",
+          "command": "pip install google-generative-ai",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python universe_reasoning.py",
+          "output": "This is a fantastic and very common question that gets to the heart of how we understand the universe based on Einstein's theory of General Relativity. The most accurate answer, according to our current understanding, is:\n**The universe isn't expanding *into* anything. Space itself is expanding.**\nHere's the reasoning:\n1.  **General Relativity's View of Spacetime:** Our everyday intuition thinks of space as a pre-existing, static container \u2013 like an empty room that things can move around *in*. General Relativity, however, describes spacetime not as a fixed background but as a dynamic entity. It can warp, bend (which we experience as gravity), and, crucially, *expand or contract*.\n2.  **Expansion is Intrinsic:** The expansion of the universe isn't like an explosion *within* a pre-existing void, where debris flies outwards *into* empty space. Instead, it's the very fabric of spacetime *itself* that is stretching. Imagine the space *between* galaxies is growing.\n3.  **Analogies (and their limitations):**\n    *   **The Rising Raisin Bread:** Imagine raisins (representing galaxies) embedded in dough (representing space). As the dough bakes and expands, all the raisins move further apart from each other. A raisin doesn't see itself as being at the center; it sees all other raisins moving away from it. Importantly, the *dough itself* is expanding.\n        *   *Limitation:* This analogy breaks down because the dough has edges and is expanding *into* the oven (an external space). Our universe, as far as we know, doesn't have an edge or an \"outside.\"\n    *   **The Expanding Balloon Surface:** Imagine drawing dots (galaxies) on the surface of a balloon. As you inflate the balloon, the rubber (space) stretches, and the distance between any two dots on the surface increases. From the perspective of any dot, all other dots are moving away. There is no \"center\" of expansion *on the surface* itself.\n        *   *Limitation:* The 2D surface of the balloon is expanding *into* the 3D space around it. General Relativity doesn't require our 3D space to be expanding into a higher-dimensional \"hyperspace.\" The expansion is an intrinsic property of our spacetime dimensions.\n4.  **No Center, No Edge:** Because space *itself* is expanding everywhere, there isn't a central point *from which* the universe is expanding. The Big Bang wasn't an explosion *at* a point *in* space; it was the beginning of the expansion *of* space, happening everywhere simultaneously. Consequently, there's no \"edge\" of the universe expanding outwards into a void.\n5.  **Infinite or Finite?**\n    *   If the universe is *infinite*, then it was always infinite. An expanding infinite universe simply becomes \"more infinite\" \u2013 the distances between objects grow, but it isn't expanding *into* anything because there's no outside to an infinite space.\n    *   If the universe is *finite* but unbounded (like the surface of the balloon, but in 3D), its total volume increases, but it still doesn't require an external space to expand into. It's self-contained.\n**In summary:** The concept of \"expanding into\" relies on the idea of an external space or container. According to General Relativity, the universe *is* the container (spacetime), and it's this container itself that is growing. There is no need for an \"outside\" for this expansion to occur."
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/thinking"
+      ],
+      "section_id": "001-basic-text",
+      "section_title": "Text"
+    },
+    {
+      "id": "020-structured-output",
+      "title": "Structured output",
+      "description": "This example shows how to generate structured data using a pydantic model to represent Cats with name, colour, and special ability.",
+      "order": 20,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import the Gemini API and pydantic\n",
+          "display_code": "",
+          "annotation": "Import the Gemini API and pydantic",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ],
+          "target_line_range": [
+            5,
+            9
+          ]
+        },
+        {
+          "code": "from google import genai\nfrom pydantic import BaseModel\nimport os\n\n\n",
+          "display_code": "from google import genai\nfrom pydantic import BaseModel\nimport os\n\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            9
+          ]
+        },
+        {
+          "code": "# Define a Pydantic model for a Cat\n",
+          "display_code": "",
+          "annotation": "Define a Pydantic model for a Cat",
+          "is_comment": true,
+          "start_line": 10,
+          "line_range": [
+            10,
+            10
+          ],
+          "target_line_range": [
+            11,
+            16
+          ]
+        },
+        {
+          "code": "class Cat(BaseModel):\n    name: str\n    colour: str\n    special_ability: str\n\n\n",
+          "display_code": "class Cat(BaseModel):\n    name: str\n    colour: str\n    special_ability: str\n\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 11,
+          "line_range": [
+            11,
+            16
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 17,
+          "line_range": [
+            17,
+            17
+          ],
+          "target_line_range": [
+            18,
+            19
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 18,
+          "line_range": [
+            18,
+            19
+          ]
+        },
+        {
+          "code": "# Define the prompt. Note: It asks for 3 cats\n",
+          "display_code": "",
+          "annotation": "Define the prompt. Note: It asks for 3 cats",
+          "is_comment": true,
+          "start_line": 20,
+          "line_range": [
+            20,
+            20
+          ],
+          "target_line_range": [
+            21,
+            22
+          ]
+        },
+        {
+          "code": "prompt = \"Generate data for 3 cats, including their name, colour and special ability.\"\n\n",
+          "display_code": "prompt = \"Generate data for 3 cats, including their name, colour and special ability.\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 21,
+          "line_range": [
+            21,
+            22
+          ]
+        },
+        {
+          "code": "# Call the API to generate content, specifying the response schema.\n# Note that it expects a `list` and not a `typing.List` object.\n# For some reason Gemini models are finicky about that.\n",
+          "display_code": "",
+          "annotation": "Call the API to generate content, specifying the response schema.\nNote that it expects a `list` and not a `typing.List` object.\nFor some reason Gemini models are finicky about that.",
+          "is_comment": true,
+          "start_line": 23,
+          "line_range": [
+            23,
+            25
+          ],
+          "target_line_range": [
+            26,
+            34
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash-lite\",\n    contents=prompt,\n    config={\n        \"response_mime_type\": \"application/json\",\n        \"response_schema\": list[Cat],\n    },\n)\n\n",
+          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash-lite\",\n    contents=prompt,\n    config={\n        \"response_mime_type\": \"application/json\",\n        \"response_schema\": list[Cat],\n    },\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 26,
+          "line_range": [
+            26,
+            34
+          ]
+        },
+        {
+          "code": "# Parse the json response to a list of Cat objects\n",
+          "display_code": "",
+          "annotation": "Parse the json response to a list of Cat objects",
+          "is_comment": true,
+          "start_line": 35,
+          "line_range": [
+            35,
+            35
+          ],
+          "target_line_range": [
+            36,
+            37
+          ]
+        },
+        {
+          "code": "my_cats: list[Cat] = response.parsed\n\n",
+          "display_code": "my_cats: list[Cat] = response.parsed\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 36,
+          "line_range": [
+            36,
+            37
+          ]
+        },
+        {
+          "code": "# Print the generated cat data\n",
+          "display_code": "",
+          "annotation": "Print the generated cat data",
+          "is_comment": true,
+          "start_line": 38,
+          "line_range": [
+            38,
+            38
+          ],
+          "target_line_range": [
+            39,
+            42
+          ]
+        },
+        {
+          "code": "for cat in my_cats:\n    print(\n        f\"Name: {cat.name}, Colour: {cat.colour}, Special Ability: {cat.special_ability}\"\n    )\n",
+          "display_code": "for cat in my_cats:\n    print(\n        f\"Name: {cat.name}, Colour: {cat.colour}, Special Ability: {cat.special_ability}\"\n    )\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 39,
+          "line_range": [
+            39,
+            42
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library and pydantic",
+          "command": "pip install google-generative-ai pydantic",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python structured_cats.py",
+          "output": "Name: Aria, Colour: tortoiseshell, Special Ability: Can teleport short distances\nName: Blupus, Colour: ginger, Special Ability: Understands human speech\nName: Moonshine, Colour: black and white, Special Ability: Invisible at night"
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/structured-output?lang=python",
+        "https://ai.google.dev/gemini-api/docs/structured-output?lang=rest"
+      ],
+      "section_id": "001-basic-text",
+      "section_title": "Text"
     },
     {
       "id": "004-image-q-a",
@@ -591,7 +952,7 @@
         {
           "explanation": "Then run the program with Python",
           "command": "python gemini-cat.py",
-          "output": "Response from URL Image:\n This looks like a British Shorthair cat."
+          "output": "Response from URL Image:\n This looks like a British Shorthair cat.\nResponse from Base64 Image:\n Yes, this cat appears to be fluffy."
         }
       ],
       "image_data": [],
@@ -599,7 +960,7 @@
         "https://ai.google.dev/gemini-api/docs/vision?lang=python"
       ],
       "section_id": "002-basic-images",
-      "section_title": "Images basics"
+      "section_title": "Images"
     },
     {
       "id": "005-image-generation",
@@ -798,7 +1159,7 @@
         "https://ai.google.dev/gemini-api/docs/image-generation"
       ],
       "section_id": "002-basic-images",
-      "section_title": "Images basics"
+      "section_title": "Images"
     },
     {
       "id": "006-editing-images",
@@ -1009,7 +1370,7 @@
         {
           "explanation": "Then run the program with Python",
           "command": "python edit_cat.py",
-          "output": ""
+          "output": "Image saved as cat_with_hat.png"
         }
       ],
       "image_data": [
@@ -1023,7 +1384,7 @@
         "https://ai.google.dev/gemini-api/docs/image-generation#gemini-image-editing"
       ],
       "section_id": "002-basic-images",
-      "section_title": "Images basics"
+      "section_title": "Images"
     },
     {
       "id": "007-bounding-boxes",
@@ -1242,7 +1603,7 @@
         "https://ai.google.dev/gemini-api/docs/vision?lang=python#bbox"
       ],
       "section_id": "002-basic-images",
-      "section_title": "Images basics"
+      "section_title": "Images"
     },
     {
       "id": "008-image-segmentation",
@@ -1727,7 +2088,7 @@
         "https://ai.google.dev/gemini-api/docs/vision?lang=python#image_segmentation"
       ],
       "section_id": "002-basic-images",
-      "section_title": "Images basics"
+      "section_title": "Images"
     },
     {
       "id": "009-audio-q-a",
@@ -1920,7 +2281,7 @@
         "https://ai.google.dev/gemini-api/docs/audio?lang=python"
       ],
       "section_id": "003-basic-audio",
-      "section_title": "Audio basics"
+      "section_title": "Audio"
     },
     {
       "id": "010-audio-transcription",
@@ -2139,7 +2500,7 @@
         "https://ai.google.dev/gemini-api/docs/audio?lang=python"
       ],
       "section_id": "003-basic-audio",
-      "section_title": "Audio basics"
+      "section_title": "Audio"
     },
     {
       "id": "011-audio-summarization",
@@ -2332,7 +2693,7 @@
         "https://ai.google.dev/gemini-api/docs/audio?lang=python"
       ],
       "section_id": "003-basic-audio",
-      "section_title": "Audio basics"
+      "section_title": "Audio"
     },
     {
       "id": "012-video-q-a",
@@ -2491,7 +2852,7 @@
         {
           "explanation": "Then run the program with Python",
           "command": "python video_question_answering.py",
-          "output": "Certainly! Here's a description of the tone and genre of the video clip:"
+          "output": "Certainly! Here's a description of the tone and genre of the video clip:\n**Genre:**  Travel or scenery/ambient video\n**Tone:** Relaxed, peaceful, and observational. The video presents a serene view of a park next to a busy street. The presence of nature with the sounds of the city creates a tranquil atmosphere."
         }
       ],
       "image_data": [],
@@ -2499,7 +2860,7 @@
         "https://ai.google.dev/gemini-api/docs/vision?lang=python#prompting-video"
       ],
       "section_id": "004-basic-video",
-      "section_title": "Video basics"
+      "section_title": "Video"
     },
     {
       "id": "013-video-summarization",
@@ -2666,7 +3027,7 @@
         "https://ai.google.dev/gemini-api/docs/vision?lang=python#prompting-video"
       ],
       "section_id": "004-basic-video",
-      "section_title": "Video basics"
+      "section_title": "Video"
     },
     {
       "id": "014-video-transcription",
@@ -2851,7 +3212,7 @@
         {
           "explanation": "Then run the program with Python",
           "command": "python video_transcription.py",
-          "output": "Okay, here's the transcription and visual descriptions of the video:"
+          "output": "Okay, here's the transcription and visual descriptions of the video:\n**Video Description:**\nThe video pans up from a low angle showing a park with lush green trees.  Sunlight filters through the leaves. In the distance, cars and a bus can be seen on a road next to the park. There is a paved walkway and low bushes.\n**Timestamps:**\n*   **0:00** Camera starts panning up showing a park with trees and sunlight. \n*   **0:04** The camera reaches its highest point in its view."
         }
       ],
       "image_data": [],
@@ -2859,7 +3220,7 @@
         "https://ai.google.dev/gemini-api/docs/vision?lang=python#prompting-video"
       ],
       "section_id": "004-basic-video",
-      "section_title": "Video basics"
+      "section_title": "Video"
     },
     {
       "id": "015-youtube-video-summarization",
@@ -3018,7 +3379,7 @@
         {
           "explanation": "Then run the program with Python",
           "command": "python youtube-summarization.py",
-          "output": "Sure, here is a summary of the video!"
+          "output": "Sure, here is a summary of the video!\nThomas, the father, is sharing his son Max's story of having Alexander Disease, a rare ultra-rare genetic disorder. After having a difficult time conceiving and finally being successful and welcoming Max to their family, they were dealt a devastating blow when Max had his first seizure at a very young age. \nBecause of the seizure, Max had to go through a series of medical tests. Those tests showed that Max had Alexander Disease. After doing some research, the family was heartbroken, as the typical life expectancy for this disease is 5-10 years, and there is no treatment or cure.\nThomas started researching more in-depth by summarizing scientific papers by using Gemini AI and has discovered a lead scientist and her team in New York that he connected with. He sends one to two emails a week to different scientists in order to get more studies underway for the disease. He doesn't want Max to be seen as having 'zero' chance and wants to be a dad and enjoy his time with Max. He will continue to strive to find a cure for Max!"
         }
       ],
       "image_data": [],
@@ -3026,7 +3387,7 @@
         "https://ai.google.dev/gemini-api/docs/vision?lang=python#youtube"
       ],
       "section_id": "004-basic-video",
-      "section_title": "Video basics"
+      "section_title": "Video"
     },
     {
       "id": "016-pdf-csv-analysis",
@@ -3315,7 +3676,7 @@
         {
           "explanation": "Then run the program with Python",
           "command": "python pdf_csv_analysis.py",
-          "output": "PDF Analysis Result:\n The main company mentioned in the invoice is Sunny Farm."
+          "output": "PDF Analysis Result:\n The main company mentioned in the invoice is Sunny Farm.\nCSV Analysis Result:\n Okay, I've analyzed the provided data. Here's a summary of its contents:\n**Data Format:**\n*   The data appears to be in CSV (Comma Separated Values) format.\n*   The first line is a header row defining the fields.\n*   Each subsequent line represents a record containing information about a person.\n**Fields Present:**\nThe data includes the following fields for each person:\n1.  **first\\_name:** The person's first name.\n2.  **last\\_name:** The person's last name.\n3.  **company\\_name:** The name of the company they are associated with.\n4.  **address:** The street address.\n5.  **city:** The city.\n6.  **county:** The county.\n7.  **state:** The state.\n8.  **zip:** The zip code.\n9.  **phone1:** The primary phone number.\n10. **phone2:** A secondary phone number.\n11. **email:** The email address.\n12. **web:** The website address (presumably for the associated company)."
         }
       ],
       "image_data": [],
@@ -3535,7 +3896,7 @@
         {
           "explanation": "Then run the program with Python",
           "command": "python translate.py",
-          "output": "```chinese\n<div align=\"center\">\n  <img referrerpolicy=\"no-referrer-when-downgrade\" src=\"https://static.scarf.sh/a.png?x-pxid=0fcbab94-8fbe-4a38-93e8-c2348450a42e\" />\n  <h1 align=\"center\">\u8d85\u8d8a\u6f14\u793a\uff1a\u751f\u4ea7\u7ea7 AI \u7cfb\u7edf</h1>\n  <h3 align=\"center\">ZenML \u5c06\u7ecf\u8fc7\u5b9e\u6218\u68c0\u9a8c\u7684 MLOps \u5b9e\u8df5\u5e26\u5165\u60a8\u7684 AI \u5e94\u7528\uff0c\u5904\u7406\u5927\u89c4\u6a21\u7684\u8bc4\u4f30\u3001\u76d1\u63a7\u548c\u90e8\u7f72</h3>\n</div>"
+          "output": "```chinese\n<div align=\"center\">\n  <img referrerpolicy=\"no-referrer-when-downgrade\" src=\"https://static.scarf.sh/a.png?x-pxid=0fcbab94-8fbe-4a38-93e8-c2348450a42e\" />\n  <h1 align=\"center\">\u8d85\u8d8a\u6f14\u793a\uff1a\u751f\u4ea7\u7ea7 AI \u7cfb\u7edf</h1>\n  <h3 align=\"center\">ZenML \u5c06\u7ecf\u8fc7\u5b9e\u6218\u68c0\u9a8c\u7684 MLOps \u5b9e\u8df5\u5e26\u5165\u60a8\u7684 AI \u5e94\u7528\uff0c\u5904\u7406\u5927\u89c4\u6a21\u7684\u8bc4\u4f30\u3001\u76d1\u63a7\u548c\u90e8\u7f72</h3>\n</div>\n<!-- \u9879\u76ee\u5fbd\u7ae0 -->\n<!--\n*** \u6211\u4f7f\u7528 Markdown \"\u5f15\u7528\u6837\u5f0f\" \u94fe\u63a5\u4ee5\u63d0\u9ad8\u53ef\u8bfb\u6027\u3002\n*** \u5f15\u7528\u94fe\u63a5\u7528\u65b9\u62ec\u53f7 [ ] \u62ec\u8d77\u6765\uff0c\u800c\u4e0d\u662f\u7528\u62ec\u53f7 ( )\u3002\n*** \u8bf7\u53c2\u9605\u672c\u6587\u6863\u5e95\u90e8\uff0c\u4e86\u89e3\u8d21\u732e\u8005\u7f51\u5740\u3001\u5206\u652f\u7f51\u5740\u7b49\u7684\u5f15\u7528\u53d8\u91cf\u58f0\u660e\u3002 \u8fd9\u662f\u4e00\u4e2a\u53ef\u9009\u7684\u3001\u7b80\u6d01\u7684\u8bed\u6cd5\uff0c\u60a8\u53ef\u4ee5\u4f7f\u7528\u5b83\u3002\n*** https://www.markdownguide.org/basic-syntax/#reference-style-links\n-->\n<div align=\"center\">\n  <!-- \u9879\u76ee Logo -->\n  <br />\n    <a href=\"https://zenml.io\">\n      <img alt=\"ZenML Logo\" src=\"docs/book/.gitbook/assets/header.png\" alt=\"ZenML Logo\">\n    </a>\n  <br />\netc..."
         }
       ],
       "image_data": [],
@@ -3817,23 +4178,635 @@
       ],
       "section_id": "005-other-data-types",
       "section_title": "PDFs and other data types"
+    },
+    {
+      "id": "021-tool-use-function-calling",
+      "title": "Function calling & tool use",
+      "description": "This example demonstrates how to use the Gemini API to call external functions.",
+      "order": 21,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import necessary libraries\n",
+          "display_code": "",
+          "annotation": "Import necessary libraries",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ],
+          "target_line_range": [
+            5,
+            10
+          ]
+        },
+        {
+          "code": "import os\nfrom datetime import datetime\nfrom google import genai\nfrom google.genai import types\n\n\n",
+          "display_code": "import os\nfrom datetime import datetime\nfrom google import genai\nfrom google.genai import types\n\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            10
+          ]
+        },
+        {
+          "code": "# Define the function to get temperature for a location.\n# In a real application, this would call a weather API service like OpenWeatherMap or WeatherAPI\n",
+          "display_code": "",
+          "annotation": "Define the function to get temperature for a location.\nIn a real application, this would call a weather API service like OpenWeatherMap or WeatherAPI",
+          "is_comment": true,
+          "start_line": 11,
+          "line_range": [
+            11,
+            12
+          ],
+          "target_line_range": [
+            13,
+            32
+          ]
+        },
+        {
+          "code": "def get_current_temperature(location: str) -> dict:\n    \"\"\"Gets the current temperature for a given location.\n\n    Note: This is a simplified mock implementation. In a real application,\n    this function would make an API call to a weather service provider.\n    \"\"\"\n    sample_temperatures = {\n        \"London\": 16,\n        \"New York\": 23,\n        \"Tokyo\": 28,\n        \"Sydney\": 20,\n        \"Paris\": 18,\n        \"Berlin\": 17,\n        \"Cairo\": 32,\n        \"Moscow\": 10,\n    }\n    temp = sample_temperatures.get(location, 21)\n    return {\"location\": location, \"temperature\": temp, \"unit\": \"Celsius\"}\n\n\n",
+          "display_code": "def get_current_temperature(location: str) -> dict:\n    \"\"\"Gets the current temperature for a given location.\n\n    Note: This is a simplified mock implementation. In a real application,\n    this function would make an API call to a weather service provider.\n    \"\"\"\n    sample_temperatures = {\n        \"London\": 16,\n        \"New York\": 23,\n        \"Tokyo\": 28,\n        \"Sydney\": 20,\n        \"Paris\": 18,\n        \"Berlin\": 17,\n        \"Cairo\": 32,\n        \"Moscow\": 10,\n    }\n    temp = sample_temperatures.get(location, 21)\n    return {\"location\": location, \"temperature\": temp, \"unit\": \"Celsius\"}\n\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 13,
+          "line_range": [
+            13,
+            32
+          ]
+        },
+        {
+          "code": "# Define the function to check appointment availability.\n# In a real application, this would query a calendar API like Google Calendar or\n# a booking system.\n# For this example, we're using hard-coded busy slots.\n",
+          "display_code": "",
+          "annotation": "Define the function to check appointment availability.\nIn a real application, this would query a calendar API like Google Calendar or\na booking system.\nFor this example, we're using hard-coded busy slots.",
+          "is_comment": true,
+          "start_line": 33,
+          "line_range": [
+            33,
+            36
+          ],
+          "target_line_range": [
+            37,
+            73
+          ]
+        },
+        {
+          "code": "def check_appointment_availability(date: str, time: str) -> dict:\n    \"\"\"Checks if there's availability for an appointment at the given date and time.\"\"\"\n    busy_slots = [\n        {\"date\": \"2024-07-04\", \"times\": [\"14:00\", \"15:00\", \"16:00\"]},\n        {\"date\": \"2024-07-05\", \"times\": [\"09:00\", \"10:00\", \"11:00\"]},\n        {\"date\": \"2024-07-10\", \"times\": [\"13:00\", \"14:00\"]},\n    ]\n\n    try:\n        datetime.strptime(date, \"%Y-%m-%d\")\n    except ValueError:\n        return {\n            \"available\": False,\n            \"error\": \"Invalid date format. Please use YYYY-MM-DD.\",\n        }\n\n    try:\n        datetime.strptime(time, \"%H:%M\")\n    except ValueError:\n        return {\n            \"available\": False,\n            \"error\": \"Invalid time format. Please use HH:MM in 24-hour format.\",\n        }\n\n    for slot in busy_slots:\n        if slot[\"date\"] == date and time in slot[\"times\"]:\n            return {\n                \"available\": False,\n                \"message\": f\"The slot on {date} at {time} is already booked.\",\n            }\n\n    return {\n        \"available\": True,\n        \"message\": f\"The slot on {date} at {time} is available for booking.\",\n    }\n\n\n",
+          "display_code": "def check_appointment_availability(date: str, time: str) -> dict:\n    \"\"\"Checks if there's availability for an appointment at the given date and time.\"\"\"\n    busy_slots = [\n        {\"date\": \"2024-07-04\", \"times\": [\"14:00\", \"15:00\", \"16:00\"]},\n        {\"date\": \"2024-07-05\", \"times\": [\"09:00\", \"10:00\", \"11:00\"]},\n        {\"date\": \"2024-07-10\", \"times\": [\"13:00\", \"14:00\"]},\n    ]\n\n    try:\n        datetime.strptime(date, \"%Y-%m-%d\")\n    except ValueError:\n        return {\n            \"available\": False,\n            \"error\": \"Invalid date format. Please use YYYY-MM-DD.\",\n        }\n\n    try:\n        datetime.strptime(time, \"%H:%M\")\n    except ValueError:\n        return {\n            \"available\": False,\n            \"error\": \"Invalid time format. Please use HH:MM in 24-hour format.\",\n        }\n\n    for slot in busy_slots:\n        if slot[\"date\"] == date and time in slot[\"times\"]:\n            return {\n                \"available\": False,\n                \"message\": f\"The slot on {date} at {time} is already booked.\",\n            }\n\n    return {\n        \"available\": True,\n        \"message\": f\"The slot on {date} at {time} is available for booking.\",\n    }\n\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 37,
+          "line_range": [
+            37,
+            73
+          ]
+        },
+        {
+          "code": "# For Example 1, we will call a single function with Gemini.\n",
+          "display_code": "",
+          "annotation": "For Example 1, we will call a single function with Gemini.",
+          "is_comment": true,
+          "start_line": 74,
+          "line_range": [
+            74,
+            74
+          ],
+          "target_line_range": [
+            75,
+            76
+          ]
+        },
+        {
+          "code": "print(\"\\n--- Example 1: Basic Function Calling ---\\n\")\n\n",
+          "display_code": "print(\"\\n--- Example 1: Basic Function Calling ---\\n\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 75,
+          "line_range": [
+            75,
+            76
+          ]
+        },
+        {
+          "code": "# First, we define the function declaration that will be provided to the model.\n",
+          "display_code": "",
+          "annotation": "First, we define the function declaration that will be provided to the model.",
+          "is_comment": true,
+          "start_line": 77,
+          "line_range": [
+            77,
+            77
+          ],
+          "target_line_range": [
+            78,
+            92
+          ]
+        },
+        {
+          "code": "weather_function = {\n    \"name\": \"get_current_temperature\",\n    \"description\": \"Gets the current temperature for a given location.\",\n    \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n            \"location\": {\n                \"type\": \"string\",\n                \"description\": \"The city name, e.g. San Francisco\",\n            },\n        },\n        \"required\": [\"location\"],\n    },\n}\n\n",
+          "display_code": "weather_function = {\n    \"name\": \"get_current_temperature\",\n    \"description\": \"Gets the current temperature for a given location.\",\n    \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n            \"location\": {\n                \"type\": \"string\",\n                \"description\": \"The city name, e.g. San Francisco\",\n            },\n        },\n        \"required\": [\"location\"],\n    },\n}\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 78,
+          "line_range": [
+            78,
+            92
+          ]
+        },
+        {
+          "code": "# Create a client and configure it with the function declaration\n",
+          "display_code": "",
+          "annotation": "Create a client and configure it with the function declaration",
+          "is_comment": true,
+          "start_line": 93,
+          "line_range": [
+            93,
+            93
+          ],
+          "target_line_range": [
+            94,
+            97
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\ntools = types.Tool(function_declarations=[weather_function])\nconfig = types.GenerateContentConfig(tools=[tools])\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\ntools = types.Tool(function_declarations=[weather_function])\nconfig = types.GenerateContentConfig(tools=[tools])\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 94,
+          "line_range": [
+            94,
+            97
+          ]
+        },
+        {
+          "code": "# Send a request to Gemini that will likely trigger the function\n",
+          "display_code": "",
+          "annotation": "Send a request to Gemini that will likely trigger the function",
+          "is_comment": true,
+          "start_line": 98,
+          "line_range": [
+            98,
+            98
+          ],
+          "target_line_range": [
+            99,
+            104
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash-lite\",\n    contents=\"What's the temperature in London?\",\n    config=config,\n)\n\n",
+          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash-lite\",\n    contents=\"What's the temperature in London?\",\n    config=config,\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 99,
+          "line_range": [
+            99,
+            104
+          ]
+        },
+        {
+          "code": "# Check if Gemini responded with a function call\n# Assumes Gemini will always respond with a function call.\n",
+          "display_code": "",
+          "annotation": "Check if Gemini responded with a function call\nAssumes Gemini will always respond with a function call.",
+          "is_comment": true,
+          "start_line": 105,
+          "line_range": [
+            105,
+            106
+          ],
+          "target_line_range": [
+            107,
+            110
+          ]
+        },
+        {
+          "code": "function_call = response.candidates[0].content.parts[0].function_call\nprint(f\"Function to call: {function_call.name}\")\nprint(f\"Arguments: {function_call.args}\")\n\n",
+          "display_code": "function_call = response.candidates[0].content.parts[0].function_call\nprint(f\"Function to call: {function_call.name}\")\nprint(f\"Arguments: {function_call.args}\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 107,
+          "line_range": [
+            107,
+            110
+          ]
+        },
+        {
+          "code": "# Execute the function with the arguments Gemini provided\n",
+          "display_code": "",
+          "annotation": "Execute the function with the arguments Gemini provided",
+          "is_comment": true,
+          "start_line": 111,
+          "line_range": [
+            111,
+            111
+          ],
+          "target_line_range": [
+            112,
+            114
+          ]
+        },
+        {
+          "code": "result = get_current_temperature(**function_call.args)\nprint(f\"Function result: {result}\")\n\n",
+          "display_code": "result = get_current_temperature(**function_call.args)\nprint(f\"Function result: {result}\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 112,
+          "line_range": [
+            112,
+            114
+          ]
+        },
+        {
+          "code": "# Send the function result back to Gemini for a final response\n",
+          "display_code": "",
+          "annotation": "Send the function result back to Gemini for a final response",
+          "is_comment": true,
+          "start_line": 115,
+          "line_range": [
+            115,
+            115
+          ],
+          "target_line_range": [
+            116,
+            133
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\n        {\n            \"parts\": [\n                {\n                    \"function_response\": {\n                        \"name\": function_call.name,\n                        \"response\": result,\n                    }\n                }\n            ]\n        }\n    ],\n)\nprint(f\"Model's final response: {response.text}\")\n\n\n",
+          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\n        {\n            \"parts\": [\n                {\n                    \"function_response\": {\n                        \"name\": function_call.name,\n                        \"response\": result,\n                    }\n                }\n            ]\n        }\n    ],\n)\nprint(f\"Model's final response: {response.text}\")\n\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 116,
+          "line_range": [
+            116,
+            133
+          ]
+        },
+        {
+          "code": "# Example 2 shows how to use multiple functions simultaneously.\n",
+          "display_code": "",
+          "annotation": "Example 2 shows how to use multiple functions simultaneously.",
+          "is_comment": true,
+          "start_line": 134,
+          "line_range": [
+            134,
+            134
+          ],
+          "target_line_range": [
+            135,
+            136
+          ]
+        },
+        {
+          "code": "print(\"\\n--- Example 2: Parallel Function Calling (Weather and Appointments) ---\\n\")\n\n",
+          "display_code": "print(\"\\n--- Example 2: Parallel Function Calling (Weather and Appointments) ---\\n\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 135,
+          "line_range": [
+            135,
+            136
+          ]
+        },
+        {
+          "code": "# Define the weather function declaration\n",
+          "display_code": "",
+          "annotation": "Define the weather function declaration",
+          "is_comment": true,
+          "start_line": 137,
+          "line_range": [
+            137,
+            137
+          ],
+          "target_line_range": [
+            138,
+            152
+          ]
+        },
+        {
+          "code": "weather_function = {\n    \"name\": \"get_current_temperature\",\n    \"description\": \"Gets the current temperature for a given location.\",\n    \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n            \"location\": {\n                \"type\": \"string\",\n                \"description\": \"The city name, e.g. London\",\n            },\n        },\n        \"required\": [\"location\"],\n    },\n}\n\n",
+          "display_code": "weather_function = {\n    \"name\": \"get_current_temperature\",\n    \"description\": \"Gets the current temperature for a given location.\",\n    \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n            \"location\": {\n                \"type\": \"string\",\n                \"description\": \"The city name, e.g. London\",\n            },\n        },\n        \"required\": [\"location\"],\n    },\n}\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 138,
+          "line_range": [
+            138,
+            152
+          ]
+        },
+        {
+          "code": "# Define the appointment function declaration\n",
+          "display_code": "",
+          "annotation": "Define the appointment function declaration",
+          "is_comment": true,
+          "start_line": 153,
+          "line_range": [
+            153,
+            153
+          ],
+          "target_line_range": [
+            154,
+            172
+          ]
+        },
+        {
+          "code": "appointment_function = {\n    \"name\": \"check_appointment_availability\",\n    \"description\": \"Checks if there's availability for an appointment at the given date and time.\",\n    \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n            \"date\": {\n                \"type\": \"string\",\n                \"description\": \"Date to check (YYYY-MM-DD)\",\n            },\n            \"time\": {\n                \"type\": \"string\",\n                \"description\": \"Time to check (HH:MM) in 24-hour format\",\n            },\n        },\n        \"required\": [\"date\", \"time\"],\n    },\n}\n\n",
+          "display_code": "appointment_function = {\n    \"name\": \"check_appointment_availability\",\n    \"description\": \"Checks if there's availability for an appointment at the given date and time.\",\n    \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n            \"date\": {\n                \"type\": \"string\",\n                \"description\": \"Date to check (YYYY-MM-DD)\",\n            },\n            \"time\": {\n                \"type\": \"string\",\n                \"description\": \"Time to check (HH:MM) in 24-hour format\",\n            },\n        },\n        \"required\": [\"date\", \"time\"],\n    },\n}\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 154,
+          "line_range": [
+            154,
+            172
+          ]
+        },
+        {
+          "code": "# Create a client and configure it with both function declarations\n",
+          "display_code": "",
+          "annotation": "Create a client and configure it with both function declarations",
+          "is_comment": true,
+          "start_line": 173,
+          "line_range": [
+            173,
+            173
+          ],
+          "target_line_range": [
+            174,
+            176
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\ntools = [types.Tool(function_declarations=[weather_function, appointment_function])]\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\ntools = [types.Tool(function_declarations=[weather_function, appointment_function])]\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 174,
+          "line_range": [
+            174,
+            176
+          ]
+        },
+        {
+          "code": "# Set a lower temperature for more predictable function calling\n",
+          "display_code": "",
+          "annotation": "Set a lower temperature for more predictable function calling",
+          "is_comment": true,
+          "start_line": 177,
+          "line_range": [
+            177,
+            177
+          ],
+          "target_line_range": [
+            178,
+            182
+          ]
+        },
+        {
+          "code": "config = {\n    \"tools\": tools,\n    \"temperature\": 0.1,\n}\n\n",
+          "display_code": "config = {\n    \"tools\": tools,\n    \"temperature\": 0.1,\n}\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 178,
+          "line_range": [
+            178,
+            182
+          ]
+        },
+        {
+          "code": "# Start a chat and send a message that should trigger both functions\n",
+          "display_code": "",
+          "annotation": "Start a chat and send a message that should trigger both functions",
+          "is_comment": true,
+          "start_line": 183,
+          "line_range": [
+            183,
+            183
+          ],
+          "target_line_range": [
+            184,
+            188
+          ]
+        },
+        {
+          "code": "chat = client.chats.create(model=\"gemini-2.0-flash-lite\", config=config)\nresponse = chat.send_message(\n    \"I'm planning to visit Paris on July 4th at 2 PM. What's the weather like there and is that slot available for an appointment?\"\n)\n\n",
+          "display_code": "chat = client.chats.create(model=\"gemini-2.0-flash-lite\", config=config)\nresponse = chat.send_message(\n    \"I'm planning to visit Paris on July 4th at 2 PM. What's the weather like there and is that slot available for an appointment?\"\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 184,
+          "line_range": [
+            184,
+            188
+          ]
+        },
+        {
+          "code": "# Store the results from each function call\n",
+          "display_code": "",
+          "annotation": "Store the results from each function call",
+          "is_comment": true,
+          "start_line": 189,
+          "line_range": [
+            189,
+            189
+          ],
+          "target_line_range": [
+            190,
+            191
+          ]
+        },
+        {
+          "code": "results = {}\n\n",
+          "display_code": "results = {}\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 190,
+          "line_range": [
+            190,
+            191
+          ]
+        },
+        {
+          "code": "# Process each function call Gemini requests\n# Assumes Gemini will always respond with function calls.\n",
+          "display_code": "",
+          "annotation": "Process each function call Gemini requests\nAssumes Gemini will always respond with function calls.",
+          "is_comment": true,
+          "start_line": 192,
+          "line_range": [
+            192,
+            193
+          ],
+          "target_line_range": [
+            194,
+            197
+          ]
+        },
+        {
+          "code": "for fn in response.function_calls:\n    args_str = \", \".join(f\"{key}={val}\" for key, val in fn.args.items())\n    print(f\"{fn.name}({args_str})\")\n\n",
+          "display_code": "for fn in response.function_calls:\n    args_str = \", \".join(f\"{key}={val}\" for key, val in fn.args.items())\n    print(f\"{fn.name}({args_str})\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 194,
+          "line_range": [
+            194,
+            197
+          ]
+        },
+        {
+          "code": "    # Call the appropriate function based on name\n",
+          "display_code": "",
+          "annotation": "Call the appropriate function based on name",
+          "is_comment": true,
+          "start_line": 198,
+          "line_range": [
+            198,
+            198
+          ],
+          "target_line_range": [
+            199,
+            205
+          ]
+        },
+        {
+          "code": "    if fn.name == \"get_current_temperature\":\n        result = get_current_temperature(**fn.args)\n    elif fn.name == \"check_appointment_availability\":\n        result = check_appointment_availability(**fn.args)\n    else:\n        result = {\"error\": f\"Unknown function: {fn.name}\"}\n\n",
+          "display_code": "    if fn.name == \"get_current_temperature\":\n        result = get_current_temperature(**fn.args)\n    elif fn.name == \"check_appointment_availability\":\n        result = check_appointment_availability(**fn.args)\n    else:\n        result = {\"error\": f\"Unknown function: {fn.name}\"}\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 199,
+          "line_range": [
+            199,
+            205
+          ]
+        },
+        {
+          "code": "    # Store each result for later use\n",
+          "display_code": "",
+          "annotation": "Store each result for later use",
+          "is_comment": true,
+          "start_line": 206,
+          "line_range": [
+            206,
+            206
+          ],
+          "target_line_range": [
+            207,
+            209
+          ]
+        },
+        {
+          "code": "    results[fn.name] = result\n    print(f\"Result: {result}\\n\")\n\n",
+          "display_code": "    results[fn.name] = result\n    print(f\"Result: {result}\\n\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 207,
+          "line_range": [
+            207,
+            209
+          ]
+        },
+        {
+          "code": "# Prepare all function responses to send back to Gemini\n",
+          "display_code": "",
+          "annotation": "Prepare all function responses to send back to Gemini",
+          "is_comment": true,
+          "start_line": 210,
+          "line_range": [
+            210,
+            210
+          ],
+          "target_line_range": [
+            211,
+            214
+          ]
+        },
+        {
+          "code": "function_responses = []\nfor fn_name, result in results.items():\n    function_responses.append({\"name\": fn_name, \"response\": result})\n\n",
+          "display_code": "function_responses = []\nfor fn_name, result in results.items():\n    function_responses.append({\"name\": fn_name, \"response\": result})\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 211,
+          "line_range": [
+            211,
+            214
+          ]
+        },
+        {
+          "code": "# Send all results back to Gemini in a single message\n",
+          "display_code": "",
+          "annotation": "Send all results back to Gemini in a single message",
+          "is_comment": true,
+          "start_line": 215,
+          "line_range": [
+            215,
+            215
+          ],
+          "target_line_range": [
+            216,
+            219
+          ]
+        },
+        {
+          "code": "if function_responses:\n    print(\"Sending all function results back to the model...\\n\")\n    response = chat.send_message(str(function_responses))\n    print(f\"Model's final response:\\n{response.text}\")\n",
+          "display_code": "if function_responses:\n    print(\"Sending all function results back to the model...\\n\")\n    response = chat.send_message(str(function_responses))\n    print(f\"Model's final response:\\n{response.text}\")\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 216,
+          "line_range": [
+            216,
+            219
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library and requests",
+          "command": "pip install google-generative-ai requests",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python function_calling_weather_calendar.py",
+          "output": "--- Example 1: Basic Function Calling ---\nFunction to call: get_current_temperature\nArguments: {'location': 'London'}\nFunction result: {'location': 'London', 'temperature': 16, 'unit': 'Celsius'}\nModel's final response: OK. The current temperature in London is 16 degrees Celsius.\n--- Example 2: Parallel Function Calling (Weather and Appointments) ---\nget_current_temperature(location=Paris)\nResult: {'location': 'Paris', 'temperature': 18, 'unit': 'Celsius'}\ncheck_appointment_availability(time=14:00, date=2024-07-04)\nResult: {'available': False, 'message': 'The slot on 2024-07-04 at 14:00 is already booked.'}\nSending all function results back to the model...\nModel's final response:\nThe current temperature in Paris is 18 degrees Celsius. The appointment slot on July 4th at 2 PM is not available."
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/function-calling?example=weather",
+        "https://ai.google.dev/gemini-api/docs/function-calling?example=meeting"
+      ],
+      "section_id": "006-agentic",
+      "section_title": "Agentic behaviour"
     }
   ],
   "sections": [
     {
       "id": "001-basic-text",
-      "title": "Text basics",
+      "title": "Text",
       "description": "",
       "order": 1,
       "examples": [
         "001-basic-generation",
         "002-streaming-text",
-        "003-system-prompt"
+        "003-system-prompt",
+        "019-reasoning-models",
+        "020-structured-output"
       ]
     },
     {
       "id": "002-basic-images",
-      "title": "Images basics",
+      "title": "Images",
       "description": "",
       "order": 2,
       "examples": [
@@ -3846,7 +4819,7 @@
     },
     {
       "id": "003-basic-audio",
-      "title": "Audio basics",
+      "title": "Audio",
       "description": "",
       "order": 3,
       "examples": [
@@ -3857,7 +4830,7 @@
     },
     {
       "id": "004-basic-video",
-      "title": "Video basics",
+      "title": "Video",
       "description": "",
       "order": 4,
       "examples": [
@@ -3876,6 +4849,19 @@
         "016-pdf-csv-analysis",
         "017-content-translation",
         "018-structured-data-extraction"
+      ]
+    },
+    {
+      "id": "006-agentic",
+      "title": "Agentic behaviour",
+      "description": "",
+      "order": 6,
+      "examples": [
+        "021-tool-use-function-calling",
+        "022-code-execution",
+        "023-chat-with-data",
+        "024-mcp-model-context-protocol",
+        "025-grounded-responses"
       ]
     }
   ]
