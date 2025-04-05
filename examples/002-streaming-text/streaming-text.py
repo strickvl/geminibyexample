@@ -1,4 +1,4 @@
-# Streaming Text Generation
+# Streaming text
 # This example demonstrates how to use the Gemini API to generate text content and stream the output.
 
 # Import the Gemini API

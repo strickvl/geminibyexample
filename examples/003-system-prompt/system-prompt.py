@@ -1,4 +1,4 @@
-# System Instructions Example
+# System prompt
 # This example demonstrates how to use system instructions to guide the model's behavior.
 
 # Import the Gemini API
