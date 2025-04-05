@@ -1243,6 +1243,491 @@
       ],
       "section_id": "002-basic-images",
       "section_title": "Images Basics"
+    },
+    {
+      "id": "008-image-segmentation",
+      "title": "Image segmentation",
+      "description": "This example demonstrates how to use the Gemini API to perform image segmentation on a picture of a cat.",
+      "order": 8,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import the Gemini API and necessary libraries. Make sure Pillow is installed!\n",
+          "display_code": "",
+          "annotation": "Import the Gemini API and necessary libraries. Make sure Pillow is installed!",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ],
+          "target_line_range": [
+            5,
+            12
+          ]
+        },
+        {
+          "code": "from google import genai\nimport os\nimport requests\nfrom PIL import Image\nfrom io import BytesIO\nimport json\nimport base64\n\n",
+          "display_code": "from google import genai\nimport os\nimport requests\nfrom PIL import Image\nfrom io import BytesIO\nimport json\nimport base64\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            12
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 13,
+          "line_range": [
+            13,
+            13
+          ],
+          "target_line_range": [
+            14,
+            15
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 14,
+          "line_range": [
+            14,
+            15
+          ]
+        },
+        {
+          "code": "# Define the prompt for image segmentation, focusing on cats\n",
+          "display_code": "",
+          "annotation": "Define the prompt for image segmentation, focusing on cats",
+          "is_comment": true,
+          "start_line": 16,
+          "line_range": [
+            16,
+            16
+          ],
+          "target_line_range": [
+            17,
+            23
+          ]
+        },
+        {
+          "code": "prompt = \"\"\"\nGive the segmentation masks for the cat in the image.\nOutput a JSON list of segmentation masks where each entry contains the 2D\nbounding box in the key \\\"box_2d\\\", the segmentation mask in key \\\"mask\\\", and\nthe text label in the key \\\"label\\\". Use descriptive labels.\n\"\"\"\n\n",
+          "display_code": "prompt = \"\"\"\nGive the segmentation masks for the cat in the image.\nOutput a JSON list of segmentation masks where each entry contains the 2D\nbounding box in the key \\\"box_2d\\\", the segmentation mask in key \\\"mask\\\", and\nthe text label in the key \\\"label\\\". Use descriptive labels.\n\"\"\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 17,
+          "line_range": [
+            17,
+            23
+          ]
+        },
+        {
+          "code": "# Download the cat image from cataas.com\n",
+          "display_code": "",
+          "annotation": "Download the cat image from cataas.com",
+          "is_comment": true,
+          "start_line": 24,
+          "line_range": [
+            24,
+            24
+          ],
+          "target_line_range": [
+            25,
+            28
+          ]
+        },
+        {
+          "code": "image_url = \"https://cataas.com/cat\"\nresponse = requests.get(image_url)\ncat_image = Image.open(BytesIO(response.content))\n\n",
+          "display_code": "image_url = \"https://cataas.com/cat\"\nresponse = requests.get(image_url)\ncat_image = Image.open(BytesIO(response.content))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 25,
+          "line_range": [
+            25,
+            28
+          ]
+        },
+        {
+          "code": "# Save the original image\n",
+          "display_code": "",
+          "annotation": "Save the original image",
+          "is_comment": true,
+          "start_line": 29,
+          "line_range": [
+            29,
+            29
+          ],
+          "target_line_range": [
+            30,
+            33
+          ]
+        },
+        {
+          "code": "original_filename = f\"cat_original.png\"\ncat_image.save(original_filename)\nprint(f\"Original image saved as: {original_filename}\")\n\n",
+          "display_code": "original_filename = f\"cat_original.png\"\ncat_image.save(original_filename)\nprint(f\"Original image saved as: {original_filename}\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 30,
+          "line_range": [
+            30,
+            33
+          ]
+        },
+        {
+          "code": "# Call the Gemini API to generate content with the image and prompt\n",
+          "display_code": "",
+          "annotation": "Call the Gemini API to generate content with the image and prompt",
+          "is_comment": true,
+          "start_line": 34,
+          "line_range": [
+            34,
+            34
+          ],
+          "target_line_range": [
+            35,
+            38
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=\"gemini-2.5-pro-exp-03-25\", contents=[cat_image, prompt]\n)\n\n",
+          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.5-pro-exp-03-25\", contents=[cat_image, prompt]\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 35,
+          "line_range": [
+            35,
+            38
+          ]
+        },
+        {
+          "code": "# Print the response containing segmentation information.\n",
+          "display_code": "",
+          "annotation": "Print the response containing segmentation information.",
+          "is_comment": true,
+          "start_line": 39,
+          "line_range": [
+            39,
+            39
+          ],
+          "target_line_range": [
+            40,
+            41
+          ]
+        },
+        {
+          "code": "print(response.text)\n\n",
+          "display_code": "print(response.text)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 40,
+          "line_range": [
+            40,
+            41
+          ]
+        },
+        {
+          "code": "# Display and save the overlaid mask.\n# Extract the JSON part from the response (it might be wrapped in markdown)\n",
+          "display_code": "",
+          "annotation": "Display and save the overlaid mask.\nExtract the JSON part from the response (it might be wrapped in markdown)",
+          "is_comment": true,
+          "start_line": 42,
+          "line_range": [
+            42,
+            43
+          ],
+          "target_line_range": [
+            44,
+            53
+          ]
+        },
+        {
+          "code": "response_text = response.text\nif \"```json\" in response_text:\n    json_str = response_text.split(\"```json\")[1].split(\"```\")[0].strip()\nelif \"[\" in response_text and \"]\" in response_text:\n    start = response_text.find(\"[\")\n    end = response_text.rfind(\"]\") + 1\n    json_str = response_text[start:end]\nelse:\n    json_str = response_text\n\n",
+          "display_code": "response_text = response.text\nif \"```json\" in response_text:\n    json_str = response_text.split(\"```json\")[1].split(\"```\")[0].strip()\nelif \"[\" in response_text and \"]\" in response_text:\n    start = response_text.find(\"[\")\n    end = response_text.rfind(\"]\") + 1\n    json_str = response_text[start:end]\nelse:\n    json_str = response_text\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 44,
+          "line_range": [
+            44,
+            53
+          ]
+        },
+        {
+          "code": "# Parse JSON data\n",
+          "display_code": "",
+          "annotation": "Parse JSON data",
+          "is_comment": true,
+          "start_line": 54,
+          "line_range": [
+            54,
+            54
+          ],
+          "target_line_range": [
+            55,
+            56
+          ]
+        },
+        {
+          "code": "mask_data = json.loads(json_str)\n\n",
+          "display_code": "mask_data = json.loads(json_str)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 55,
+          "line_range": [
+            55,
+            56
+          ]
+        },
+        {
+          "code": "# Get the first mask. This assumes a mask was returned.\n",
+          "display_code": "",
+          "annotation": "Get the first mask. This assumes a mask was returned.",
+          "is_comment": true,
+          "start_line": 57,
+          "line_range": [
+            57,
+            57
+          ],
+          "target_line_range": [
+            58,
+            59
+          ]
+        },
+        {
+          "code": "first_mask = mask_data[0]\n\n",
+          "display_code": "first_mask = mask_data[0]\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 58,
+          "line_range": [
+            58,
+            59
+          ]
+        },
+        {
+          "code": "# Extract base64 encoded mask\n",
+          "display_code": "",
+          "annotation": "Extract base64 encoded mask",
+          "is_comment": true,
+          "start_line": 60,
+          "line_range": [
+            60,
+            60
+          ],
+          "target_line_range": [
+            61,
+            64
+          ]
+        },
+        {
+          "code": "mask_base64 = first_mask.get(\"mask\", \"\")\nif \"base64,\" in mask_base64:\n    mask_base64 = mask_base64.split(\"base64,\")[1]\n\n",
+          "display_code": "mask_base64 = first_mask.get(\"mask\", \"\")\nif \"base64,\" in mask_base64:\n    mask_base64 = mask_base64.split(\"base64,\")[1]\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 61,
+          "line_range": [
+            61,
+            64
+          ]
+        },
+        {
+          "code": "# Decode and load the mask image\n",
+          "display_code": "",
+          "annotation": "Decode and load the mask image",
+          "is_comment": true,
+          "start_line": 65,
+          "line_range": [
+            65,
+            65
+          ],
+          "target_line_range": [
+            66,
+            68
+          ]
+        },
+        {
+          "code": "mask_bytes = base64.b64decode(mask_base64)\nmask_image = Image.open(BytesIO(mask_bytes))\n\n",
+          "display_code": "mask_bytes = base64.b64decode(mask_base64)\nmask_image = Image.open(BytesIO(mask_bytes))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 66,
+          "line_range": [
+            66,
+            68
+          ]
+        },
+        {
+          "code": "# Convert images to RGBA\n",
+          "display_code": "",
+          "annotation": "Convert images to RGBA",
+          "is_comment": true,
+          "start_line": 69,
+          "line_range": [
+            69,
+            69
+          ],
+          "target_line_range": [
+            70,
+            72
+          ]
+        },
+        {
+          "code": "cat_image = cat_image.convert(\"RGBA\")\nmask_image = mask_image.convert(\"L\")  # Convert mask to grayscale\n\n",
+          "display_code": "cat_image = cat_image.convert(\"RGBA\")\nmask_image = mask_image.convert(\"L\")  # Convert mask to grayscale\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 70,
+          "line_range": [
+            70,
+            72
+          ]
+        },
+        {
+          "code": "# Create a bright colored overlay (bright pink)\n",
+          "display_code": "",
+          "annotation": "Create a bright colored overlay (bright pink)",
+          "is_comment": true,
+          "start_line": 73,
+          "line_range": [
+            73,
+            73
+          ],
+          "target_line_range": [
+            74,
+            77
+          ]
+        },
+        {
+          "code": "overlay = Image.new(\n    \"RGBA\", mask_image.size, (255, 0, 255, 128)\n)  # Bright pink, semi-transparent\n\n",
+          "display_code": "overlay = Image.new(\n    \"RGBA\", mask_image.size, (255, 0, 255, 128)\n)  # Bright pink, semi-transparent\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 74,
+          "line_range": [
+            74,
+            77
+          ]
+        },
+        {
+          "code": "# Use the mask to determine where to apply the color.\n# We need the mask as an alpha channel\n",
+          "display_code": "",
+          "annotation": "Use the mask to determine where to apply the color.\nWe need the mask as an alpha channel",
+          "is_comment": true,
+          "start_line": 78,
+          "line_range": [
+            78,
+            79
+          ],
+          "target_line_range": [
+            80,
+            81
+          ]
+        },
+        {
+          "code": "overlay.putalpha(mask_image)\n\n",
+          "display_code": "overlay.putalpha(mask_image)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 80,
+          "line_range": [
+            80,
+            81
+          ]
+        },
+        {
+          "code": "# Resize the overlay to match the original image if needed\n",
+          "display_code": "",
+          "annotation": "Resize the overlay to match the original image if needed",
+          "is_comment": true,
+          "start_line": 82,
+          "line_range": [
+            82,
+            82
+          ],
+          "target_line_range": [
+            83,
+            85
+          ]
+        },
+        {
+          "code": "if overlay.size != cat_image.size:\n    overlay = overlay.resize(cat_image.size)\n\n",
+          "display_code": "if overlay.size != cat_image.size:\n    overlay = overlay.resize(cat_image.size)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 83,
+          "line_range": [
+            83,
+            85
+          ]
+        },
+        {
+          "code": "# Overlay the colored mask on the original image. Save both images.\n",
+          "display_code": "",
+          "annotation": "Overlay the colored mask on the original image. Save both images.",
+          "is_comment": true,
+          "start_line": 86,
+          "line_range": [
+            86,
+            86
+          ],
+          "target_line_range": [
+            87,
+            93
+          ]
+        },
+        {
+          "code": "result = Image.alpha_composite(cat_image, overlay)\n\nmask_filename = f\"cat_mask.png\"\nmask_image.save(mask_filename)\n\nmerged_filename = f\"cat_with_mask.png\"\nresult.save(merged_filename)\n",
+          "display_code": "result = Image.alpha_composite(cat_image, overlay)\n\nmask_filename = f\"cat_mask.png\"\nmask_image.save(mask_filename)\n\nmerged_filename = f\"cat_with_mask.png\"\nresult.save(merged_filename)\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 87,
+          "line_range": [
+            87,
+            93
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library",
+          "command": "pip install google-generative-ai",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python cat_segmentation.py",
+          "output": "# Expected output (example):\n# [{\"box_2d\": [100, 50, 900, 750], \"mask\": \"base64_encoded_png_data\", \"label\": \"Main Coon Cat\"}, ...]"
+        }
+      ],
+      "image_data": [
+        {
+          "path": "examples/008-image-segmentation/image-segmentation.png",
+          "filename": "image-segmentation.png",
+          "caption": "Segmentation"
+        }
+      ],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/vision?lang=python#image_segmentation"
+      ],
+      "section_id": "002-basic-images",
+      "section_title": "Images Basics"
     }
   ],
   "sections": [
@@ -1266,7 +1751,8 @@
         "004-image-q-a",
         "005-image-generation",
         "006-editing-images",
-        "007-bounding-boxes"
+        "007-bounding-boxes",
+        "008-image-segmentation"
       ]
     }
   ]

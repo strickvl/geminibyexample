@@ -5,14 +5,24 @@
       "title": "Text Basics",
       "description": "",
       "order": 1,
-      "examples": ["001-basic-generation", "002-streaming-text", "003-system-prompt"]
+      "examples": [
+        "001-basic-generation",
+        "002-streaming-text",
+        "003-system-prompt"
+      ]
     },
     {
       "id": "002-basic-images",
       "title": "Images Basics",
       "description": "",
       "order": 2,
-      "examples": ["004-image-q-a", "005-image-generation", "006-editing-images", "007-bounding-boxes"]
+      "examples": [
+        "004-image-q-a",
+        "005-image-generation",
+        "006-editing-images",
+        "007-bounding-boxes",
+        "008-image-segmentation"
+      ]
     }
   ]
 }

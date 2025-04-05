@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bounding boxes - Gemini by Example</title>
+    <title>Image segmentation - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
     <style>
@@ -159,7 +159,7 @@
                     <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
                         <a href="../" style="text-decoration: none; color: #666;">Images Basics</a>
                     </div>
-                    <h1 style="margin: 0; margin-bottom: 10px;">Bounding boxes</h1>
+                    <h1 style="margin: 0; margin-bottom: 10px;">Image segmentation</h1>
                 </div>
                 <div style="position: relative; margin-top: 10px;">
                     <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
@@ -172,18 +172,21 @@
                 </div>
             </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
-                This example demonstrates how to use the Gemini API to detect an object (a cat) in an image and retrieve its bounding box coordinates.
+                This example demonstrates how to use the Gemini API to perform image segmentation on a picture of a cat.
             </p>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Import necessary libraries. Make sure Pillow is installed!</div>
+                    <div style='font-size: 0.9em; color: #666;'>Import the Gemini API and necessary libraries. Make sure Pillow is installed!</div>
 
                 </div>
                 <div class="code">
                     <pre><code>from google import genai
+import os
 import requests
 from PIL import Image
-from io import BytesIO</code></pre>
+from io import BytesIO
+import json
+import base64</code></pre>
                 </div>
             </div>
             <hr>
@@ -193,20 +196,22 @@ from io import BytesIO</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)</code></pre>
+                    <pre><code>client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Specify the prompt, asking for a bounding box around the cat</div>
+                    <div style='font-size: 0.9em; color: #666;'>Define the prompt for image segmentation, focusing on cats</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>prompt = (
-    &quot;Return a bounding box for the cat in this image &quot;
-    &quot;in [ymin, xmin, ymax, xmax] format.&quot;
-)</code></pre>
+                    <pre><code>prompt = &quot;&quot;&quot;
+Give the segmentation masks for the cat in the image.
+Output a JSON list of segmentation masks where each entry contains the 2D
+bounding box in the key \&quot;box_2d\&quot;, the segmentation mask in key \&quot;mask\&quot;, and
+the text label in the key \&quot;label\&quot;. Use descriptive labels.
+&quot;&quot;&quot;</code></pre>
                 </div>
             </div>
             <hr>
@@ -224,19 +229,31 @@ cat_image = Image.open(BytesIO(response.content))</code></pre>
             <hr>
             <div class="row">
                 <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Save the original image</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>original_filename = f&quot;cat_original.png&quot;
+cat_image.save(original_filename)
+print(f&quot;Original image saved as: {original_filename}&quot;)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
                     <div style='font-size: 0.9em; color: #666;'>Call the Gemini API to generate content with the image and prompt</div>
 
                 </div>
                 <div class="code">
                     <pre><code>response = client.models.generate_content(
-    model=&quot;gemini-1.5-pro&quot;, contents=[cat_image, prompt]
+    model=&quot;gemini-2.5-pro-exp-03-25&quot;, contents=[cat_image, prompt]
 )</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Print the response text, which will contain the bounding box coordinates</div>
+                    <div style='font-size: 0.9em; color: #666;'>Print the response containing segmentation information.</div>
 
                 </div>
                 <div class="code">
@@ -246,28 +263,131 @@ cat_image = Image.open(BytesIO(response.content))</code></pre>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Normalize Coordinates
-The model returns bounding box coordinates in the format [y_min, x_min, y_max, x_max].
-To convert these normalized coordinates to the pixel coordinates of your original image, follow these steps:
-1. Divide each output coordinate by 1000.
-2. Multiply the x-coordinates by the original image width.
-3. Multiply the y-coordinates by the original image height.
-
-Example Calculation (assuming the model returns [200, 300, 700, 800] and the image is 1000x800):</div>
+                    <div style='font-size: 0.9em; color: #666;'>Display and save the overlaid mask.
+Extract the JSON part from the response (it might be wrapped in markdown)</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>y_min = (200 / 1000) * 800  # 160
-x_min = (300 / 1000) * 1000  # 300
-y_max = (700 / 1000) * 800  # 560
-x_max = (800 / 1000) * 1000  # 800</code></pre>
+                    <pre><code>response_text = response.text
+if &quot;```json&quot; in response_text:
+    json_str = response_text.split(&quot;```json&quot;)[1].split(&quot;```&quot;)[0].strip()
+elif &quot;[&quot; in response_text and &quot;]&quot; in response_text:
+    start = response_text.find(&quot;[&quot;)
+    end = response_text.rfind(&quot;]&quot;) + 1
+    json_str = response_text[start:end]
+else:
+    json_str = response_text</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Parse JSON data</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>mask_data = json.loads(json_str)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Get the first mask. This assumes a mask was returned.</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>first_mask = mask_data[0]</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Extract base64 encoded mask</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>mask_base64 = first_mask.get(&quot;mask&quot;, &quot;&quot;)
+if &quot;base64,&quot; in mask_base64:
+    mask_base64 = mask_base64.split(&quot;base64,&quot;)[1]</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Decode and load the mask image</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>mask_bytes = base64.b64decode(mask_base64)
+mask_image = Image.open(BytesIO(mask_bytes))</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Convert images to RGBA</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>cat_image = cat_image.convert(&quot;RGBA&quot;)
+mask_image = mask_image.convert(&quot;L&quot;)  # Convert mask to grayscale</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Create a bright colored overlay (bright pink)</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>overlay = Image.new(
+    &quot;RGBA&quot;, mask_image.size, (255, 0, 255, 128)
+)  # Bright pink, semi-transparent</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Use the mask to determine where to apply the color.
+We need the mask as an alpha channel</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>overlay.putalpha(mask_image)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Resize the overlay to match the original image if needed</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>if overlay.size != cat_image.size:
+    overlay = overlay.resize(cat_image.size)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Overlay the colored mask on the original image. Save both images.</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>result = Image.alpha_composite(cat_image, overlay)
+
+mask_filename = f&quot;cat_mask.png&quot;
+mask_image.save(mask_filename)
+
+merged_filename = f&quot;cat_with_mask.png&quot;
+result.save(merged_filename)</code></pre>
                 </div>
             </div>
             <hr>
             <h2>Running the Example</h2>
             <div class="row">
                 <div class="docs" style='font-size: 0.9em; color: #666;'>
-                    First, install the Google Generative AI library, requests, and Pillow
+                    First, install the Google Generative AI library
                 </div>
                 <div class="code">
                     <div class="buttons">
@@ -275,7 +395,7 @@ x_max = (800 / 1000) * 1000  # 800</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai Pillow requests</span></span>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai</span></span>
 </code></pre>
                 </div>
             </div>
@@ -289,19 +409,26 @@ x_max = (800 / 1000) * 1000  # 800</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python object-detection.py</span></span>
-[0.1, 0.2, 0.7, 0.8]</code></pre>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python cat_segmentation.py</span></span>
+# Expected output (example):
+# [{&quot;box_2d&quot;: [100, 50, 900, 750], &quot;mask&quot;: &quot;base64_encoded_png_data&quot;, &quot;label&quot;: &quot;Main Coon Cat&quot;}, ...]</code></pre>
                 </div>
+            </div>
+            <hr>
+            <div style="margin: 30px 0; text-align: center;">
+                <figure>
+                    <img src="images/image-segmentation.png" alt="An illustration or output
+                    from the example code" style="max-width: 100%; border: 1px solid #eee;
+                    border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; color: #666; font-style: italic;"></figcaption>
+                </figure>
             </div>
             <hr>
             <h4>Further Information</h4>
             <ul style="font-size: 0.9em;">
-                <li><a href="https://ai.google.dev/gemini-api/docs/vision?lang=python#bbox"
+                <li><a href="https://ai.google.dev/gemini-api/docs/vision?lang=python#image_segmentation"
                          target="_blank">Gemini docs link 1</a></li>
             </ul>
-            <p class="next">
-                Next example: <a href="../008-image-segmentation/">Image segmentation</a>
-            </p>
         </main>
         <footer>
             <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 05, 2025</span></p>
