@@ -3030,7 +3030,7 @@
     },
     {
       "id": "016-pdf-csv-analysis",
-      "title": "PDF and CSV data analysis",
+      "title": "PDF and CSV data analysis and summarization",
       "description": "This example demonstrates how to use the Gemini API to analyze data from PDF and CSV files.",
       "order": 16,
       "code_segments": [
@@ -3135,18 +3135,18 @@
           ],
           "target_line_range": [
             19,
-            20
+            23
           ]
         },
         {
-          "code": "pdf_prompt = \"Identify the main companies or entities mentioned in this invoice.\"\n\n",
-          "display_code": "pdf_prompt = \"Identify the main companies or entities mentioned in this invoice.\"\n\n",
+          "code": "pdf_prompt = (\n    \"Identify the main companies or entities mentioned in this invoice. \"\n    \"Summarize the data.\"\n)\n\n",
+          "display_code": "pdf_prompt = (\n    \"Identify the main companies or entities mentioned in this invoice. \"\n    \"Summarize the data.\"\n)\n\n",
           "annotation": "",
           "is_comment": false,
           "start_line": 19,
           "line_range": [
             19,
-            20
+            23
           ]
         },
         {
@@ -3154,14 +3154,14 @@
           "display_code": "",
           "annotation": "Generate content with the PDF and the prompt",
           "is_comment": true,
-          "start_line": 21,
+          "start_line": 24,
           "line_range": [
-            21,
-            21
+            24,
+            24
           ],
           "target_line_range": [
-            22,
-            29
+            25,
+            32
           ]
         },
         {
@@ -3169,10 +3169,10 @@
           "display_code": "pdf_response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\n        types.Part.from_bytes(data=pdf_data, mime_type=\"application/pdf\"),\n        pdf_prompt,\n    ],\n)\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 22,
+          "start_line": 25,
           "line_range": [
-            22,
-            29
+            25,
+            32
           ]
         },
         {
@@ -3180,14 +3180,14 @@
           "display_code": "",
           "annotation": "Print the PDF analysis result",
           "is_comment": true,
-          "start_line": 30,
+          "start_line": 33,
           "line_range": [
-            30,
-            30
+            33,
+            33
           ],
           "target_line_range": [
-            31,
-            32
+            34,
+            35
           ]
         },
         {
@@ -3195,25 +3195,25 @@
           "display_code": "print(\"PDF Analysis Result:\\n\", pdf_response.text)\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 31,
+          "start_line": 34,
           "line_range": [
-            31,
-            32
+            34,
+            35
           ]
         },
         {
-          "code": "# Moving on to the CSV analysis now.\n# We download the CSV file\n",
+          "code": "# Moving on to the CSV analysis now. You'll note that the process is very\n# similar.\n# You can also pass in code files, XML, RTF, Markdown, and more.\n# We download the CSV file here.\n",
           "display_code": "",
-          "annotation": "Moving on to the CSV analysis now.\nWe download the CSV file",
+          "annotation": "Moving on to the CSV analysis now. You'll note that the process is very\nsimilar.\nYou can also pass in code files, XML, RTF, Markdown, and more.\nWe download the CSV file here.",
           "is_comment": true,
-          "start_line": 33,
+          "start_line": 36,
           "line_range": [
-            33,
-            34
+            36,
+            39
           ],
           "target_line_range": [
-            35,
-            37
+            40,
+            42
           ]
         },
         {
@@ -3221,10 +3221,10 @@
           "display_code": "csv_url = \"https://gist.githubusercontent.com/suellenstringer-hye/f2231b3383538bcb1a5b051c7908f5b7/raw/0f4e0733a434733cda8e749bbbf33a93c2b5bbde/test.csv\"\ncsv_data = httpx.get(csv_url).content\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 35,
+          "start_line": 40,
           "line_range": [
-            35,
-            37
+            40,
+            42
           ]
         },
         {
@@ -3232,25 +3232,25 @@
           "display_code": "",
           "annotation": "Prompt to analyze the CSV data",
           "is_comment": true,
-          "start_line": 38,
+          "start_line": 43,
           "line_range": [
-            38,
-            38
+            43,
+            43
           ],
           "target_line_range": [
-            39,
-            40
+            44,
+            45
           ]
         },
         {
-          "code": "csv_prompt = \"Analyze this data and tell me about the contents.\"\n\n",
-          "display_code": "csv_prompt = \"Analyze this data and tell me about the contents.\"\n\n",
+          "code": "csv_prompt = \"Analyze this data and tell me about the contents. Summarize the data.\"\n\n",
+          "display_code": "csv_prompt = \"Analyze this data and tell me about the contents. Summarize the data.\"\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 39,
+          "start_line": 44,
           "line_range": [
-            39,
-            40
+            44,
+            45
           ]
         },
         {
@@ -3258,14 +3258,14 @@
           "display_code": "",
           "annotation": "Generate content with the CSV data and the prompt",
           "is_comment": true,
-          "start_line": 41,
+          "start_line": 46,
           "line_range": [
-            41,
-            41
+            46,
+            46
           ],
           "target_line_range": [
-            42,
-            52
+            47,
+            57
           ]
         },
         {
@@ -3273,10 +3273,10 @@
           "display_code": "csv_response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\n        types.Part.from_bytes(\n            data=csv_data,\n            mime_type=\"text/csv\",\n        ),\n        csv_prompt,\n    ],\n)\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 42,
+          "start_line": 47,
           "line_range": [
-            42,
-            52
+            47,
+            57
           ]
         },
         {
@@ -3284,14 +3284,14 @@
           "display_code": "",
           "annotation": "Print the CSV analysis result",
           "is_comment": true,
-          "start_line": 53,
+          "start_line": 58,
           "line_range": [
-            53,
-            53
+            58,
+            58
           ],
           "target_line_range": [
-            54,
-            54
+            59,
+            59
           ]
         },
         {
@@ -3299,10 +3299,10 @@
           "display_code": "print(\"\\nCSV Analysis Result:\\n\", csv_response.text)\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 54,
+          "start_line": 59,
           "line_range": [
-            54,
-            54
+            59,
+            59
           ]
         }
       ],
@@ -3322,6 +3322,498 @@
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/document-processing?lang=python",
         "https://ai.google.dev/gemini-api/docs/document-processing?lang=rest"
+      ],
+      "section_id": "005-other-data-types",
+      "section_title": "PDFs and other data types"
+    },
+    {
+      "id": "017-content-translation",
+      "title": "Translate documents",
+      "description": "This example demonstrates how to load content from a URL and translate it into\nChinese using the Gemini API.\nIt's easy to do the same using PDF or Markdown files, though you might want to\nsplit it up into smaller chunks for better accuracy if your document is long.",
+      "order": 17,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 6,
+          "line_range": [
+            6,
+            6
+          ]
+        },
+        {
+          "code": "# Import the necessary libraries\n",
+          "display_code": "",
+          "annotation": "Import the necessary libraries",
+          "is_comment": true,
+          "start_line": 7,
+          "line_range": [
+            7,
+            7
+          ],
+          "target_line_range": [
+            8,
+            11
+          ]
+        },
+        {
+          "code": "from google import genai\nimport requests\nimport os\n\n",
+          "display_code": "from google import genai\nimport requests\nimport os\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 8,
+          "line_range": [
+            8,
+            11
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 12,
+          "line_range": [
+            12,
+            12
+          ],
+          "target_line_range": [
+            13,
+            14
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 13,
+          "line_range": [
+            13,
+            14
+          ]
+        },
+        {
+          "code": "# Define the URL of the content to be translated\n",
+          "display_code": "",
+          "annotation": "Define the URL of the content to be translated",
+          "is_comment": true,
+          "start_line": 15,
+          "line_range": [
+            15,
+            15
+          ],
+          "target_line_range": [
+            16,
+            17
+          ]
+        },
+        {
+          "code": "url = \"https://raw.githubusercontent.com/zenml-io/zenml/refs/heads/main/README.md\"\n\n",
+          "display_code": "url = \"https://raw.githubusercontent.com/zenml-io/zenml/refs/heads/main/README.md\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 16,
+          "line_range": [
+            16,
+            17
+          ]
+        },
+        {
+          "code": "# Fetch the content from the URL\n",
+          "display_code": "",
+          "annotation": "Fetch the content from the URL",
+          "is_comment": true,
+          "start_line": 18,
+          "line_range": [
+            18,
+            18
+          ],
+          "target_line_range": [
+            19,
+            21
+          ]
+        },
+        {
+          "code": "response = requests.get(url)\ntext_content = response.text\n\n",
+          "display_code": "response = requests.get(url)\ntext_content = response.text\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 19,
+          "line_range": [
+            19,
+            21
+          ]
+        },
+        {
+          "code": "# Define the prompt for translation\n",
+          "display_code": "",
+          "annotation": "Define the prompt for translation",
+          "is_comment": true,
+          "start_line": 22,
+          "line_range": [
+            22,
+            22
+          ],
+          "target_line_range": [
+            23,
+            24
+          ]
+        },
+        {
+          "code": "prompt = f\"Translate the following English text to Chinese: {text_content}\"\n\n",
+          "display_code": "prompt = f\"Translate the following English text to Chinese: {text_content}\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 23,
+          "line_range": [
+            23,
+            24
+          ]
+        },
+        {
+          "code": "# Generate the translated content using the Gemini API.\n# We're using the 2.0-flash-lite model here for speed, but you probably would\n# want to use a more powerful model for better results.\n",
+          "display_code": "",
+          "annotation": "Generate the translated content using the Gemini API.\nWe're using the 2.0-flash-lite model here for speed, but you probably would\nwant to use a more powerful model for better results.",
+          "is_comment": true,
+          "start_line": 25,
+          "line_range": [
+            25,
+            27
+          ],
+          "target_line_range": [
+            28,
+            32
+          ]
+        },
+        {
+          "code": "model = client.models.generate_content(\n    model=\"gemini-2.0-flash-lite\",\n    contents=prompt,\n)\n\n",
+          "display_code": "model = client.models.generate_content(\n    model=\"gemini-2.0-flash-lite\",\n    contents=prompt,\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 28,
+          "line_range": [
+            28,
+            32
+          ]
+        },
+        {
+          "code": "# Print the translated text\n",
+          "display_code": "",
+          "annotation": "Print the translated text",
+          "is_comment": true,
+          "start_line": 33,
+          "line_range": [
+            33,
+            33
+          ],
+          "target_line_range": [
+            34,
+            34
+          ]
+        },
+        {
+          "code": "print(model.text)\n",
+          "display_code": "print(model.text)\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 34,
+          "line_range": [
+            34,
+            34
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library and requests",
+          "command": "pip install google-generative-ai requests",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python translate.py",
+          "output": "```chinese\n<div align=\"center\">\n  <img referrerpolicy=\"no-referrer-when-downgrade\" src=\"https://static.scarf.sh/a.png?x-pxid=0fcbab94-8fbe-4a38-93e8-c2348450a42e\" />\n  <h1 align=\"center\">\u8d85\u8d8a\u6f14\u793a\uff1a\u751f\u4ea7\u7ea7 AI \u7cfb\u7edf</h1>\n  <h3 align=\"center\">ZenML \u5c06\u7ecf\u8fc7\u5b9e\u6218\u68c0\u9a8c\u7684 MLOps \u5b9e\u8df5\u5e26\u5165\u60a8\u7684 AI \u5e94\u7528\uff0c\u5904\u7406\u5927\u89c4\u6a21\u7684\u8bc4\u4f30\u3001\u76d1\u63a7\u548c\u90e8\u7f72</h3>\n</div>"
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/document-processing?lang=python",
+        "https://ai.google.dev/gemini-api/docs/document-processing?lang=rest"
+      ],
+      "section_id": "005-other-data-types",
+      "section_title": "PDFs and other data types"
+    },
+    {
+      "id": "018-structured-data-extraction",
+      "title": "Extract structured data from a PDF invoice",
+      "description": "This example demonstrates how to extract structured data from a PDF invoice using the Gemini API and Pydantic.",
+      "order": 18,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import necessary libraries\n",
+          "display_code": "",
+          "annotation": "Import necessary libraries",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ],
+          "target_line_range": [
+            5,
+            11
+          ]
+        },
+        {
+          "code": "import os\nimport requests\nimport json\nfrom pydantic import BaseModel\nfrom typing import List\nfrom google import genai\n\n",
+          "display_code": "import os\nimport requests\nimport json\nfrom pydantic import BaseModel\nfrom typing import List\nfrom google import genai\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            11
+          ]
+        },
+        {
+          "code": "# Define Pydantic models for structured data\n",
+          "display_code": "",
+          "annotation": "Define Pydantic models for structured data",
+          "is_comment": true,
+          "start_line": 12,
+          "line_range": [
+            12,
+            12
+          ],
+          "target_line_range": [
+            13,
+            27
+          ]
+        },
+        {
+          "code": "class Item(BaseModel):\n    name: str\n    price_per_kg: float\n    quantity_kg: float\n\n\nclass InvoiceContents(BaseModel):\n    sender: str\n    recipient: str\n    address: str\n    full_total: float\n    subtotal: float\n    GST: float\n    items: List[Item]\n\n",
+          "display_code": "class Item(BaseModel):\n    name: str\n    price_per_kg: float\n    quantity_kg: float\n\n\nclass InvoiceContents(BaseModel):\n    sender: str\n    recipient: str\n    address: str\n    full_total: float\n    subtotal: float\n    GST: float\n    items: List[Item]\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 13,
+          "line_range": [
+            13,
+            27
+          ]
+        },
+        {
+          "code": "# Load the PDF invoice from a URL\n# For PDFs larger than 20MB, use the Files API for uploading\n",
+          "display_code": "",
+          "annotation": "Load the PDF invoice from a URL\nFor PDFs larger than 20MB, use the Files API for uploading",
+          "is_comment": true,
+          "start_line": 28,
+          "line_range": [
+            28,
+            29
+          ],
+          "target_line_range": [
+            30,
+            34
+          ]
+        },
+        {
+          "code": "pdf_url = \"https://www.princexml.com/samples/invoice/invoicesample.pdf\"\nresponse = requests.get(pdf_url)\nresponse.raise_for_status()  # Ensure the download was successful\npdf_data = response.content\n\n",
+          "display_code": "pdf_url = \"https://www.princexml.com/samples/invoice/invoicesample.pdf\"\nresponse = requests.get(pdf_url)\nresponse.raise_for_status()  # Ensure the download was successful\npdf_data = response.content\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 30,
+          "line_range": [
+            30,
+            34
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 35,
+          "line_range": [
+            35,
+            35
+          ],
+          "target_line_range": [
+            36,
+            37
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.environ.get(\"GEMINI_API_KEY\", \"YOUR_API_KEY\"))\n\n",
+          "display_code": "client = genai.Client(api_key=os.environ.get(\"GEMINI_API_KEY\", \"YOUR_API_KEY\"))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 36,
+          "line_range": [
+            36,
+            37
+          ]
+        },
+        {
+          "code": "# Configure the model for structured output\n",
+          "display_code": "",
+          "annotation": "Configure the model for structured output",
+          "is_comment": true,
+          "start_line": 38,
+          "line_range": [
+            38,
+            38
+          ],
+          "target_line_range": [
+            39,
+            40
+          ]
+        },
+        {
+          "code": "model = 'gemini-2.5-pro-preview-03-25'\n\n",
+          "display_code": "model = 'gemini-2.5-pro-preview-03-25'\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 39,
+          "line_range": [
+            39,
+            40
+          ]
+        },
+        {
+          "code": "# Construct the prompt with instructions and schema information\n",
+          "display_code": "",
+          "annotation": "Construct the prompt with instructions and schema information",
+          "is_comment": true,
+          "start_line": 41,
+          "line_range": [
+            41,
+            41
+          ],
+          "target_line_range": [
+            42,
+            43
+          ]
+        },
+        {
+          "code": "prompt_text = f\"\"\"Extract the following information from the invoice: sender, recipient, address, full_total, subtotal, GST, and a list of items (name, price/kg, quantity (kg)).\"\n\n",
+          "display_code": "prompt_text = f\"\"\"Extract the following information from the invoice: sender, recipient, address, full_total, subtotal, GST, and a list of items (name, price/kg, quantity (kg)).\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 42,
+          "line_range": [
+            42,
+            43
+          ]
+        },
+        {
+          "code": "# Call the Gemini API to extract structured data from the PDF\n",
+          "display_code": "",
+          "annotation": "Call the Gemini API to extract structured data from the PDF",
+          "is_comment": true,
+          "start_line": 44,
+          "line_range": [
+            44,
+            44
+          ],
+          "target_line_range": [
+            45,
+            50
+          ]
+        },
+        {
+          "code": "response = client.generate_content(\n    model=model,\n    contents=[pdf_data, prompt_text],\n    generation_config=genai.GenerationConfig(temperature=0.0),\n)\n\n",
+          "display_code": "response = client.generate_content(\n    model=model,\n    contents=[pdf_data, prompt_text],\n    generation_config=genai.GenerationConfig(temperature=0.0),\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 45,
+          "line_range": [
+            45,
+            50
+          ]
+        },
+        {
+          "code": "# Parse the JSON response into the Pydantic model\n# Assuming the model returns a JSON string representation of the InvoiceContents\n",
+          "display_code": "",
+          "annotation": "Parse the JSON response into the Pydantic model\nAssuming the model returns a JSON string representation of the InvoiceContents",
+          "is_comment": true,
+          "start_line": 51,
+          "line_range": [
+            51,
+            52
+          ],
+          "target_line_range": [
+            53,
+            55
+          ]
+        },
+        {
+          "code": "invoice_data = json.loads(response.text)\ninvoice = InvoiceContents(**invoice_data)\n\n",
+          "display_code": "invoice_data = json.loads(response.text)\ninvoice = InvoiceContents(**invoice_data)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 53,
+          "line_range": [
+            53,
+            55
+          ]
+        },
+        {
+          "code": "# Print the extracted data as a JSON string\n",
+          "display_code": "",
+          "annotation": "Print the extracted data as a JSON string",
+          "is_comment": true,
+          "start_line": 56,
+          "line_range": [
+            56,
+            56
+          ],
+          "target_line_range": [
+            57,
+            57
+          ]
+        },
+        {
+          "code": "print(invoice.model_dump_json(indent=2))\n",
+          "display_code": "print(invoice.model_dump_json(indent=2))\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 57,
+          "line_range": [
+            57,
+            57
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "Install the Google Generative AI library and Pydantic",
+          "command": "pip install google-generative-ai pydantic requests",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python structured-data-extraction.py",
+          "output": "{\n  \"sender\": \"SUNNY FARM\",\n  \"recipient\": \"Denny Gunawan\",\n  \"address\": \"221 Queen St\\nMelbourne VIC 3000\",\n  \"full_total\": \"$39.60\",\n  \"subtotal\": \"$36.00\",\n  \"gst_value\": \"$3.60\",\n  \"items\": [\n    {\n      \"name\": \"Apple\",\n      \"price_per_kg\": \"$5.00\",\n      \"quantity_kg\": 1\n    },\n    {\n      \"name\": \"Orange\",\n      \"price_per_kg\": \"$1.99\",\n      \"quantity_kg\": 2\n    },\n    {\n      \"name\": \"Watermelon\",\n      \"price_per_kg\": \"$1.69\",\n      \"quantity_kg\": 3\n    },\n    {\n      \"name\": \"Mango\",\n      \"price_per_kg\": \"$9.56\",\n      \"quantity_kg\": 2\n    },\n    {\n      \"name\": \"Peach\",\n      \"price_per_kg\": \"$2.99\",\n      \"quantity_kg\": 1\n    }\n  ]\n}"
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/document-processing",
+        "https://ai.google.dev/gemini-api/docs/structured-output?lang=python"
       ],
       "section_id": "005-other-data-types",
       "section_title": "PDFs and other data types"
@@ -3382,10 +3874,8 @@
       "order": 5,
       "examples": [
         "016-pdf-csv-analysis",
-        "017-content-conversion",
-        "018-content-summarization",
-        "019-content-translation",
-        "020-structured-extraction"
+        "017-content-translation",
+        "018-structured-data-extraction"
       ]
     }
   ]

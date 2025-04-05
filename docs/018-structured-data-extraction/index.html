@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF and CSV data analysis and summarization - Gemini by Example</title>
+    <title>Extract structured data from a PDF invoice - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
     <style>
@@ -159,7 +159,7 @@
                     <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
                         <a href="../" style="text-decoration: none; color: #666;">PDFs and other data types</a>
                     </div>
-                    <h1 style="margin: 0; margin-bottom: 10px;">PDF and CSV data analysis and summarization</h1>
+                    <h1 style="margin: 0; margin-bottom: 10px;">Extract structured data from a PDF invoice</h1>
                 </div>
                 <div style="position: relative; margin-top: 10px;">
                     <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
@@ -172,7 +172,7 @@
                 </div>
             </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
-                This example demonstrates how to use the Gemini API to analyze data from PDF and CSV files.
+                This example demonstrates how to extract structured data from a PDF invoice using the Gemini API and Pydantic.
             </p>
             <div class="row">
                 <div class="docs">
@@ -180,10 +180,49 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>from google import genai
-from google.genai import types
-import httpx
-import os</code></pre>
+                    <pre><code>import os
+import requests
+import json
+from pydantic import BaseModel
+from typing import List
+from google import genai</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Define Pydantic models for structured data</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>class Item(BaseModel):
+    name: str
+    price_per_kg: float
+    quantity_kg: float
+
+
+class InvoiceContents(BaseModel):
+    sender: str
+    recipient: str
+    address: str
+    full_total: float
+    subtotal: float
+    GST: float
+    items: List[Item]</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Load the PDF invoice from a URL
+For PDFs larger than 20MB, use the Files API for uploading</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>pdf_url = &quot;https://www.princexml.com/samples/invoice/invoicesample.pdf&quot;
+response = requests.get(pdf_url)
+response.raise_for_status()  # Ensure the download was successful
+pdf_data = response.content</code></pre>
                 </div>
             </div>
             <hr>
@@ -193,118 +232,70 @@ import os</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
+                    <pre><code>client = genai.Client(api_key=os.environ.get(&quot;GEMINI_API_KEY&quot;, &quot;YOUR_API_KEY&quot;))</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>We start with the PDF analysis.
-Download the PDF file</div>
+                    <div style='font-size: 0.9em; color: #666;'>Configure the model for structured output</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>pdf_url = &quot;https://www.princexml.com/samples/invoice/invoicesample.pdf&quot;
-pdf_data = httpx.get(pdf_url).content</code></pre>
+                    <pre><code>model = &#x27;gemini-2.5-pro-preview-03-25&#x27;</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Prompt to extract main players from the PDF</div>
+                    <div style='font-size: 0.9em; color: #666;'>Construct the prompt with instructions and schema information</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>pdf_prompt = (
-    &quot;Identify the main companies or entities mentioned in this invoice. &quot;
-    &quot;Summarize the data.&quot;
+                    <pre><code>prompt_text = f&quot;&quot;&quot;Extract the following information from the invoice: sender, recipient, address, full_total, subtotal, GST, and a list of items (name, price/kg, quantity (kg)).&quot;</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Call the Gemini API to extract structured data from the PDF</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>response = client.generate_content(
+    model=model,
+    contents=[pdf_data, prompt_text],
+    generation_config=genai.GenerationConfig(temperature=0.0),
 )</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Generate content with the PDF and the prompt</div>
+                    <div style='font-size: 0.9em; color: #666;'>Parse the JSON response into the Pydantic model
+Assuming the model returns a JSON string representation of the InvoiceContents</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>pdf_response = client.models.generate_content(
-    model=&quot;gemini-2.0-flash&quot;,
-    contents=[
-        types.Part.from_bytes(data=pdf_data, mime_type=&quot;application/pdf&quot;),
-        pdf_prompt,
-    ],
-)</code></pre>
+                    <pre><code>invoice_data = json.loads(response.text)
+invoice = InvoiceContents(**invoice_data)</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Print the PDF analysis result</div>
+                    <div style='font-size: 0.9em; color: #666;'>Print the extracted data as a JSON string</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>print(&quot;PDF Analysis Result:\n&quot;, pdf_response.text)</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Moving on to the CSV analysis now. You'll note that the process is very
-similar.
-You can also pass in code files, XML, RTF, Markdown, and more.
-We download the CSV file here.</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>csv_url = &quot;https://gist.githubusercontent.com/suellenstringer-hye/f2231b3383538bcb1a5b051c7908f5b7/raw/0f4e0733a434733cda8e749bbbf33a93c2b5bbde/test.csv&quot;
-csv_data = httpx.get(csv_url).content</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Prompt to analyze the CSV data</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>csv_prompt = &quot;Analyze this data and tell me about the contents. Summarize the data.&quot;</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Generate content with the CSV data and the prompt</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>csv_response = client.models.generate_content(
-    model=&quot;gemini-2.0-flash&quot;,
-    contents=[
-        types.Part.from_bytes(
-            data=csv_data,
-            mime_type=&quot;text/csv&quot;,
-        ),
-        csv_prompt,
-    ],
-)</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Print the CSV analysis result</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>print(&quot;\nCSV Analysis Result:\n&quot;, csv_response.text)</code></pre>
+                    <pre><code>print(invoice.model_dump_json(indent=2))</code></pre>
                 </div>
             </div>
             <hr>
             <h2>Running the Example</h2>
             <div class="row">
                 <div class="docs" style='font-size: 0.9em; color: #666;'>
-                    First, install the Google Generative AI library and httpx (for downloading files)
+                    Install the Google Generative AI library and Pydantic
                 </div>
                 <div class="code">
                     <div class="buttons">
@@ -312,7 +303,7 @@ csv_data = httpx.get(csv_url).content</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai httpx pandas</span></span>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai pydantic requests</span></span>
 </code></pre>
                 </div>
             </div>
@@ -326,22 +317,52 @@ csv_data = httpx.get(csv_url).content</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python pdf_csv_analysis.py</span></span>
-PDF Analysis Result:
- The main company mentioned in the invoice is Sunny Farm.</code></pre>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python structured-data-extraction.py</span></span>
+{
+  &quot;sender&quot;: &quot;SUNNY FARM&quot;,
+  &quot;recipient&quot;: &quot;Denny Gunawan&quot;,
+  &quot;address&quot;: &quot;221 Queen St\nMelbourne VIC 3000&quot;,
+  &quot;full_total&quot;: &quot;$39.60&quot;,
+  &quot;subtotal&quot;: &quot;$36.00&quot;,
+  &quot;gst_value&quot;: &quot;$3.60&quot;,
+  &quot;items&quot;: [
+    {
+      &quot;name&quot;: &quot;Apple&quot;,
+      &quot;price_per_kg&quot;: &quot;$5.00&quot;,
+      &quot;quantity_kg&quot;: 1
+    },
+    {
+      &quot;name&quot;: &quot;Orange&quot;,
+      &quot;price_per_kg&quot;: &quot;$1.99&quot;,
+      &quot;quantity_kg&quot;: 2
+    },
+    {
+      &quot;name&quot;: &quot;Watermelon&quot;,
+      &quot;price_per_kg&quot;: &quot;$1.69&quot;,
+      &quot;quantity_kg&quot;: 3
+    },
+    {
+      &quot;name&quot;: &quot;Mango&quot;,
+      &quot;price_per_kg&quot;: &quot;$9.56&quot;,
+      &quot;quantity_kg&quot;: 2
+    },
+    {
+      &quot;name&quot;: &quot;Peach&quot;,
+      &quot;price_per_kg&quot;: &quot;$2.99&quot;,
+      &quot;quantity_kg&quot;: 1
+    }
+  ]
+}</code></pre>
                 </div>
             </div>
             <hr>
             <h4>Further Information</h4>
             <ul style="font-size: 0.9em;">
-                <li><a href="https://ai.google.dev/gemini-api/docs/document-processing?lang=python"
+                <li><a href="https://ai.google.dev/gemini-api/docs/document-processing"
                          target="_blank">Gemini docs link 1</a></li>
-                <li><a href="https://ai.google.dev/gemini-api/docs/document-processing?lang=rest"
+                <li><a href="https://ai.google.dev/gemini-api/docs/structured-output?lang=python"
                          target="_blank">Gemini docs link 2</a></li>
             </ul>
-            <p class="next">
-                Next example: <a href="../017-content-translation/">Translate documents</a>
-            </p>
         </main>
         <footer>
             <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>

@@ -1,0 +1,2 @@
+https://ai.google.dev/gemini-api/docs/document-processing
+https://ai.google.dev/gemini-api/docs/structured-output?lang=python

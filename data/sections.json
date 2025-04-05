@@ -54,9 +54,8 @@
       "order": 5,
       "examples": [
         "016-pdf-csv-analysis",
-        "017-content-summarization",
-        "018-content-translation",
-        "019-structured-data-extraction"
+        "017-content-translation",
+        "018-structured-data-extraction"
       ]
     }
   ]
