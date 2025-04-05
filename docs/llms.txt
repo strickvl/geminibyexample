@@ -7,7 +7,7 @@ It's organized by sections, with each example's Python code and terminal command
 
 * Basic Examples: Text
   * Simple text generation
-  * Streaming Text Generation using the HTTP API
+  * Streaming Text Generation
   * System Instructions Example
 
 ## Basic Examples: Text
@@ -32,31 +32,19 @@ AI works by learning patterns from data, then using those patterns to make predi
 
 *This example includes images which can be viewed on the website.*
 
-### Streaming Text Generation using the HTTP API
+### Streaming Text Generation
 
-This example demonstrates how to use the Gemini API to generate text content
-and stream the output using the HTTP API.
+This example demonstrates how to use the Gemini API to generate text content and stream the output.
 
 ```python
-import requests
-import json
-import os
-model = "gemini-2.0-flash"
-api_key = os.environ.get("GEMINI_API_KEY", "YOUR_API_KEY")
-prompt = "Explain how AI works"
-url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:streamGenerateContent"
-params = {"alt": "sse", "key": api_key}
-payload = {"contents": [{"parts": [{"text": prompt}]}]}
-with requests.post(url, json=payload, params=params, stream=True) as r:
-    for line in r.iter_lines():
-        if line and line.startswith(b"data: ") and not line.endswith(b"[DONE]"):
-            try:
-                data = json.loads(line[6:])
-                if "candidates" in data and data["candidates"]:
-                    text = data["candidates"][0]["content"]["parts"][0].get("text", "")
-                    print(text, end="")
-            except:
-                pass
+from google import genai
+client = genai.Client(api_key="YOUR_API_KEY")
+response = client.models.generate_content_stream(
+    model="gemini-2.0-flash",
+    contents=["Explain how AI works"]
+)
+for chunk in response:
+    print(chunk.text, end="")
 ```
 
 ```shell

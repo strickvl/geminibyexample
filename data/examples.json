@@ -94,8 +94,8 @@
     },
     {
       "id": "002-streaming-text",
-      "title": "Streaming Text Generation using the HTTP API",
-      "description": "This example demonstrates how to use the Gemini API to generate text content\nand stream the output using the HTTP API.",
+      "title": "Streaming Text Generation",
+      "description": "This example demonstrates how to use the Gemini API to generate text content and stream the output.",
       "order": 2,
       "code_segments": [
         {
@@ -103,42 +103,68 @@
           "display_code": "\n",
           "annotation": "",
           "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import the Gemini API\n",
+          "display_code": "",
+          "annotation": "Import the Gemini API",
+          "is_comment": true,
           "start_line": 4,
           "line_range": [
             4,
             4
+          ],
+          "target_line_range": [
+            5,
+            6
           ]
         },
         {
-          "code": "# Import the necessary libraries\n",
-          "display_code": "",
-          "annotation": "Import the necessary libraries",
-          "is_comment": true,
+          "code": "from google import genai\n\n",
+          "display_code": "from google import genai\n\n",
+          "annotation": "",
+          "is_comment": false,
           "start_line": 5,
           "line_range": [
             5,
-            5
+            6
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 7,
+          "line_range": [
+            7,
+            7
           ],
           "target_line_range": [
-            6,
+            8,
             9
           ]
         },
         {
-          "code": "import requests\nimport json\nimport os\n\n",
-          "display_code": "import requests\nimport json\nimport os\n\n",
+          "code": "client = genai.Client(api_key=\"YOUR_API_KEY\")\n\n",
+          "display_code": "client = genai.Client(api_key=\"YOUR_API_KEY\")\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 6,
+          "start_line": 8,
           "line_range": [
-            6,
+            8,
             9
           ]
         },
         {
-          "code": "# Set the model and API key\n",
+          "code": "# Call the API to generate content in streaming mode\n",
           "display_code": "",
-          "annotation": "Set the model and API key",
+          "annotation": "Call the API to generate content in streaming mode",
           "is_comment": true,
           "start_line": 10,
           "line_range": [
@@ -147,70 +173,44 @@
           ],
           "target_line_range": [
             11,
-            14
+            15
           ]
         },
         {
-          "code": "model = \"gemini-2.0-flash\"\napi_key = os.environ.get(\"GEMINI_API_KEY\", \"YOUR_API_KEY\")\nprompt = \"Explain how AI works\"\n\n",
-          "display_code": "model = \"gemini-2.0-flash\"\napi_key = os.environ.get(\"GEMINI_API_KEY\", \"YOUR_API_KEY\")\nprompt = \"Explain how AI works\"\n\n",
+          "code": "response = client.models.generate_content_stream(\n    model=\"gemini-2.0-flash\",\n    contents=[\"Explain how AI works\"]\n)\n\n",
+          "display_code": "response = client.models.generate_content_stream(\n    model=\"gemini-2.0-flash\",\n    contents=[\"Explain how AI works\"]\n)\n\n",
           "annotation": "",
           "is_comment": false,
           "start_line": 11,
           "line_range": [
             11,
-            14
-          ]
-        },
-        {
-          "code": "# Set up the API request\n",
-          "display_code": "",
-          "annotation": "Set up the API request",
-          "is_comment": true,
-          "start_line": 15,
-          "line_range": [
-            15,
             15
-          ],
-          "target_line_range": [
-            16,
-            19
           ]
         },
         {
-          "code": "url = f\"https://generativelanguage.googleapis.com/v1beta/models/{model}:streamGenerateContent\"\nparams = {\"alt\": \"sse\", \"key\": api_key}\npayload = {\"contents\": [{\"parts\": [{\"text\": prompt}]}]}\n\n",
-          "display_code": "url = f\"https://generativelanguage.googleapis.com/v1beta/models/{model}:streamGenerateContent\"\nparams = {\"alt\": \"sse\", \"key\": api_key}\npayload = {\"contents\": [{\"parts\": [{\"text\": prompt}]}]}\n\n",
-          "annotation": "",
-          "is_comment": false,
+          "code": "# Iterate over the stream of responses and print each chunk of text\n",
+          "display_code": "",
+          "annotation": "Iterate over the stream of responses and print each chunk of text",
+          "is_comment": true,
           "start_line": 16,
           "line_range": [
             16,
-            19
-          ]
-        },
-        {
-          "code": "# Make the streaming request and process the response\n",
-          "display_code": "",
-          "annotation": "Make the streaming request and process the response",
-          "is_comment": true,
-          "start_line": 20,
-          "line_range": [
-            20,
-            20
+            16
           ],
           "target_line_range": [
-            21,
-            30
+            17,
+            18
           ]
         },
         {
-          "code": "with requests.post(url, json=payload, params=params, stream=True) as r:\n    for line in r.iter_lines():\n        if line and line.startswith(b\"data: \") and not line.endswith(b\"[DONE]\"):\n            try:\n                data = json.loads(line[6:])\n                if \"candidates\" in data and data[\"candidates\"]:\n                    text = data[\"candidates\"][0][\"content\"][\"parts\"][0].get(\"text\", \"\")\n                    print(text, end=\"\")\n            except:\n                pass\n",
-          "display_code": "with requests.post(url, json=payload, params=params, stream=True) as r:\n    for line in r.iter_lines():\n        if line and line.startswith(b\"data: \") and not line.endswith(b\"[DONE]\"):\n            try:\n                data = json.loads(line[6:])\n                if \"candidates\" in data and data[\"candidates\"]:\n                    text = data[\"candidates\"][0][\"content\"][\"parts\"][0].get(\"text\", \"\")\n                    print(text, end=\"\")\n            except:\n                pass\n",
+          "code": "for chunk in response:\n    print(chunk.text, end=\"\")",
+          "display_code": "for chunk in response:\n    print(chunk.text, end=\"\")",
           "annotation": "",
           "is_comment": false,
-          "start_line": 21,
+          "start_line": 17,
           "line_range": [
-            21,
-            30
+            17,
+            18
           ]
         }
       ],
