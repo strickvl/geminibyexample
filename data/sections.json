@@ -2,7 +2,7 @@
   "sections": [
     {
       "id": "001-basic-text",
-      "title": "Text Basics",
+      "title": "Text basics",
       "description": "",
       "order": 1,
       "examples": [
@@ -13,7 +13,7 @@
     },
     {
       "id": "002-basic-images",
-      "title": "Images Basics",
+      "title": "Images basics",
       "description": "",
       "order": 2,
       "examples": [
@@ -26,13 +26,38 @@
     },
     {
       "id": "003-basic-audio",
-      "title": "Audio Basics",
+      "title": "Audio basics",
       "description": "",
       "order": 3,
       "examples": [
         "009-audio-q-a",
         "010-audio-transcription",
         "011-audio-summarization"
+      ]
+    },
+    {
+      "id": "004-basic-video",
+      "title": "Video basics",
+      "description": "",
+      "order": 4,
+      "examples": [
+        "012-video-q-a",
+        "013-video-summarization",
+        "014-video-transcription",
+        "015-youtube-video-summarization"
+      ]
+    },
+    {
+      "id": "005-other-data-types",
+      "title": "PDFs and other data types",
+      "description": "",
+      "order": 5,
+      "examples": [
+        "016-pdf-analysis",
+        "017-content-conversion",
+        "018-content-summarization",
+        "019-content-translation",
+        "020-structured-extraction"
       ]
     }
   ]
