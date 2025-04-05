@@ -1,4 +1,73 @@
-# Gemini by Example - LLMs
+# Gemini by Example
 
-001-basic-generation: Simple generation
-002-values: Values in Python
+This file contains all examples from the Gemini by Example site (geminibyexample.com).
+It's organized by sections, with each example's Python code and terminal commands included.
+
+## Table of Contents
+
+* Basic Examples: Text
+  * Simple generation
+* Basic Examples: Images
+  * Values in Python
+
+## Basic Examples: Text
+
+### Simple generation
+
+```python
+from google import genai
+client = genai.Client(api_key="YOUR_API_KEY")
+
+response = client.models.generate_content(
+    model="gemini-2.0-flash", contents="Explain how AI works in a few words"
+)
+print(response.text)
+```
+
+```shell
+$ pip install google-generative-ai
+$ python basic-generation.py
+AI works by learning patterns from data, then using those patterns to make predictions or generate new content. It processes information through neural networks that mimic human brain connections, identifying features and relationships to perform tasks like recognition, prediction, and generation.
+```
+
+*This example includes images which can be viewed on the website.*
+
+## Basic Examples: Images
+
+### Values in Python
+
+This example demonstrates the different value types in Python.
+
+```python
+print("Hello, World")
+print("Hello with single quotes")
+print(42)  # Integer
+print(3.14159)  # Float
+print(True)
+print(False)
+print(None)
+my_list = [1, 2, 3, "four", 5.0]
+print(my_list)
+my_tuple = (1, 2, "three")
+print(my_tuple)
+my_dict = {"name": "Python", "version": 3.9}
+print(my_dict)
+```
+
+```shell
+$ python values.py
+Hello, World
+Hello with single quotes
+42
+3.14159
+True
+False
+None
+[1, 2, 3, 'four', 5.0]
+(1, 2, 'three')
+{'name': 'Python', 'version': 3.9}
+$ python -c "print('Hello from Python!'); print(1 + 2)"
+Hello from Python!
+3
+```
+

@@ -726,15 +726,99 @@ def copy_static_files(source_dir: Path, output_dir: Path) -> None:
         logger.warning("Static directory %s does not exist" % source_dir)
 
 
-def generate_llms_txt(examples: List[Dict[str, Any]], output_dir: Path) -> None:
-    """Generate llms.txt file with example titles and IDs."""
+def extract_code_from_example(example: Dict[str, Any]) -> str:
+    """Extract all Python code from an example's code segments."""
+    code = ""
+    for segment in example.get("code_segments", []):
+        if segment.get("display_code", "").strip():
+            code += segment.get("display_code", "").strip() + "\n"
+    return code.strip()
+
+
+def extract_shell_from_example(example: Dict[str, Any]) -> str:
+    """Extract shell commands and outputs from an example."""
+    shell = ""
+    for segment in example.get("shell_segments", []):
+        cmd = segment.get("command", "").strip()
+        out = segment.get("output", "").strip()
+        if cmd:
+            shell += f"$ {cmd}\n"
+            if out:
+                shell += f"{out}\n"
+    return shell.strip()
+
+
+def generate_llms_txt(examples: List[Dict[str, Any]], sections: List[Dict[str, Any]], output_dir: Path) -> None:
+    """Generate llms.txt file with organized headers and full example code."""
     logger.info("Generating llms.txt")
     
     output_file = output_dir / "llms.txt"
+    
+    # Group examples by section
+    examples_by_section = {}
+    for example in examples:
+        section_id = example.get("section_id", "999-misc")
+        if section_id not in examples_by_section:
+            examples_by_section[section_id] = []
+        examples_by_section[section_id].append(example)
+    
     with open(output_file, "w") as f:
-        f.write("# Gemini by Example - LLMs\n\n")
-        for example in sorted(examples, key=lambda e: e["order"]):
-            f.write(f"{example['id']}: {example['title']}\n")
+        # Main heading and introduction
+        f.write("# Gemini by Example\n\n")
+        f.write("This file contains all examples from the Gemini by Example site (geminibyexample.com).\n")
+        f.write("It's organized by sections, with each example's Python code and terminal commands included.\n\n")
+        
+        # Table of contents
+        f.write("## Table of Contents\n\n")
+        for section in sorted(sections, key=lambda s: s["order"]):
+            section_examples = examples_by_section.get(section["id"], [])
+            if not section_examples:
+                continue
+                
+            f.write(f"* {section['title']}\n")
+            for example in sorted(section_examples, key=lambda e: e["order"]):
+                f.write(f"  * {example['title']}\n")
+        f.write("\n")
+        
+        # Each section with its examples
+        for section in sorted(sections, key=lambda s: s["order"]):
+            section_examples = examples_by_section.get(section["id"], [])
+            if not section_examples:
+                continue
+                
+            # Section heading
+            f.write(f"## {section['title']}\n\n")
+            
+            # Section description if available
+            if section.get("description"):
+                f.write(f"{section['description']}\n\n")
+                
+            # Each example in the section
+            for example in sorted(section_examples, key=lambda e: e["order"]):
+                # Example heading
+                f.write(f"### {example['title']}\n\n")
+                
+                # Example description if available
+                if example.get("description"):
+                    f.write(f"{example['description']}\n\n")
+                    
+                # Python code
+                python_code = extract_code_from_example(example)
+                if python_code:
+                    f.write("```python\n")
+                    f.write(python_code)
+                    f.write("\n```\n\n")
+                
+                # Shell commands and output
+                shell_code = extract_shell_from_example(example)
+                if shell_code:
+                    f.write("```shell\n")
+                    f.write(shell_code)
+                    f.write("\n```\n\n")
+                    
+                # Image references if any
+                if example.get("image_data"):
+                    f.write("*This example includes images which can be viewed on the website.*\n\n")
     
     logger.info(f"Generated llms.txt at {output_file}")
 
@@ -761,7 +845,7 @@ def generate_static_site() -> None:
     copy_static_files(static_dir, output_dir)
 
     # Generate llms.txt file
-    generate_llms_txt(examples, output_dir)
+    generate_llms_txt(examples, sections, output_dir)
 
     # Generate index page
     generate_index_html(examples, sections, output_dir)
