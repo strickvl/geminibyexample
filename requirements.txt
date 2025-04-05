@@ -2,3 +2,4 @@ uv
 pytest
 ruff
 rich
+google-genai
