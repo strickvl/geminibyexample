@@ -5573,6 +5573,361 @@
       ],
       "section_id": "007-tokens-context-windows",
       "section_title": "Token counting & context windows"
+    },
+    {
+      "id": "026-token-counting",
+      "title": "Counting chat tokens",
+      "description": "This example demonstrates how to count tokens in a chat history with the Gemini API, incorporating a cat theme.",
+      "order": 26,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import the Gemini API\n",
+          "display_code": "",
+          "annotation": "Import the Gemini API",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ],
+          "target_line_range": [
+            5,
+            8
+          ]
+        },
+        {
+          "code": "from google import genai\nfrom google.genai import types\nimport os\n\n",
+          "display_code": "from google import genai\nfrom google.genai import types\nimport os\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            8
+          ]
+        },
+        {
+          "code": "# Configure the Gemini API with your API key\n",
+          "display_code": "",
+          "annotation": "Configure the Gemini API with your API key",
+          "is_comment": true,
+          "start_line": 9,
+          "line_range": [
+            9,
+            9
+          ],
+          "target_line_range": [
+            10,
+            11
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 10,
+          "line_range": [
+            10,
+            11
+          ]
+        },
+        {
+          "code": "# Start a chat session with a cat-related history\n",
+          "display_code": "",
+          "annotation": "Start a chat session with a cat-related history",
+          "is_comment": true,
+          "start_line": 12,
+          "line_range": [
+            12,
+            12
+          ],
+          "target_line_range": [
+            13,
+            27
+          ]
+        },
+        {
+          "code": "chat = client.chats.create(\n    model=\"gemini-2.0-flash\",\n    history=[\n        types.Content(role=\"user\", parts=[types.Part(text=\"Hey there! I love cats!\")]),\n        types.Content(\n            role=\"model\",\n            parts=[\n                types.Part(\n                    text=\"Me too! Cats are the best. What's your favorite breed?\"\n                )\n            ],\n        ),\n    ],\n)\n\n",
+          "display_code": "chat = client.chats.create(\n    model=\"gemini-2.0-flash\",\n    history=[\n        types.Content(role=\"user\", parts=[types.Part(text=\"Hey there! I love cats!\")]),\n        types.Content(\n            role=\"model\",\n            parts=[\n                types.Part(\n                    text=\"Me too! Cats are the best. What's your favorite breed?\"\n                )\n            ],\n        ),\n    ],\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 13,
+          "line_range": [
+            13,
+            27
+          ]
+        },
+        {
+          "code": "# Count the tokens in the initial chat history\n",
+          "display_code": "",
+          "annotation": "Count the tokens in the initial chat history",
+          "is_comment": true,
+          "start_line": 28,
+          "line_range": [
+            28,
+            28
+          ],
+          "target_line_range": [
+            29,
+            33
+          ]
+        },
+        {
+          "code": "token_count = client.models.count_tokens(\n    model=\"gemini-2.0-flash\", contents=chat.get_history()\n)\nprint(f\"Tokens in initial chat history: {token_count.total_tokens} tokens\")\n\n",
+          "display_code": "token_count = client.models.count_tokens(\n    model=\"gemini-2.0-flash\", contents=chat.get_history()\n)\nprint(f\"Tokens in initial chat history: {token_count.total_tokens} tokens\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 29,
+          "line_range": [
+            29,
+            33
+          ]
+        },
+        {
+          "code": "# Send a new message to the chat, asking about cat breeds\n",
+          "display_code": "",
+          "annotation": "Send a new message to the chat, asking about cat breeds",
+          "is_comment": true,
+          "start_line": 34,
+          "line_range": [
+            34,
+            34
+          ],
+          "target_line_range": [
+            35,
+            36
+          ]
+        },
+        {
+          "code": "response = chat.send_message(message=\"Tell me more about Ragdoll cats.\")\n\n",
+          "display_code": "response = chat.send_message(message=\"Tell me more about Ragdoll cats.\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 35,
+          "line_range": [
+            35,
+            36
+          ]
+        },
+        {
+          "code": "# Print the token usage metadata from the response\n",
+          "display_code": "",
+          "annotation": "Print the token usage metadata from the response",
+          "is_comment": true,
+          "start_line": 37,
+          "line_range": [
+            37,
+            37
+          ],
+          "target_line_range": [
+            38,
+            41
+          ]
+        },
+        {
+          "code": "print(\n    f\"Token usage for the last turn: input_tokens={response.usage_metadata.prompt_token_count}, output_tokens={response.usage_metadata.candidates_token_count}, total_tokens={response.usage_metadata.total_token_count}\"\n)\n\n",
+          "display_code": "print(\n    f\"Token usage for the last turn: input_tokens={response.usage_metadata.prompt_token_count}, output_tokens={response.usage_metadata.candidates_token_count}, total_tokens={response.usage_metadata.total_token_count}\"\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 38,
+          "line_range": [
+            38,
+            41
+          ]
+        },
+        {
+          "code": "# Count tokens including next turn question\n",
+          "display_code": "",
+          "annotation": "Count tokens including next turn question",
+          "is_comment": true,
+          "start_line": 42,
+          "line_range": [
+            42,
+            42
+          ],
+          "target_line_range": [
+            43,
+            53
+          ]
+        },
+        {
+          "code": "extra = types.UserContent(\n    parts=[\n        types.Part(\n            text=\"Do you know Neko the cat?\",\n        )\n    ]\n)\nhistory = chat.get_history()\nhistory.append(extra)\nfinal_count = client.models.count_tokens(model=\"gemini-2.0-flash\", contents=history)\nprint(f\"Total tokens with additional question: {final_count.total_tokens} tokens\")\n",
+          "display_code": "extra = types.UserContent(\n    parts=[\n        types.Part(\n            text=\"Do you know Neko the cat?\",\n        )\n    ]\n)\nhistory = chat.get_history()\nhistory.append(extra)\nfinal_count = client.models.count_tokens(model=\"gemini-2.0-flash\", contents=history)\nprint(f\"Total tokens with additional question: {final_count.total_tokens} tokens\")\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 43,
+          "line_range": [
+            43,
+            53
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "Install the Google Generative AI library",
+          "command": "pip install google-generative-ai",
+          "output": ""
+        },
+        {
+          "explanation": "Run the Python script",
+          "command": "python count_chat_tokens.py",
+          "output": "Tokens in initial chat history: 24 tokens\nToken usage for the last turn: input_tokens=30, output_tokens=843, total_tokens=873\nTotal tokens with additional question: 892 tokens"
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/tokens?lang=python#text-tokens"
+      ],
+      "section_id": "007-tokens-context-windows",
+      "section_title": "Token counting & context windows"
+    },
+    {
+      "id": "027-calculate-input-tokens",
+      "title": "Calculating multimodal input tokens",
+      "description": "This example demonstrates how to calculate input tokens for different data types when using the Gemini API, including images, video, and audio.",
+      "order": 27,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Images are tokenized based on their dimensions.\n# With Gemini 2.0, image inputs with both dimensions <=384 pixels are counted as 258 tokens.\n# Images larger in one or both dimensions are cropped and scaled as needed into tiles of 768x768 pixels, each counted as 258 tokens.\n",
+          "display_code": "",
+          "annotation": "Images are tokenized based on their dimensions.\nWith Gemini 2.0, image inputs with both dimensions <=384 pixels are counted as 258 tokens.\nImages larger in one or both dimensions are cropped and scaled as needed into tiles of 768x768 pixels, each counted as 258 tokens.",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            6
+          ],
+          "target_line_range": [
+            7,
+            15
+          ]
+        },
+        {
+          "code": "def calculate_image_tokens(width, height):\n    if width <= 384 and height <= 384:\n        return 258\n    else:\n        tiles_width = (width + 767) // 768\n        tiles_height = (height + 767) // 768\n        return tiles_width * tiles_height * 258\n\n\n",
+          "display_code": "def calculate_image_tokens(width, height):\n    if width <= 384 and height <= 384:\n        return 258\n    else:\n        tiles_width = (width + 767) // 768\n        tiles_height = (height + 767) // 768\n        return tiles_width * tiles_height * 258\n\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 7,
+          "line_range": [
+            7,
+            15
+          ]
+        },
+        {
+          "code": "# Video is tokenized at a fixed rate of 263 tokens per second.\n",
+          "display_code": "",
+          "annotation": "Video is tokenized at a fixed rate of 263 tokens per second.",
+          "is_comment": true,
+          "start_line": 16,
+          "line_range": [
+            16,
+            16
+          ],
+          "target_line_range": [
+            17,
+            20
+          ]
+        },
+        {
+          "code": "def calculate_video_tokens(duration_seconds):\n    return duration_seconds * 263\n\n\n",
+          "display_code": "def calculate_video_tokens(duration_seconds):\n    return duration_seconds * 263\n\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 17,
+          "line_range": [
+            17,
+            20
+          ]
+        },
+        {
+          "code": "# Audio is tokenized at a fixed rate of 32 tokens per second.\n",
+          "display_code": "",
+          "annotation": "Audio is tokenized at a fixed rate of 32 tokens per second.",
+          "is_comment": true,
+          "start_line": 21,
+          "line_range": [
+            21,
+            21
+          ],
+          "target_line_range": [
+            22,
+            25
+          ]
+        },
+        {
+          "code": "def calculate_audio_tokens(duration_seconds):\n    return duration_seconds * 32\n\n\n",
+          "display_code": "def calculate_audio_tokens(duration_seconds):\n    return duration_seconds * 32\n\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 22,
+          "line_range": [
+            22,
+            25
+          ]
+        },
+        {
+          "code": "# Example Usage\n",
+          "display_code": "",
+          "annotation": "Example Usage",
+          "is_comment": true,
+          "start_line": 26,
+          "line_range": [
+            26,
+            26
+          ],
+          "target_line_range": [
+            27,
+            40
+          ]
+        },
+        {
+          "code": "image_width = 600\nimage_height = 400\nimage_tokens = calculate_image_tokens(image_width, image_height)\nprint(\n    f\"Image with dimensions {image_width}x{image_height} will cost {image_tokens} tokens.\"\n)\n\nvideo_duration = 10  # seconds\nvideo_tokens = calculate_video_tokens(video_duration)\nprint(f\"Video with duration {video_duration} seconds will cost {video_tokens} tokens.\")\n\naudio_duration = 30  # seconds\naudio_tokens = calculate_audio_tokens(audio_duration)\nprint(f\"Audio with duration {audio_duration} seconds will cost {audio_tokens} tokens.\")\n",
+          "display_code": "image_width = 600\nimage_height = 400\nimage_tokens = calculate_image_tokens(image_width, image_height)\nprint(\n    f\"Image with dimensions {image_width}x{image_height} will cost {image_tokens} tokens.\"\n)\n\nvideo_duration = 10  # seconds\nvideo_tokens = calculate_video_tokens(video_duration)\nprint(f\"Video with duration {video_duration} seconds will cost {video_tokens} tokens.\")\n\naudio_duration = 30  # seconds\naudio_tokens = calculate_audio_tokens(audio_duration)\nprint(f\"Audio with duration {audio_duration} seconds will cost {audio_tokens} tokens.\")\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 27,
+          "line_range": [
+            27,
+            40
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python multimodal_token_calculator.py",
+          "output": "Image with dimensions 600x400 will cost 258 tokens.\nVideo with duration 10 seconds will cost 2630 tokens.\nAudio with duration 30 seconds will cost 960 tokens."
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/tokens?lang=python#multimodal-tokens"
+      ],
+      "section_id": "007-tokens-context-windows",
+      "section_title": "Token counting & context windows"
     }
   ],
   "sections": [

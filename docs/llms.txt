@@ -37,6 +37,8 @@ It's organized by sections, with each example's Python code and terminal command
   * Grounded responses with search tool
 * Token counting & context windows
   * Model context windows
+  * Counting chat tokens
+  * Calculating multimodal input tokens
 
 ## Text
 
@@ -1462,4 +1464,101 @@ Gemini 2.5 Pro:
 
 For more information, see the original documentation:
 - https://ai.google.dev/gemini-api/docs/tokens?lang=python
+
+### Counting chat tokens
+
+This example demonstrates how to count tokens in a chat history with the Gemini API, incorporating a cat theme.
+
+```python
+from google import genai
+from google.genai import types
+import os
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+chat = client.chats.create(
+    model="gemini-2.0-flash",
+    history=[
+        types.Content(role="user", parts=[types.Part(text="Hey there! I love cats!")]),
+        types.Content(
+            role="model",
+            parts=[
+                types.Part(
+                    text="Me too! Cats are the best. What's your favorite breed?"
+                )
+            ],
+        ),
+    ],
+)
+token_count = client.models.count_tokens(
+    model="gemini-2.0-flash", contents=chat.get_history()
+)
+print(f"Tokens in initial chat history: {token_count.total_tokens} tokens")
+response = chat.send_message(message="Tell me more about Ragdoll cats.")
+print(
+    f"Token usage for the last turn: input_tokens={response.usage_metadata.prompt_token_count}, output_tokens={response.usage_metadata.candidates_token_count}, total_tokens={response.usage_metadata.total_token_count}"
+)
+extra = types.UserContent(
+    parts=[
+        types.Part(
+            text="Do you know Neko the cat?",
+        )
+    ]
+)
+history = chat.get_history()
+history.append(extra)
+final_count = client.models.count_tokens(model="gemini-2.0-flash", contents=history)
+print(f"Total tokens with additional question: {final_count.total_tokens} tokens")
+```
+
+```shell
+$ pip install google-generative-ai
+$ python count_chat_tokens.py
+Tokens in initial chat history: 24 tokens
+Token usage for the last turn: input_tokens=30, output_tokens=843, total_tokens=873
+Total tokens with additional question: 892 tokens
+```
+
+For more information, see the original documentation:
+- https://ai.google.dev/gemini-api/docs/tokens?lang=python#text-tokens
+
+### Calculating multimodal input tokens
+
+This example demonstrates how to calculate input tokens for different data types when using the Gemini API, including images, video, and audio.
+
+```python
+def calculate_image_tokens(width, height):
+    if width <= 384 and height <= 384:
+        return 258
+    else:
+        tiles_width = (width + 767) // 768
+        tiles_height = (height + 767) // 768
+        return tiles_width * tiles_height * 258
+def calculate_video_tokens(duration_seconds):
+    return duration_seconds * 263
+def calculate_audio_tokens(duration_seconds):
+    return duration_seconds * 32
+image_width = 600
+image_height = 400
+image_tokens = calculate_image_tokens(image_width, image_height)
+print(
+    f"Image with dimensions {image_width}x{image_height} will cost {image_tokens} tokens."
+)
+
+video_duration = 10  # seconds
+video_tokens = calculate_video_tokens(video_duration)
+print(f"Video with duration {video_duration} seconds will cost {video_tokens} tokens.")
+
+audio_duration = 30  # seconds
+audio_tokens = calculate_audio_tokens(audio_duration)
+print(f"Audio with duration {audio_duration} seconds will cost {audio_tokens} tokens.")
+```
+
+```shell
+$ python multimodal_token_calculator.py
+Image with dimensions 600x400 will cost 258 tokens.
+Video with duration 10 seconds will cost 2630 tokens.
+Audio with duration 30 seconds will cost 960 tokens.
+```
+
+For more information, see the original documentation:
+- https://ai.google.dev/gemini-api/docs/tokens?lang=python#multimodal-tokens
 
