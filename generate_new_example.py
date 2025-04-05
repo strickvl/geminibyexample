@@ -94,20 +94,51 @@ def generate_example(prompt: str) -> GeminiExample:
     return response.parsed
 
 
+def get_next_example_number() -> int:
+    """Determine the next available example number based on existing examples."""
+    examples_dir = Path("examples")
+    
+    if not examples_dir.exists():
+        return 1  # Start with 001 if examples directory doesn't exist
+    
+    # Get all example directories that match the pattern NNN-*
+    example_dirs = [d for d in examples_dir.iterdir() 
+                   if d.is_dir() and re.match(r"^\d{3}-", d.name)]
+    
+    if not example_dirs:
+        return 1  # Start with 001 if no examples exist
+    
+    # Extract the numeric portion and find the max
+    max_number = 0
+    for dir_path in example_dirs:
+        match = re.match(r"^(\d{3})-", dir_path.name)
+        if match:
+            number = int(match.group(1))
+            max_number = max(max_number, number)
+    
+    return max_number + 1
+
 def main():
     rprint("[bold blue]Welcome to the Gemini Example Generator![/bold blue]")
 
-    # Ask for folder name
-    folder_name = Prompt.ask(
-        "[yellow]Enter the folder name for this example[/yellow] (e.g., 003-hello-world)"
+    # Automatically determine the next example number
+    next_number = get_next_example_number()
+    
+    # Ask for the text portion of the folder name
+    example_name = Prompt.ask(
+        "[yellow]Enter the name for this example[/yellow] (e.g., hello-world)"
     )
-
-    # Validate folder name format (should be like 003-hello-world)
-    while not re.match(r"^\d{3}-[a-z0-9-]+$", folder_name):
-        rprint("[bold red]Folder name should be in format '003-hello-world'[/bold red]")
-        folder_name = Prompt.ask(
-            "[yellow]Enter the folder name for this example[/yellow] (e.g., 003-hello-world)"
+    
+    # Validate example name format (should be like hello-world)
+    while not re.match(r"^[a-z0-9-]+$", example_name):
+        rprint("[bold red]Example name should only contain lowercase letters, numbers, and hyphens[/bold red]")
+        example_name = Prompt.ask(
+            "[yellow]Enter the name for this example[/yellow] (e.g., hello-world)"
         )
+    
+    # Construct the full folder name with numeric prefix
+    folder_name = f"{next_number:03d}-{example_name}"
+    rprint(f"[green]Creating example in folder: {folder_name}[/green]")
 
     # Ask for focus area
     focus = Prompt.ask(
