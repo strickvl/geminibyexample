@@ -10,11 +10,15 @@ It's organized by sections, with each example's Python code and terminal command
   * Streaming text
   * System prompt
 * Images Basics
-  * Understanding images
+  * Image question answering
   * Image generation (Gemini and Imagen)
   * Edit an image
   * Bounding boxes
   * Image segmentation
+* Audio Basics
+  * Audio question answering
+  * Audio transcription
+  * Audio summarization
 
 ## Text Basics
 
@@ -93,7 +97,7 @@ For more information, see the original documentation:
 
 ## Images Basics
 
-### Understanding images
+### Image question answering
 
 This example demonstrates how to use the Gemini API to analyze or understand images of cats, including using image URLs and base64 encoding.
 
@@ -338,4 +342,124 @@ $ python cat_segmentation.py
 
 For more information, see the original documentation:
 - https://ai.google.dev/gemini-api/docs/vision?lang=python#image_segmentation
+
+## Audio Basics
+
+### Audio question answering
+
+This example demonstrates how to ask a question about the content of an audio file using the Gemini API.
+
+```python
+from google import genai
+from google.genai import types
+import requests
+import os
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+user_agent = "GeminiByExample/1.0 (https://github.com/strickvl/geminibyexample; contact@example.org) python-requests/2.0"
+url = "https://upload.wikimedia.org/wikipedia/commons/1/1f/%22DayBreak%22_with_Jay_Young_on_the_USA_Radio_Network.ogg"
+headers = {"User-Agent": user_agent}
+response = requests.get(url, headers=headers)
+response.raise_for_status()  # Raise an exception for bad status codes
+audio_bytes = response.content
+response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents=[
+        "What is the main topic of this audio?",
+        types.Part.from_bytes(
+            data=audio_bytes,
+            mime_type="audio/ogg",
+        ),
+    ],
+)
+
+print(response.text)
+```
+
+```shell
+$ pip install google-generative-ai requests
+$ python audio-question.py
+This audio features a male host and a travel expert, Pete Trabucco.
+```
+
+For more information, see the original documentation:
+- https://ai.google.dev/gemini-api/docs/audio?lang=python
+
+### Audio transcription
+
+This example demonstrates how to transcribe an audio file by providing the audio data inline with the request.
+
+```python
+from google import genai
+from google.genai import types
+import requests
+client = genai.Client(api_key="YOUR_API_KEY")
+user_agent = "GeminiByExample/1.0 (https://github.com/strickvl/geminibyexample; contact@example.org) python-requests/2.0"
+url = "https://upload.wikimedia.org/wikipedia/commons/1/1f/%22DayBreak%22_with_Jay_Young_on_the_USA_Radio_Network.ogg"
+headers = {"User-Agent": user_agent}
+response = requests.get(url, headers=headers)
+response.raise_for_status()  # Raise an exception for bad status codes
+audio_bytes = response.content
+response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents=[
+        "Transcribe this audio clip",
+        types.Part.from_bytes(
+            data=audio_bytes,
+            mime_type="audio/ogg",
+        ),
+    ],
+)
+print(response.text)
+```
+
+```shell
+$ pip install google-generative-ai
+$ python audio-transcription.py
+We're joined once again by our travel expert and also author of America's Top Roller Coasters and Amusement Parks, Pete Trabucco. Good morning and welcome back to Daybreak USA. Well, thanks for having me on. If someone's lucky enough to go on vacation to an exotic location, and then maybe not so lucky to have some kind of a disaster happen while they're there, maybe some civil unrest. What should they do now? What's the next step? Well, whenever you're going on vacation whether it's locally or internationally, you've got to be uh very careful.
+```
+
+For more information, see the original documentation:
+- https://ai.google.dev/gemini-api/docs/audio?lang=python
+
+### Audio summarization
+
+This example demonstrates how to summarize the content of an audio file using the Gemini API.
+
+```python
+from google import genai
+from google.genai import types
+import requests
+import os
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+user_agent = "GeminiByExample/1.0 (https://github.com/strickvl/geminibyexample; contact@example.org) python-requests/2.0"
+url = "https://upload.wikimedia.org/wikipedia/commons/1/1f/%22DayBreak%22_with_Jay_Young_on_the_USA_Radio_Network.ogg"
+headers = {"User-Agent": user_agent}
+response = requests.get(url, headers=headers)
+response.raise_for_status()  # Raise an exception for bad status codes
+audio_bytes = response.content
+response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents=[
+        "What is this audio about?",
+        types.Part.from_bytes(
+            data=audio_bytes,
+            mime_type="audio/ogg",
+        ),
+    ],
+)
+
+print(response.text)
+```
+
+```shell
+$ pip install google-generative-ai requests
+$ python audio-summarization.py
+This audio is about travel tips, particularly what to do in the event of a disaster while on vacation.
+The speaker emphasizes the importance of staying informed about the destination, traveling with a buddy,
+having a plan in place, and investing in travel insurance. They also mention the importance of connecting
+with home base and knowing the location of the American Red Cross in case of emergencies.
+```
+
+For more information, see the original documentation:
+- https://ai.google.dev/gemini-api/docs/audio?lang=python
 

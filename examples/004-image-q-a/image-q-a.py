@@ -1,4 +1,4 @@
-# Understanding images
+# Image question answering
 # This example demonstrates how to use the Gemini API to analyze or understand images of cats, including using image URLs and base64 encoding.
 
 # Import necessary libraries

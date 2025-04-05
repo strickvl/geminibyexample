@@ -23,6 +23,17 @@
         "007-bounding-boxes",
         "008-image-segmentation"
       ]
+    },
+    {
+      "id": "003-basic-audio",
+      "title": "Audio Basics",
+      "description": "",
+      "order": 3,
+      "examples": [
+        "009-audio-q-a",
+        "010-audio-transcription",
+        "011-audio-summarization"
+      ]
     }
   ]
 }

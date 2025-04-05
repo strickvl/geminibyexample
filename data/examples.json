@@ -379,7 +379,7 @@
     },
     {
       "id": "004-image-q-a",
-      "title": "Understanding images",
+      "title": "Image question answering",
       "description": "This example demonstrates how to use the Gemini API to analyze or understand images of cats, including using image URLs and base64 encoding.",
       "order": 4,
       "code_segments": [
@@ -1728,6 +1728,611 @@
       ],
       "section_id": "002-basic-images",
       "section_title": "Images Basics"
+    },
+    {
+      "id": "009-audio-q-a",
+      "title": "Audio question answering",
+      "description": "This example demonstrates how to ask a question about the content of an audio file using the Gemini API.",
+      "order": 9,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import the necessary libraries\n",
+          "display_code": "",
+          "annotation": "Import the necessary libraries",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ],
+          "target_line_range": [
+            5,
+            9
+          ]
+        },
+        {
+          "code": "from google import genai\nfrom google.genai import types\nimport requests\nimport os\n\n",
+          "display_code": "from google import genai\nfrom google.genai import types\nimport requests\nimport os\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            9
+          ]
+        },
+        {
+          "code": "# Replace with your actual API key\n",
+          "display_code": "",
+          "annotation": "Replace with your actual API key",
+          "is_comment": true,
+          "start_line": 10,
+          "line_range": [
+            10,
+            10
+          ],
+          "target_line_range": [
+            11,
+            12
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 11,
+          "line_range": [
+            11,
+            12
+          ]
+        },
+        {
+          "code": "# Define a descriptive User-Agent following Wikimedia's policy\n",
+          "display_code": "",
+          "annotation": "Define a descriptive User-Agent following Wikimedia's policy",
+          "is_comment": true,
+          "start_line": 13,
+          "line_range": [
+            13,
+            13
+          ],
+          "target_line_range": [
+            14,
+            15
+          ]
+        },
+        {
+          "code": "user_agent = \"GeminiByExample/1.0 (https://github.com/strickvl/geminibyexample; contact@example.org) python-requests/2.0\"\n\n",
+          "display_code": "user_agent = \"GeminiByExample/1.0 (https://github.com/strickvl/geminibyexample; contact@example.org) python-requests/2.0\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 14,
+          "line_range": [
+            14,
+            15
+          ]
+        },
+        {
+          "code": "# Download the audio file from the URL\n",
+          "display_code": "",
+          "annotation": "Download the audio file from the URL",
+          "is_comment": true,
+          "start_line": 16,
+          "line_range": [
+            16,
+            16
+          ],
+          "target_line_range": [
+            17,
+            21
+          ]
+        },
+        {
+          "code": "url = \"https://upload.wikimedia.org/wikipedia/commons/1/1f/%22DayBreak%22_with_Jay_Young_on_the_USA_Radio_Network.ogg\"\nheaders = {\"User-Agent\": user_agent}\nresponse = requests.get(url, headers=headers)\nresponse.raise_for_status()  # Raise an exception for bad status codes\n\n",
+          "display_code": "url = \"https://upload.wikimedia.org/wikipedia/commons/1/1f/%22DayBreak%22_with_Jay_Young_on_the_USA_Radio_Network.ogg\"\nheaders = {\"User-Agent\": user_agent}\nresponse = requests.get(url, headers=headers)\nresponse.raise_for_status()  # Raise an exception for bad status codes\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 17,
+          "line_range": [
+            17,
+            21
+          ]
+        },
+        {
+          "code": "# Save the content to a variable\n# Note: If your audio file is larger than 20MB, you should use the File API to upload the file first.\n# The File API allows you to upload larger files and then reference them in your requests.\n",
+          "display_code": "",
+          "annotation": "Save the content to a variable\nNote: If your audio file is larger than 20MB, you should use the File API to upload the file first.\nThe File API allows you to upload larger files and then reference them in your requests.",
+          "is_comment": true,
+          "start_line": 22,
+          "line_range": [
+            22,
+            24
+          ],
+          "target_line_range": [
+            25,
+            26
+          ]
+        },
+        {
+          "code": "audio_bytes = response.content\n\n",
+          "display_code": "audio_bytes = response.content\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 25,
+          "line_range": [
+            25,
+            26
+          ]
+        },
+        {
+          "code": "# You can now pass that audio file along with the prompt to Gemini\n",
+          "display_code": "",
+          "annotation": "You can now pass that audio file along with the prompt to Gemini",
+          "is_comment": true,
+          "start_line": 27,
+          "line_range": [
+            27,
+            27
+          ],
+          "target_line_range": [
+            28,
+            39
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\n        \"What is the main topic of this audio?\",\n        types.Part.from_bytes(\n            data=audio_bytes,\n            mime_type=\"audio/ogg\",\n        ),\n    ],\n)\n\nprint(response.text)\n",
+          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\n        \"What is the main topic of this audio?\",\n        types.Part.from_bytes(\n            data=audio_bytes,\n            mime_type=\"audio/ogg\",\n        ),\n    ],\n)\n\nprint(response.text)\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 28,
+          "line_range": [
+            28,
+            39
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library and requests",
+          "command": "pip install google-generative-ai requests",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python audio-question.py",
+          "output": "This audio features a male host and a travel expert, Pete Trabucco."
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/audio?lang=python"
+      ],
+      "section_id": "003-basic-audio",
+      "section_title": "Audio Basics"
+    },
+    {
+      "id": "010-audio-transcription",
+      "title": "Audio transcription",
+      "description": "This example demonstrates how to transcribe an audio file by providing the audio data inline with the request.",
+      "order": 10,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import the necessary modules\n",
+          "display_code": "",
+          "annotation": "Import the necessary modules",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ],
+          "target_line_range": [
+            5,
+            8
+          ]
+        },
+        {
+          "code": "from google import genai\nfrom google.genai import types\nimport requests\n\n",
+          "display_code": "from google import genai\nfrom google.genai import types\nimport requests\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            8
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 9,
+          "line_range": [
+            9,
+            9
+          ],
+          "target_line_range": [
+            10,
+            11
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=\"YOUR_API_KEY\")\n\n",
+          "display_code": "client = genai.Client(api_key=\"YOUR_API_KEY\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 10,
+          "line_range": [
+            10,
+            11
+          ]
+        },
+        {
+          "code": "# Define a descriptive User-Agent following Wikimedia's policy\n",
+          "display_code": "",
+          "annotation": "Define a descriptive User-Agent following Wikimedia's policy",
+          "is_comment": true,
+          "start_line": 12,
+          "line_range": [
+            12,
+            12
+          ],
+          "target_line_range": [
+            13,
+            14
+          ]
+        },
+        {
+          "code": "user_agent = \"GeminiByExample/1.0 (https://github.com/strickvl/geminibyexample; contact@example.org) python-requests/2.0\"\n\n",
+          "display_code": "user_agent = \"GeminiByExample/1.0 (https://github.com/strickvl/geminibyexample; contact@example.org) python-requests/2.0\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 13,
+          "line_range": [
+            13,
+            14
+          ]
+        },
+        {
+          "code": "# Download the audio file from the URL\n",
+          "display_code": "",
+          "annotation": "Download the audio file from the URL",
+          "is_comment": true,
+          "start_line": 15,
+          "line_range": [
+            15,
+            15
+          ],
+          "target_line_range": [
+            16,
+            20
+          ]
+        },
+        {
+          "code": "url = \"https://upload.wikimedia.org/wikipedia/commons/1/1f/%22DayBreak%22_with_Jay_Young_on_the_USA_Radio_Network.ogg\"\nheaders = {\"User-Agent\": user_agent}\nresponse = requests.get(url, headers=headers)\nresponse.raise_for_status()  # Raise an exception for bad status codes\n\n",
+          "display_code": "url = \"https://upload.wikimedia.org/wikipedia/commons/1/1f/%22DayBreak%22_with_Jay_Young_on_the_USA_Radio_Network.ogg\"\nheaders = {\"User-Agent\": user_agent}\nresponse = requests.get(url, headers=headers)\nresponse.raise_for_status()  # Raise an exception for bad status codes\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 16,
+          "line_range": [
+            16,
+            20
+          ]
+        },
+        {
+          "code": "# Read the audio file as bytes\n# Note: If your audio file is larger than 20MB, you should use the File API to upload the file first.\n# The File API allows you to upload larger files and then reference them in your requests.\n",
+          "display_code": "",
+          "annotation": "Read the audio file as bytes\nNote: If your audio file is larger than 20MB, you should use the File API to upload the file first.\nThe File API allows you to upload larger files and then reference them in your requests.",
+          "is_comment": true,
+          "start_line": 21,
+          "line_range": [
+            21,
+            23
+          ],
+          "target_line_range": [
+            24,
+            25
+          ]
+        },
+        {
+          "code": "audio_bytes = response.content\n\n",
+          "display_code": "audio_bytes = response.content\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 24,
+          "line_range": [
+            24,
+            25
+          ]
+        },
+        {
+          "code": "# Call the API to generate a transcription of the audio clip\n",
+          "display_code": "",
+          "annotation": "Call the API to generate a transcription of the audio clip",
+          "is_comment": true,
+          "start_line": 26,
+          "line_range": [
+            26,
+            26
+          ],
+          "target_line_range": [
+            27,
+            37
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\n        \"Transcribe this audio clip\",\n        types.Part.from_bytes(\n            data=audio_bytes,\n            mime_type=\"audio/ogg\",\n        ),\n    ],\n)\n\n",
+          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\n        \"Transcribe this audio clip\",\n        types.Part.from_bytes(\n            data=audio_bytes,\n            mime_type=\"audio/ogg\",\n        ),\n    ],\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 27,
+          "line_range": [
+            27,
+            37
+          ]
+        },
+        {
+          "code": "# Print the transcribed text\n",
+          "display_code": "",
+          "annotation": "Print the transcribed text",
+          "is_comment": true,
+          "start_line": 38,
+          "line_range": [
+            38,
+            38
+          ],
+          "target_line_range": [
+            39,
+            39
+          ]
+        },
+        {
+          "code": "print(response.text)\n",
+          "display_code": "print(response.text)\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 39,
+          "line_range": [
+            39,
+            39
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library",
+          "command": "pip install google-generative-ai",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python audio-transcription.py",
+          "output": "We're joined once again by our travel expert and also author of America's Top Roller Coasters and Amusement Parks, Pete Trabucco. Good morning and welcome back to Daybreak USA. Well, thanks for having me on. If someone's lucky enough to go on vacation to an exotic location, and then maybe not so lucky to have some kind of a disaster happen while they're there, maybe some civil unrest. What should they do now? What's the next step? Well, whenever you're going on vacation whether it's locally or internationally, you've got to be uh very careful."
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/audio?lang=python"
+      ],
+      "section_id": "003-basic-audio",
+      "section_title": "Audio Basics"
+    },
+    {
+      "id": "011-audio-summarization",
+      "title": "Audio summarization",
+      "description": "This example demonstrates how to summarize the content of an audio file using the Gemini API.",
+      "order": 11,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import the necessary libraries\n",
+          "display_code": "",
+          "annotation": "Import the necessary libraries",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ],
+          "target_line_range": [
+            5,
+            9
+          ]
+        },
+        {
+          "code": "from google import genai\nfrom google.genai import types\nimport requests\nimport os\n\n",
+          "display_code": "from google import genai\nfrom google.genai import types\nimport requests\nimport os\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            9
+          ]
+        },
+        {
+          "code": "# Replace with your actual API key\n",
+          "display_code": "",
+          "annotation": "Replace with your actual API key",
+          "is_comment": true,
+          "start_line": 10,
+          "line_range": [
+            10,
+            10
+          ],
+          "target_line_range": [
+            11,
+            12
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 11,
+          "line_range": [
+            11,
+            12
+          ]
+        },
+        {
+          "code": "# Define a descriptive User-Agent following Wikimedia's policy\n",
+          "display_code": "",
+          "annotation": "Define a descriptive User-Agent following Wikimedia's policy",
+          "is_comment": true,
+          "start_line": 13,
+          "line_range": [
+            13,
+            13
+          ],
+          "target_line_range": [
+            14,
+            15
+          ]
+        },
+        {
+          "code": "user_agent = \"GeminiByExample/1.0 (https://github.com/strickvl/geminibyexample; contact@example.org) python-requests/2.0\"\n\n",
+          "display_code": "user_agent = \"GeminiByExample/1.0 (https://github.com/strickvl/geminibyexample; contact@example.org) python-requests/2.0\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 14,
+          "line_range": [
+            14,
+            15
+          ]
+        },
+        {
+          "code": "# Download the audio file from the URL\n",
+          "display_code": "",
+          "annotation": "Download the audio file from the URL",
+          "is_comment": true,
+          "start_line": 16,
+          "line_range": [
+            16,
+            16
+          ],
+          "target_line_range": [
+            17,
+            21
+          ]
+        },
+        {
+          "code": "url = \"https://upload.wikimedia.org/wikipedia/commons/1/1f/%22DayBreak%22_with_Jay_Young_on_the_USA_Radio_Network.ogg\"\nheaders = {\"User-Agent\": user_agent}\nresponse = requests.get(url, headers=headers)\nresponse.raise_for_status()  # Raise an exception for bad status codes\n\n",
+          "display_code": "url = \"https://upload.wikimedia.org/wikipedia/commons/1/1f/%22DayBreak%22_with_Jay_Young_on_the_USA_Radio_Network.ogg\"\nheaders = {\"User-Agent\": user_agent}\nresponse = requests.get(url, headers=headers)\nresponse.raise_for_status()  # Raise an exception for bad status codes\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 17,
+          "line_range": [
+            17,
+            21
+          ]
+        },
+        {
+          "code": "# Save the content to a variable\n# Note: If your audio file is larger than 20MB, you should use the File API to upload the file first.\n# The File API allows you to upload larger files and then reference them in your requests.\n",
+          "display_code": "",
+          "annotation": "Save the content to a variable\nNote: If your audio file is larger than 20MB, you should use the File API to upload the file first.\nThe File API allows you to upload larger files and then reference them in your requests.",
+          "is_comment": true,
+          "start_line": 22,
+          "line_range": [
+            22,
+            24
+          ],
+          "target_line_range": [
+            25,
+            26
+          ]
+        },
+        {
+          "code": "audio_bytes = response.content\n\n",
+          "display_code": "audio_bytes = response.content\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 25,
+          "line_range": [
+            25,
+            26
+          ]
+        },
+        {
+          "code": "# You can now pass that audio file along with the prompt to Gemini\n",
+          "display_code": "",
+          "annotation": "You can now pass that audio file along with the prompt to Gemini",
+          "is_comment": true,
+          "start_line": 27,
+          "line_range": [
+            27,
+            27
+          ],
+          "target_line_range": [
+            28,
+            39
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\n        \"What is this audio about?\",\n        types.Part.from_bytes(\n            data=audio_bytes,\n            mime_type=\"audio/ogg\",\n        ),\n    ],\n)\n\nprint(response.text)\n",
+          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\n        \"What is this audio about?\",\n        types.Part.from_bytes(\n            data=audio_bytes,\n            mime_type=\"audio/ogg\",\n        ),\n    ],\n)\n\nprint(response.text)\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 28,
+          "line_range": [
+            28,
+            39
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library and requests",
+          "command": "pip install google-generative-ai requests",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python audio-summarization.py",
+          "output": "This audio is about travel tips, particularly what to do in the event of a disaster while on vacation.\nThe speaker emphasizes the importance of staying informed about the destination, traveling with a buddy,\nhaving a plan in place, and investing in travel insurance. They also mention the importance of connecting\nwith home base and knowing the location of the American Red Cross in case of emergencies."
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/audio?lang=python"
+      ],
+      "section_id": "003-basic-audio",
+      "section_title": "Audio Basics"
     }
   ],
   "sections": [
@@ -1753,6 +2358,17 @@
         "006-editing-images",
         "007-bounding-boxes",
         "008-image-segmentation"
+      ]
+    },
+    {
+      "id": "003-basic-audio",
+      "title": "Audio Basics",
+      "description": "",
+      "order": 3,
+      "examples": [
+        "009-audio-q-a",
+        "010-audio-transcription",
+        "011-audio-summarization"
       ]
     }
   ]

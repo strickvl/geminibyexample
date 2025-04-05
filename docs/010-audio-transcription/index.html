@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Streaming text - Gemini by Example</title>
+    <title>Audio transcription - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
     <style>
@@ -157,9 +157,9 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
                 <div>
                     <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
-                        <a href="../" style="text-decoration: none; color: #666;">Text Basics</a>
+                        <a href="../" style="text-decoration: none; color: #666;">Audio Basics</a>
                     </div>
-                    <h1 style="margin: 0; margin-bottom: 10px;">Streaming text</h1>
+                    <h1 style="margin: 0; margin-bottom: 10px;">Audio transcription</h1>
                 </div>
                 <div style="position: relative; margin-top: 10px;">
                     <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
@@ -172,15 +172,17 @@
                 </div>
             </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
-                This example demonstrates how to use the Gemini API to generate text content and stream the output.
+                This example demonstrates how to transcribe an audio file by providing the audio data inline with the request.
             </p>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Import the Gemini API</div>
+                    <div style='font-size: 0.9em; color: #666;'>Import the necessary modules</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>from google import genai</code></pre>
+                    <pre><code>from google import genai
+from google.genai import types
+import requests</code></pre>
                 </div>
             </div>
             <hr>
@@ -196,25 +198,65 @@
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Call the API to generate content in streaming mode</div>
+                    <div style='font-size: 0.9em; color: #666;'>Define a descriptive User-Agent following Wikimedia's policy</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>response = client.models.generate_content_stream(
+                    <pre><code>user_agent = &quot;GeminiByExample/1.0 (https://github.com/strickvl/geminibyexample; contact@example.org) python-requests/2.0&quot;</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Download the audio file from the URL</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>url = &quot;https://upload.wikimedia.org/wikipedia/commons/1/1f/%22DayBreak%22_with_Jay_Young_on_the_USA_Radio_Network.ogg&quot;
+headers = {&quot;User-Agent&quot;: user_agent}
+response = requests.get(url, headers=headers)
+response.raise_for_status()  # Raise an exception for bad status codes</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Read the audio file as bytes
+Note: If your audio file is larger than 20MB, you should use the File API to upload the file first.
+The File API allows you to upload larger files and then reference them in your requests.</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>audio_bytes = response.content</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Call the API to generate a transcription of the audio clip</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>response = client.models.generate_content(
     model=&quot;gemini-2.0-flash&quot;,
-    contents=[&quot;Explain how AI works&quot;]
+    contents=[
+        &quot;Transcribe this audio clip&quot;,
+        types.Part.from_bytes(
+            data=audio_bytes,
+            mime_type=&quot;audio/ogg&quot;,
+        ),
+    ],
 )</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Iterate over the stream of responses and print each chunk of text</div>
+                    <div style='font-size: 0.9em; color: #666;'>Print the transcribed text</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>for chunk in response:
-    print(chunk.text, end=&quot;&quot;)</code></pre>
+                    <pre><code>print(response.text)</code></pre>
                 </div>
             </div>
             <hr>
@@ -243,18 +285,18 @@
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python streaming-generation.py</span></span>
-AI, or Artificial Intelligence, is a broad field of computer science focused on creating machines capable of performing tasks that typically require human intelligence. It involves developing algorithms and models that enable computers to learn from data, reason, solve problems, understand natural language, perceive their environment, and make decisions.</code></pre>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python audio-transcription.py</span></span>
+We&#x27;re joined once again by our travel expert and also author of America&#x27;s Top Roller Coasters and Amusement Parks, Pete Trabucco. Good morning and welcome back to Daybreak USA. Well, thanks for having me on. If someone&#x27;s lucky enough to go on vacation to an exotic location, and then maybe not so lucky to have some kind of a disaster happen while they&#x27;re there, maybe some civil unrest. What should they do now? What&#x27;s the next step? Well, whenever you&#x27;re going on vacation whether it&#x27;s locally or internationally, you&#x27;ve got to be uh very careful.</code></pre>
                 </div>
             </div>
             <hr>
             <h4>Further Information</h4>
             <ul style="font-size: 0.9em;">
-                <li><a href="https://ai.google.dev/gemini-api/docs/text-generation"
+                <li><a href="https://ai.google.dev/gemini-api/docs/audio?lang=python"
                          target="_blank">Gemini docs link 1</a></li>
             </ul>
             <p class="next">
-                Next example: <a href="../003-system-prompt/">System prompt</a>
+                Next example: <a href="../011-audio-summarization/">Audio summarization</a>
             </p>
         </main>
         <footer>
