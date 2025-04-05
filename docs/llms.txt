@@ -11,7 +11,6 @@ It's organized by sections, with each example's Python code and terminal command
   * System prompt
 * Images Basics
   * Understanding images
-* Miscellaneous Examples
   * Image generation (Gemini and Imagen)
 
 ## Text Basics
@@ -131,10 +130,6 @@ Response from URL Image:
 
 For more information, see the original documentation:
 - https://ai.google.dev/gemini-api/docs/vision?lang=python
-
-## Miscellaneous Examples
-
-Additional examples that don't fit into other categories
 
 ### Image generation (Gemini and Imagen)
 

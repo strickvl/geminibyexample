@@ -797,8 +797,8 @@
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/image-generation"
       ],
-      "section_id": "999-misc",
-      "section_title": "Miscellaneous Examples"
+      "section_id": "002-basic-images",
+      "section_title": "Images Basics"
     }
   ],
   "sections": [
@@ -819,14 +819,9 @@
       "description": "",
       "order": 2,
       "examples": [
-        "004-image-q-a"
+        "004-image-q-a",
+        "005-image-generation"
       ]
-    },
-    {
-      "id": "999-misc",
-      "title": "Miscellaneous Examples",
-      "description": "Additional examples that don't fit into other categories",
-      "order": 999
     }
   ]
 }

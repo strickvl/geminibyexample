@@ -12,7 +12,7 @@
       "title": "Images Basics",
       "description": "",
       "order": 2,
-      "examples": ["004-image-q-a"]
+      "examples": ["004-image-q-a", "005-image-generation"]
     }
   ]
 }
