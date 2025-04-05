@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code execution - Gemini by Example</title>
+    <title>Model Context Protocol - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
     <style>
@@ -175,7 +175,7 @@
                     <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
                         <a href="../" style="text-decoration: none; color: #666;">Agentic behaviour</a>
                     </div>
-                    <h1 style="margin: 0; margin-bottom: 10px;">Code execution</h1>
+                    <h1 style="margin: 0; margin-bottom: 10px;">Model Context Protocol</h1>
                 </div>
                 <div style="position: relative; margin-top: 10px;">
                     <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
@@ -188,106 +188,130 @@
                 </div>
             </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
-                This example demonstrates how to use the Gemini API to execute code
-(agent-style) and calculate the sum of the first 50 prime numbers.
+                This example demonstrates using a local MCP server with Gemini to get weather information.
             </p>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Import the necessary libraries. Make sure you have the rich library installed!</div>
+                    <div style='font-size: 0.9em; color: #666;'>Import necessary libraries. Make you have mcp installed.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>from google import genai
-from google.genai import types
+                    <pre><code>import asyncio
 import os
-from rich.console import Console
-from rich.markdown import Markdown
-from rich.syntax import Syntax
-from rich.panel import Panel</code></pre>
+from datetime import datetime
+from google import genai
+from google.genai import types
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Initialize the rich console and the Gemini client</div>
+                    <div style='font-size: 0.9em; color: #666;'>Configure Gemini client</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>console = Console()
-client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
+                    <pre><code>client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Configure the model to use the code execution tool.
-Note that not all models support code execution.
-The code execution environment includes a number of popular libraries like
-sklearn, matplotlib, pandas, pdfminer and so on.
-You can't install your own libraries.</div>
+                    <div style='font-size: 0.9em; color: #666;'>Define server parameters for the MCP server</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>response = client.models.generate_content(
-    model=&quot;gemini-2.0-flash&quot;,
-    contents=&quot;What is the sum of the first 50 prime numbers? &quot;
-    &quot;Generate and run code for the calculation, and make sure you get all 50.&quot;,
-    config=types.GenerateContentConfig(
-        tools=[types.Tool(code_execution=types.ToolCodeExecution)]
-    ),
-)
-
-
-for part in response.candidates[0].content.parts:
-    if part.text is not None:
-        console.print(Markdown(part.text))
-
-    if part.executable_code is not None:
-        code = part.executable_code.code</code></pre>
+                    <pre><code>server_params = StdioServerParameters(
+    command=&quot;npx&quot;,  # Executable for the MCP server
+    args=[
+        &quot;-y&quot;,
+        &quot;@philschmid/weather-mcp&quot;,
+    ],  # Arguments for the server (Weather MCP Server)
+    env=None,  # Optional environment variables
+)</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Detect language (simple approach)</div>
+                    <div style='font-size: 0.9em; color: #666;'>Define the prompt to get the weather for the current day in Delft</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>language = (
-            &quot;python&quot;
-            if &quot;def &quot; in code or &quot;import &quot; in code or &quot;print(&quot; in code
-            else &quot;text&quot;
-        )
-        console.print(
-            Panel(
-                Syntax(code, language, theme=&quot;monokai&quot;, line_numbers=True),
-                title=&quot;Code&quot;,
-                border_style=&quot;blue&quot;,
+                    <pre><code>PROMPT = f&quot;What is the weather in Delft in {datetime.now().strftime(&#x27;%Y-%m-%d&#x27;)}?&quot;</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Define an asynchronous function to run the MCP client and interact with
+Gemini.
+We retrieve tools from the MCP session and convert them to Gemini Tool objects</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>async def run():
+    async with stdio_client(server_params) as (read, write):
+        async with ClientSession(read, write) as session:
+            await session.initialize()
+
+            mcp_tools = await session.list_tools()
+            tools = [
+                types.Tool(
+                    function_declarations=[
+                        {
+                            &quot;name&quot;: tool.name,
+                            &quot;description&quot;: tool.description,
+                            &quot;parameters&quot;: {
+                                k: v
+                                for k, v in tool.inputSchema.items()
+                                if k not in [&quot;additionalProperties&quot;, &quot;$schema&quot;]
+                            },
+                        }
+                    ]
+                )
+                for tool in mcp_tools.tools
+            ]
+
+            response = client.models.generate_content(
+                model=&quot;gemini-2.0-flash&quot;,
+                contents=PROMPT,
+                config=types.GenerateContentConfig(
+                    temperature=0,
+                    tools=tools,
+                ),
             )
-        )
 
-    if part.code_execution_result is not None:
-        console.print(
-            Panel(
-                part.code_execution_result.output,
-                title=&quot;Output&quot;,
-                border_style=&quot;green&quot;,
-            )
-        )
+            if response.candidates[0].content.parts[0].function_call:
+                function_call = response.candidates[0].content.parts[0].function_call
+                print(f&quot;Function call: {function_call}&quot;)
 
-    if part.inline_data is not None:
-        console.print(
-            &quot;[yellow]Image data available but cannot be displayed in terminal[/yellow]&quot;
-        )
+                result = await session.call_tool(
+                    function_call.name, arguments=function_call.args
+                )
+                print(f&quot;Tool Result: {result.content[0].text}&quot;)
 
-    console.print(&quot;---&quot;)</code></pre>
+            else:
+                print(&quot;No function call found in the response.&quot;)
+                print(response.text)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Run the asynchronous function</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>asyncio.run(run())</code></pre>
                 </div>
             </div>
             <hr>
             <h2>Running the Example</h2>
             <div class="row">
                 <div class="docs" style='font-size: 0.9em; color: #666;'>
-                    First, install the Google Generative AI library
+                    First, install the necessary libraries
                 </div>
                 <div class="code">
                     <div class="buttons">
@@ -295,7 +319,7 @@ for part in response.candidates[0].content.parts:
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai rich</span></span>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai mcp</span></span>
 </code></pre>
                 </div>
             </div>
@@ -309,75 +333,23 @@ for part in response.candidates[0].content.parts:
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python code-execution.py</span></span>
-Okay, I can help you find the sum of the first 50 prime numbers. Here&#x27;s how I&#x27;ll approach this:                                       
- 1 Generate a list of the first 50 prime numbers. I&#x27;ll need an efficient way to identify prime numbers. I can use the Sieve of        
-   Eratosthenes method or a simpler trial division approach.                                                                          
- 2 Sum the prime numbers. Once I have the list, I&#x27;ll simply add them up.                                                              
-Here&#x27;s the Python code to accomplish this:                                                                                            
----
-╭─────────────────────────────────────────────────────────────── Code ───────────────────────────────────────────────────────────────╮
-│    1 def is_prime(n):                                                                                                              │
-│    2     &quot;&quot;&quot;Efficiently determine if a number is prime.&quot;&quot;&quot;                                                                         │
-│    3     if n &lt;= 1:                                                                                                                │
-│    4         return False                                                                                                          │
-│    5     if n &lt;= 3:                                                                                                                │
-│    6         return True                                                                                                           │
-│    7     if n % 2 == 0 or n % 3 == 0:                                                                                              │
-│    8         return False                                                                                                          │
-│    9     i = 5                                                                                                                     │
-│   10     while i * i &lt;= n:                                                                                                         │
-│   11         if n % i == 0 or n % (i + 2) == 0:                                                                                    │
-│   12             return False                                                                                                      │
-│   13         i += 6                                                                                                                │
-│   14     return True                                                                                                               │
-│   15                                                                                                                               │
-│   16 primes = []                                                                                                                   │
-│   17 num = 2                                                                                                                       │
-│   18 while len(primes) &lt; 50:                                                                                                       │
-│   19     if is_prime(num):                                                                                                         │
-│   20         primes.append(num)                                                                                                    │
-│   21     num += 1                                                                                                                  │
-│   22                                                                                                                               │
-│   23 print(f&#x27;{primes=}&#x27;)                                                                                                           │
-│   24 print(f&#x27;{sum(primes)=}&#x27;)                                                                                                      │
-│   25                                                                                                                               │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
----
-╭────────────────────────────────────────────────────────────── Output ──────────────────────────────────────────────────────────────╮
-│ primes=[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113,   │
-│ 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229]                                │
-│ sum(primes)=5117                                                                                                                   │
-│                                                                                                                                    │
-╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
----
-The sum of the first 50 prime numbers is 5117.                                                                                        
----</code></pre>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python mcp_example.py</span></span>
+Function call: id=None args={&#x27;date&#x27;: &#x27;2025-04-05&#x27;, &#x27;location&#x27;: &#x27;Delft&#x27;} name=&#x27;get_weather_forecast&#x27;
+Tool Result: {&quot;2025-04-05T00:00&quot;:11.4,&quot;2025-04-05T01:00&quot;:10.3,&quot;2025-04-05T02:00&quot;:9.8,&quot;2025-04-05T03:00&quot;:9.1,&quot;2025-04-05T04:00&quot;:8,&quot;2025-04-05T05:00&quot;:8,&quot;2025-04-05T06:00&quot;:8.3,&quot;2025-04-05T07:00&quot;:9.1,&quot;2025-04-05T08:00&quot;:11.1,&quot;2025-04-05T09:00&quot;:12.8,&quot;2025-04-05T10:00&quot;:14.3,&quot;2025-04-05T11:00&quot;:15.6,&quot;2025-04-05T12:00&quot;:16,&quot;2025-04-05T13:00&quot;:16.4,&quot;2025-04-05T14:00&quot;:17,&quot;2025-04-05T15:00&quot;:16.6,&quot;2025-04-05T16:00&quot;:16.1,&quot;2025-04-05T17:00&quot;:15,&quot;2025-04-05T18:00&quot;:13.5,&quot;2025-04-05T19:00&quot;:11.9,&quot;2025-04-05T20:00&quot;:11.1,&quot;2025-04-05T21:00&quot;:10.7,&quot;2025-04-05T22:00&quot;:10.1,&quot;2025-04-05T23:00&quot;:9.3}</code></pre>
                 </div>
-            </div>
-            <hr>
-            <div style="margin: 30px 0; text-align: center;">
-                <figure>
-                    <img src="images/code_execution.png" alt="An illustration or output
-                    from the example code" style="max-width: 100%; border: 1px solid #eee;
-                    border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <figcaption style="margin-top: 10px; color: #666; font-style: italic;"></figcaption>
-                </figure>
             </div>
             <hr>
             <h4>Further Information</h4>
             <ul style="font-size: 0.9em;">
-                <li><a href="https://ai.google.dev/gemini-api/docs/code-execution?lang=python"
+                <li><a href="https://ai.google.dev/gemini-api/docs/function-calling?example=weather#use_model_context_protocol_mcp"
                          target="_blank">Gemini docs link 1</a></li>
-                <li><a href="https://ai.google.dev/gemini-api/docs/code-execution?lang=rest"
-                         target="_blank">Gemini docs link 2</a></li>
             </ul>
             <div class="navigation">
                 <p class="prev">
-                    <span>← Previous:</span> <a href="../021-tool-use-function-calling/">Function calling & tool use</a>
+                    <span>← Previous:</span> <a href="../022-code-execution/">Code execution</a>
                 </p>
                 <p class="next">
-                    <span>Next:</span> <a href="../023-mcp-model-context-protocol/">Model Context Protocol</a> →
+                    <span>Next:</span> <a href="../024-grounded-responses/">Grounded Responses with Search Tool</a> →
                 </p>
             </div>
         </main>

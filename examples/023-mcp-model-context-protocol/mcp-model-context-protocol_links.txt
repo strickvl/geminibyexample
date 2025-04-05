@@ -1,0 +1,1 @@
+https://ai.google.dev/gemini-api/docs/function-calling?example=weather#use_model_context_protocol_mcp

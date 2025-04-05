@@ -4936,6 +4936,450 @@
       ],
       "section_id": "006-agentic",
       "section_title": "Agentic behaviour"
+    },
+    {
+      "id": "023-mcp-model-context-protocol",
+      "title": "Model Context Protocol",
+      "description": "This example demonstrates using a local MCP server with Gemini to get weather information.",
+      "order": 23,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import necessary libraries. Make you have mcp installed.\n",
+          "display_code": "",
+          "annotation": "Import necessary libraries. Make you have mcp installed.",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ],
+          "target_line_range": [
+            5,
+            12
+          ]
+        },
+        {
+          "code": "import asyncio\nimport os\nfrom datetime import datetime\nfrom google import genai\nfrom google.genai import types\nfrom mcp import ClientSession, StdioServerParameters\nfrom mcp.client.stdio import stdio_client\n\n",
+          "display_code": "import asyncio\nimport os\nfrom datetime import datetime\nfrom google import genai\nfrom google.genai import types\nfrom mcp import ClientSession, StdioServerParameters\nfrom mcp.client.stdio import stdio_client\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            12
+          ]
+        },
+        {
+          "code": "# Configure Gemini client\n",
+          "display_code": "",
+          "annotation": "Configure Gemini client",
+          "is_comment": true,
+          "start_line": 13,
+          "line_range": [
+            13,
+            13
+          ],
+          "target_line_range": [
+            14,
+            15
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 14,
+          "line_range": [
+            14,
+            15
+          ]
+        },
+        {
+          "code": "# Define server parameters for the MCP server\n",
+          "display_code": "",
+          "annotation": "Define server parameters for the MCP server",
+          "is_comment": true,
+          "start_line": 16,
+          "line_range": [
+            16,
+            16
+          ],
+          "target_line_range": [
+            17,
+            25
+          ]
+        },
+        {
+          "code": "server_params = StdioServerParameters(\n    command=\"npx\",  # Executable for the MCP server\n    args=[\n        \"-y\",\n        \"@philschmid/weather-mcp\",\n    ],  # Arguments for the server (Weather MCP Server)\n    env=None,  # Optional environment variables\n)\n\n",
+          "display_code": "server_params = StdioServerParameters(\n    command=\"npx\",  # Executable for the MCP server\n    args=[\n        \"-y\",\n        \"@philschmid/weather-mcp\",\n    ],  # Arguments for the server (Weather MCP Server)\n    env=None,  # Optional environment variables\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 17,
+          "line_range": [
+            17,
+            25
+          ]
+        },
+        {
+          "code": "# Define the prompt to get the weather for the current day in Delft\n",
+          "display_code": "",
+          "annotation": "Define the prompt to get the weather for the current day in Delft",
+          "is_comment": true,
+          "start_line": 26,
+          "line_range": [
+            26,
+            26
+          ],
+          "target_line_range": [
+            27,
+            29
+          ]
+        },
+        {
+          "code": "PROMPT = f\"What is the weather in Delft in {datetime.now().strftime('%Y-%m-%d')}?\"\n\n\n",
+          "display_code": "PROMPT = f\"What is the weather in Delft in {datetime.now().strftime('%Y-%m-%d')}?\"\n\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 27,
+          "line_range": [
+            27,
+            29
+          ]
+        },
+        {
+          "code": "# Define an asynchronous function to run the MCP client and interact with\n# Gemini.\n# We retrieve tools from the MCP session and convert them to Gemini Tool objects\n",
+          "display_code": "",
+          "annotation": "Define an asynchronous function to run the MCP client and interact with\nGemini.\nWe retrieve tools from the MCP session and convert them to Gemini Tool objects",
+          "is_comment": true,
+          "start_line": 30,
+          "line_range": [
+            30,
+            32
+          ],
+          "target_line_range": [
+            33,
+            78
+          ]
+        },
+        {
+          "code": "async def run():\n    async with stdio_client(server_params) as (read, write):\n        async with ClientSession(read, write) as session:\n            await session.initialize()\n\n            mcp_tools = await session.list_tools()\n            tools = [\n                types.Tool(\n                    function_declarations=[\n                        {\n                            \"name\": tool.name,\n                            \"description\": tool.description,\n                            \"parameters\": {\n                                k: v\n                                for k, v in tool.inputSchema.items()\n                                if k not in [\"additionalProperties\", \"$schema\"]\n                            },\n                        }\n                    ]\n                )\n                for tool in mcp_tools.tools\n            ]\n\n            response = client.models.generate_content(\n                model=\"gemini-2.0-flash\",\n                contents=PROMPT,\n                config=types.GenerateContentConfig(\n                    temperature=0,\n                    tools=tools,\n                ),\n            )\n\n            if response.candidates[0].content.parts[0].function_call:\n                function_call = response.candidates[0].content.parts[0].function_call\n                print(f\"Function call: {function_call}\")\n\n                result = await session.call_tool(\n                    function_call.name, arguments=function_call.args\n                )\n                print(f\"Tool Result: {result.content[0].text}\")\n\n            else:\n                print(\"No function call found in the response.\")\n                print(response.text)\n\n\n",
+          "display_code": "async def run():\n    async with stdio_client(server_params) as (read, write):\n        async with ClientSession(read, write) as session:\n            await session.initialize()\n\n            mcp_tools = await session.list_tools()\n            tools = [\n                types.Tool(\n                    function_declarations=[\n                        {\n                            \"name\": tool.name,\n                            \"description\": tool.description,\n                            \"parameters\": {\n                                k: v\n                                for k, v in tool.inputSchema.items()\n                                if k not in [\"additionalProperties\", \"$schema\"]\n                            },\n                        }\n                    ]\n                )\n                for tool in mcp_tools.tools\n            ]\n\n            response = client.models.generate_content(\n                model=\"gemini-2.0-flash\",\n                contents=PROMPT,\n                config=types.GenerateContentConfig(\n                    temperature=0,\n                    tools=tools,\n                ),\n            )\n\n            if response.candidates[0].content.parts[0].function_call:\n                function_call = response.candidates[0].content.parts[0].function_call\n                print(f\"Function call: {function_call}\")\n\n                result = await session.call_tool(\n                    function_call.name, arguments=function_call.args\n                )\n                print(f\"Tool Result: {result.content[0].text}\")\n\n            else:\n                print(\"No function call found in the response.\")\n                print(response.text)\n\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 33,
+          "line_range": [
+            33,
+            78
+          ]
+        },
+        {
+          "code": "# Run the asynchronous function\n",
+          "display_code": "",
+          "annotation": "Run the asynchronous function",
+          "is_comment": true,
+          "start_line": 79,
+          "line_range": [
+            79,
+            79
+          ],
+          "target_line_range": [
+            80,
+            80
+          ]
+        },
+        {
+          "code": "asyncio.run(run())\n",
+          "display_code": "asyncio.run(run())\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 80,
+          "line_range": [
+            80,
+            80
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the necessary libraries",
+          "command": "pip install google-generative-ai mcp",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python mcp_example.py",
+          "output": "Function call: id=None args={'date': '2025-04-05', 'location': 'Delft'} name='get_weather_forecast'\nTool Result: {\"2025-04-05T00:00\":11.4,\"2025-04-05T01:00\":10.3,\"2025-04-05T02:00\":9.8,\"2025-04-05T03:00\":9.1,\"2025-04-05T04:00\":8,\"2025-04-05T05:00\":8,\"2025-04-05T06:00\":8.3,\"2025-04-05T07:00\":9.1,\"2025-04-05T08:00\":11.1,\"2025-04-05T09:00\":12.8,\"2025-04-05T10:00\":14.3,\"2025-04-05T11:00\":15.6,\"2025-04-05T12:00\":16,\"2025-04-05T13:00\":16.4,\"2025-04-05T14:00\":17,\"2025-04-05T15:00\":16.6,\"2025-04-05T16:00\":16.1,\"2025-04-05T17:00\":15,\"2025-04-05T18:00\":13.5,\"2025-04-05T19:00\":11.9,\"2025-04-05T20:00\":11.1,\"2025-04-05T21:00\":10.7,\"2025-04-05T22:00\":10.1,\"2025-04-05T23:00\":9.3}"
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/function-calling?example=weather#use_model_context_protocol_mcp"
+      ],
+      "section_id": "006-agentic",
+      "section_title": "Agentic behaviour"
+    },
+    {
+      "id": "024-grounded-responses",
+      "title": "Grounded Responses with Search Tool",
+      "description": "This example demonstrates how to use the Gemini API with the Search tool to get grounded responses.",
+      "order": 24,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import the Gemini API and necessary tools\n",
+          "display_code": "",
+          "annotation": "Import the Gemini API and necessary tools",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ],
+          "target_line_range": [
+            5,
+            7
+          ]
+        },
+        {
+          "code": "from google import genai\nfrom google.genai.types import Tool, GenerateContentConfig, GoogleSearch\n\n",
+          "display_code": "from google import genai\nfrom google.genai.types import Tool, GenerateContentConfig, GoogleSearch\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            7
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 8,
+          "line_range": [
+            8,
+            8
+          ],
+          "target_line_range": [
+            9,
+            10
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=\"YOUR_API_KEY\")\n\n",
+          "display_code": "client = genai.Client(api_key=\"YOUR_API_KEY\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 9,
+          "line_range": [
+            9,
+            10
+          ]
+        },
+        {
+          "code": "# Specify the model to use (Gemini 2.0 models or later support search as a tool)\n",
+          "display_code": "",
+          "annotation": "Specify the model to use (Gemini 2.0 models or later support search as a tool)",
+          "is_comment": true,
+          "start_line": 11,
+          "line_range": [
+            11,
+            11
+          ],
+          "target_line_range": [
+            12,
+            13
+          ]
+        },
+        {
+          "code": "model_id = \"gemini-2.0-flash\"\n\n",
+          "display_code": "model_id = \"gemini-2.0-flash\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 12,
+          "line_range": [
+            12,
+            13
+          ]
+        },
+        {
+          "code": "# Configure the Google Search tool\n",
+          "display_code": "",
+          "annotation": "Configure the Google Search tool",
+          "is_comment": true,
+          "start_line": 14,
+          "line_range": [
+            14,
+            14
+          ],
+          "target_line_range": [
+            15,
+            18
+          ]
+        },
+        {
+          "code": "google_search_tool = Tool(\n    google_search = GoogleSearch()\n)\n\n",
+          "display_code": "google_search_tool = Tool(\n    google_search = GoogleSearch()\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 15,
+          "line_range": [
+            15,
+            18
+          ]
+        },
+        {
+          "code": "# Craft your query.  This one asks for films in Delft cinemas on a specific date.\n",
+          "display_code": "",
+          "annotation": "Craft your query.  This one asks for films in Delft cinemas on a specific date.",
+          "is_comment": true,
+          "start_line": 19,
+          "line_range": [
+            19,
+            19
+          ],
+          "target_line_range": [
+            20,
+            21
+          ]
+        },
+        {
+          "code": "query = \"What films are showing in Delft on October 27, 2024, particularly at Filmhuis Lumen and Pathe cinemas?\"\n\n",
+          "display_code": "query = \"What films are showing in Delft on October 27, 2024, particularly at Filmhuis Lumen and Pathe cinemas?\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 20,
+          "line_range": [
+            20,
+            21
+          ]
+        },
+        {
+          "code": "# Call the API to generate content, including the search tool in the configuration\n",
+          "display_code": "",
+          "annotation": "Call the API to generate content, including the search tool in the configuration",
+          "is_comment": true,
+          "start_line": 22,
+          "line_range": [
+            22,
+            22
+          ],
+          "target_line_range": [
+            23,
+            31
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=model_id,\n    contents=query,\n    config=GenerateContentConfig(\n        tools=[google_search_tool],\n        response_modalities=[\"TEXT\"],\n    )\n)\n\n",
+          "display_code": "response = client.models.generate_content(\n    model=model_id,\n    contents=query,\n    config=GenerateContentConfig(\n        tools=[google_search_tool],\n        response_modalities=[\"TEXT\"],\n    )\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 23,
+          "line_range": [
+            23,
+            31
+          ]
+        },
+        {
+          "code": "# Print the generated text response\n",
+          "display_code": "",
+          "annotation": "Print the generated text response",
+          "is_comment": true,
+          "start_line": 32,
+          "line_range": [
+            32,
+            32
+          ],
+          "target_line_range": [
+            33,
+            35
+          ]
+        },
+        {
+          "code": "for each in response.candidates[0].content.parts:\n    print(each.text)\n\n",
+          "display_code": "for each in response.candidates[0].content.parts:\n    print(each.text)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 33,
+          "line_range": [
+            33,
+            35
+          ]
+        },
+        {
+          "code": "# Print the grounding metadata (web content used to ground the response).\n",
+          "display_code": "",
+          "annotation": "Print the grounding metadata (web content used to ground the response).",
+          "is_comment": true,
+          "start_line": 36,
+          "line_range": [
+            36,
+            36
+          ],
+          "target_line_range": [
+            37,
+            37
+          ]
+        },
+        {
+          "code": "print(response.candidates[0].grounding_metadata.search_entry_point.rendered_content)",
+          "display_code": "print(response.candidates[0].grounding_metadata.search_entry_point.rendered_content)",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 37,
+          "line_range": [
+            37,
+            37
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library",
+          "command": "pip install google-generative-ai",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python grounded_search.py",
+          "output": "[Example output - this will vary based on search results]\nOkay, here's what I've found regarding films playing in Delft on April 5, 2025:\n**Filmhuis Lumen:**\n*   **Vermiglio:** An Italian family chronicle about a large family in a mountain village during the last year of World War II.\n*   **Vingt Dieux:** A heartwarming film about an 18-year-old whose carefree life ends when his father suddenly dies.\n*   **En Fanfare:** A feel-good film about how music connects people and how unlikely family ties can lead to genuine friendships.\n*   **I'm Still Here** (Playing at 21:00)\n*   **De Propagandist** (Documentary)\n**Pathe Delft:**\nPlease note that film schedules are often updated weekly (typically on Mondays or Wednesdays), so the listings available right now might not be entirely accurate for April 5, 2025.\nBased on current information, these films *might* be playing at Path\u00e9 Delft on that date:\n*   A Minecraft Movie (Original version)\n*   A Minecraft Movie (Dutch version)\n*   A Working Man\n*   Disney Snow White (Original version)\n*   Mickey 17\n*   Novocaine\n*   Ne Zha 2\n*   Vaiana 2 (Dutch version)\nTo get the most accurate listings for Pathe Delft, I recommend checking their website ([https://www.pathe.nl/](https://www.pathe.nl/)) closer to the date, likely after Monday, March 31, 2025.\n<style>\n.container {\n  align-items: center;\n  border-radius: 8px;\n  display: flex;\n  font-family: Google Sans, Roboto, sans-serif;\n  font-size: 14px;\n  line-height: 20px;\n  padding: 8px 12px;\n}\n.chip {\n  display: inline-block;\n  border: solid 1px;\n  border-radius: 16px;\n  min-width: 14px;\netc..."
+        }
+      ],
+      "image_data": [
+        {
+          "path": "examples/024-grounded-responses/grounded-responses.png",
+          "filename": "grounded-responses.png",
+          "caption": "Responses"
+        }
+      ],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/grounding?lang=python"
+      ],
+      "section_id": "006-agentic",
+      "section_title": "Agentic behaviour"
     }
   ],
   "sections": [
