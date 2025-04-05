@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code execution - Gemini by Example</title>
+    <meta name="description" content="Learn the Gemini API through annotated examples">
+    <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+            margin-bottom: 20px;
+        }
+        .site-title {
+            text-decoration: none;
+            color: #375EAB;
+            font-weight: 500;
+            font-size: 20px;
+        }
+        main {
+            padding-bottom: 40px;
+        }
+        footer {
+            border-top: 1px solid #eee;
+            padding: 15px 0;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        h1 {
+            font-size: 36px;
+            font-weight: 500;
+            margin: 0 0 25px 0;
+            color: #333;
+        }
+        p {
+            margin: 20px 0;
+            color: #444;
+            line-height: 1.6;
+        }
+        a {
+            color: #375EAB;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .example-link {
+            margin: 4px 0;
+            line-height: 1.3;
+        }
+        .row {
+            display: flex;
+            width: 100%;
+            margin-bottom: 30px;
+            gap: 30px;
+        }
+        .docs {
+            flex: 1;
+            min-width: 0;
+            color: #444;
+            line-height: 1.6;
+            font-size: 1em;
+        }
+        .code {
+            flex: 2;
+            min-width: 0;
+            position: relative;
+        }
+        pre {
+            margin: 0;
+            padding: 16px;
+            background-color: #f8f8f8;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+        }
+        .leading {
+            margin-bottom: 5px;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 20px 0;
+        }
+        .buttons {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            z-index: 10;
+        }
+        .copy {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            opacity: 0.6;
+            color: #666;
+            background-color: #f8f8f8;
+            border-radius: 3px;
+            padding: 3px;
+        }
+        .copy:hover {
+            opacity: 1;
+            color: #375EAB;
+        }
+        .tooltip {
+            position: absolute;
+            background: #333;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            top: -25px;
+            right: 0;
+        }
+        .command-prompt {
+            color: #888;
+        }
+        .command-text {
+            font-weight: bold;
+        }
+        .next {
+            margin-top: 30px;
+            font-weight: 500;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        @media (max-width: 768px) {
+            .row {
+                flex-direction: column;
+            }
+            .docs, .code {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="../" class="site-title">Gemini by Example</a>
+        </header>
+        <main>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                <div>
+                    <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
+                        <a href="../" style="text-decoration: none; color: #666;">Agentic behaviour</a>
+                    </div>
+                    <h1 style="margin: 0; margin-bottom: 10px;">Code execution</h1>
+                </div>
+                <div style="position: relative; margin-top: 10px;">
+                    <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                        Copy All Python
+                    </button>
+                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
+                </div>
+            </div>
+            <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
+                This example demonstrates how to use the Gemini API to execute code
+(agent-style) and calculate the sum of the first 50 prime numbers.
+            </p>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Import the necessary libraries. Make sure you have the rich library installed!</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>from google import genai
+from google.genai import types
+import os
+from rich.console import Console
+from rich.markdown import Markdown
+from rich.syntax import Syntax
+from rich.panel import Panel</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Initialize the rich console and the Gemini client</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>console = Console()
+client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Configure the model to use the code execution tool.
+Note that not all models support code execution.
+The code execution environment includes a number of popular libraries like
+sklearn, matplotlib, pandas, pdfminer and so on.
+You can't install your own libraries.</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash&quot;,
+    contents=&quot;What is the sum of the first 50 prime numbers? &quot;
+    &quot;Generate and run code for the calculation, and make sure you get all 50.&quot;,
+    config=types.GenerateContentConfig(
+        tools=[types.Tool(code_execution=types.ToolCodeExecution)]
+    ),
+)
+
+
+for part in response.candidates[0].content.parts:
+    if part.text is not None:
+        console.print(Markdown(part.text))
+
+    if part.executable_code is not None:
+        code = part.executable_code.code</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Detect language (simple approach)</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>language = (
+            &quot;python&quot;
+            if &quot;def &quot; in code or &quot;import &quot; in code or &quot;print(&quot; in code
+            else &quot;text&quot;
+        )
+        console.print(
+            Panel(
+                Syntax(code, language, theme=&quot;monokai&quot;, line_numbers=True),
+                title=&quot;Code&quot;,
+                border_style=&quot;blue&quot;,
+            )
+        )
+
+    if part.code_execution_result is not None:
+        console.print(
+            Panel(
+                part.code_execution_result.output,
+                title=&quot;Output&quot;,
+                border_style=&quot;green&quot;,
+            )
+        )
+
+    if part.inline_data is not None:
+        console.print(
+            &quot;[yellow]Image data available but cannot be displayed in terminal[/yellow]&quot;
+        )
+
+    console.print(&quot;---&quot;)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <h2>Running the Example</h2>
+            <div class="row">
+                <div class="docs" style='font-size: 0.9em; color: #666;'>
+                    First, install the Google Generative AI library
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy command" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai</span></span>
+</code></pre>
+                </div>
+            </div>
+            <div class="row">
+                <div class="docs" style='font-size: 0.9em; color: #666;'>
+                    Then run the program with Python
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy command" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python code-execution.py</span></span>
+Okay, I can help you find the sum of the first 50 prime numbers. Here&#x27;s how I&#x27;ll approach this:                                       
+ 1 Generate a list of the first 50 prime numbers. I&#x27;ll need an efficient way to identify prime numbers. I can use the Sieve of        
+   Eratosthenes method or a simpler trial division approach.                                                                          
+ 2 Sum the prime numbers. Once I have the list, I&#x27;ll simply add them up.                                                              
+Here&#x27;s the Python code to accomplish this:                                                                                            
+---
+╭─────────────────────────────────────────────────────────────── Code ───────────────────────────────────────────────────────────────╮
+│    1 def is_prime(n):                                                                                                              │
+│    2     &quot;&quot;&quot;Efficiently determine if a number is prime.&quot;&quot;&quot;                                                                         │
+│    3     if n &lt;= 1:                                                                                                                │
+│    4         return False                                                                                                          │
+│    5     if n &lt;= 3:                                                                                                                │
+│    6         return True                                                                                                           │
+│    7     if n % 2 == 0 or n % 3 == 0:                                                                                              │
+│    8         return False                                                                                                          │
+│    9     i = 5                                                                                                                     │
+│   10     while i * i &lt;= n:                                                                                                         │
+│   11         if n % i == 0 or n % (i + 2) == 0:                                                                                    │
+│   12             return False                                                                                                      │
+│   13         i += 6                                                                                                                │
+│   14     return True                                                                                                               │
+│   15                                                                                                                               │
+│   16 primes = []                                                                                                                   │
+│   17 num = 2                                                                                                                       │
+│   18 while len(primes) &lt; 50:                                                                                                       │
+│   19     if is_prime(num):                                                                                                         │
+│   20         primes.append(num)                                                                                                    │
+│   21     num += 1                                                                                                                  │
+│   22                                                                                                                               │
+│   23 print(f&#x27;{primes=}&#x27;)                                                                                                           │
+│   24 print(f&#x27;{sum(primes)=}&#x27;)                                                                                                      │
+│   25                                                                                                                               │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+---
+╭────────────────────────────────────────────────────────────── Output ──────────────────────────────────────────────────────────────╮
+│ primes=[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113,   │
+│ 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229]                                │
+│ sum(primes)=5117                                                                                                                   │
+│                                                                                                                                    │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+---
+The sum of the first 50 prime numbers is 5117.                                                                                        
+---</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div style="margin: 30px 0; text-align: center;">
+                <figure>
+                    <img src="images/code_execution.png" alt="An illustration or output
+                    from the example code" style="max-width: 100%; border: 1px solid #eee;
+                    border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; color: #666; font-style: italic;"></figcaption>
+                </figure>
+            </div>
+            <hr>
+            <h4>Further Information</h4>
+            <ul style="font-size: 0.9em;">
+                <li><a href="https://ai.google.dev/gemini-api/docs/code-execution?lang=python"
+                         target="_blank">Gemini docs link 1</a></li>
+                <li><a href="https://ai.google.dev/gemini-api/docs/code-execution?lang=rest"
+                         target="_blank">Gemini docs link 2</a></li>
+            </ul>
+        </main>
+        <footer>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>
+        </footer>
+    </div>
+    <script>
+        // Function to copy code to clipboard
+        function copyCode(button) {
+            const codeBlock = button.closest('.code').querySelector('pre');
+            const code = codeBlock.textContent;
+            copyToClipboard(code, button);
+        }
+        
+        // Function to copy all Python code
+        document.addEventListener('DOMContentLoaded', function() {
+            const copyAllButton = document.getElementById('copy-all-python');
+            if (copyAllButton) {
+                copyAllButton.addEventListener('click', function() {
+                    const allCodeElement = document.getElementById('all-python-code');
+                    const code = allCodeElement.textContent;
+                    copyToClipboard(code, copyAllButton);
+                });
+            }
+        });
+        
+        // Shared function to copy text and show tooltip
+        function copyToClipboard(text, element) {
+            // For older browsers, fallback to textarea method
+            if (!navigator.clipboard) {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.style.position = 'fixed';  // Avoid scrolling to bottom
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                
+                try {
+                    document.execCommand('copy');
+                    showTooltip(element, 'Copied!');
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                    showTooltip(element, 'Error!');
+                }
+                
+                document.body.removeChild(textArea);
+                return;
+            }
+            
+            // Use clipboard API if available
+            navigator.clipboard.writeText(text).then(() => {
+                showTooltip(element, 'Copied!');
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                showTooltip(element, 'Error!');
+            });
+        }
+        
+        // Helper to show tooltip
+        function showTooltip(element, message) {
+            // Check if there's already a tooltip
+            let tooltip = element.parentElement.querySelector('.tooltip');
+            if (tooltip) {
+                tooltip.textContent = message;
+            } else {
+                // Create and append new tooltip
+                tooltip = document.createElement('span');
+                tooltip.textContent = message;
+                tooltip.className = 'tooltip';
+                tooltip.style.position = 'absolute';
+                tooltip.style.background = '#333';
+                tooltip.style.color = 'white';
+                tooltip.style.padding = '2px 8px';
+                tooltip.style.borderRadius = '4px';
+                tooltip.style.fontSize = '12px';
+                tooltip.style.top = '-25px';
+                tooltip.style.right = '0';
+                
+                // Make sure the parent has position relative for tooltip positioning
+                if (getComputedStyle(element.parentElement).position === 'static') {
+                    element.parentElement.style.position = 'relative';
+                }
+                
+                element.parentElement.appendChild(tooltip);
+            }
+            
+            // Remove tooltip after 1.5 seconds
+            setTimeout(() => tooltip.remove(), 1500);
+        }
+
+        // Enable keyboard navigation between examples
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
+                return;
+            }
+            
+            if (e.key === 'ArrowRight') {
+                const nextLink = document.querySelector('.next a');
+                if (nextLink) {
+                    window.location.href = nextLink.getAttribute('href');
+                }
+            }
+            
+            if (e.key === 'ArrowLeft') {
+                const prevLink = document.querySelector('.prev a');
+                if (prevLink) {
+                    window.location.href = prevLink.getAttribute('href');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

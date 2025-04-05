@@ -4788,6 +4788,154 @@
       ],
       "section_id": "006-agentic",
       "section_title": "Agentic behaviour"
+    },
+    {
+      "id": "022-code-execution",
+      "title": "Code execution",
+      "description": "This example demonstrates how to use the Gemini API to execute code\n(agent-style) and calculate the sum of the first 50 prime numbers.",
+      "order": 22,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ]
+        },
+        {
+          "code": "# Import the necessary libraries. Make sure you have the rich library installed!\n",
+          "display_code": "",
+          "annotation": "Import the necessary libraries. Make sure you have the rich library installed!",
+          "is_comment": true,
+          "start_line": 5,
+          "line_range": [
+            5,
+            5
+          ],
+          "target_line_range": [
+            6,
+            13
+          ]
+        },
+        {
+          "code": "from google import genai\nfrom google.genai import types\nimport os\nfrom rich.console import Console\nfrom rich.markdown import Markdown\nfrom rich.syntax import Syntax\nfrom rich.panel import Panel\n\n",
+          "display_code": "from google import genai\nfrom google.genai import types\nimport os\nfrom rich.console import Console\nfrom rich.markdown import Markdown\nfrom rich.syntax import Syntax\nfrom rich.panel import Panel\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 6,
+          "line_range": [
+            6,
+            13
+          ]
+        },
+        {
+          "code": "# Initialize the rich console and the Gemini client\n",
+          "display_code": "",
+          "annotation": "Initialize the rich console and the Gemini client",
+          "is_comment": true,
+          "start_line": 14,
+          "line_range": [
+            14,
+            14
+          ],
+          "target_line_range": [
+            15,
+            17
+          ]
+        },
+        {
+          "code": "console = Console()\nclient = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "display_code": "console = Console()\nclient = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 15,
+          "line_range": [
+            15,
+            17
+          ]
+        },
+        {
+          "code": "# Configure the model to use the code execution tool.\n# Note that not all models support code execution.\n# The code execution environment includes a number of popular libraries like\n# sklearn, matplotlib, pandas, pdfminer and so on.\n# You can't install your own libraries.\n",
+          "display_code": "",
+          "annotation": "Configure the model to use the code execution tool.\nNote that not all models support code execution.\nThe code execution environment includes a number of popular libraries like\nsklearn, matplotlib, pandas, pdfminer and so on.\nYou can't install your own libraries.",
+          "is_comment": true,
+          "start_line": 18,
+          "line_range": [
+            18,
+            22
+          ],
+          "target_line_range": [
+            23,
+            38
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=\"What is the sum of the first 50 prime numbers? \"\n    \"Generate and run code for the calculation, and make sure you get all 50.\",\n    config=types.GenerateContentConfig(\n        tools=[types.Tool(code_execution=types.ToolCodeExecution)]\n    ),\n)\n\n\nfor part in response.candidates[0].content.parts:\n    if part.text is not None:\n        console.print(Markdown(part.text))\n\n    if part.executable_code is not None:\n        code = part.executable_code.code\n",
+          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=\"What is the sum of the first 50 prime numbers? \"\n    \"Generate and run code for the calculation, and make sure you get all 50.\",\n    config=types.GenerateContentConfig(\n        tools=[types.Tool(code_execution=types.ToolCodeExecution)]\n    ),\n)\n\n\nfor part in response.candidates[0].content.parts:\n    if part.text is not None:\n        console.print(Markdown(part.text))\n\n    if part.executable_code is not None:\n        code = part.executable_code.code\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 23,
+          "line_range": [
+            23,
+            38
+          ]
+        },
+        {
+          "code": "        # Detect language (simple approach)\n",
+          "display_code": "",
+          "annotation": "Detect language (simple approach)",
+          "is_comment": true,
+          "start_line": 39,
+          "line_range": [
+            39,
+            39
+          ],
+          "target_line_range": [
+            40,
+            67
+          ]
+        },
+        {
+          "code": "        language = (\n            \"python\"\n            if \"def \" in code or \"import \" in code or \"print(\" in code\n            else \"text\"\n        )\n        console.print(\n            Panel(\n                Syntax(code, language, theme=\"monokai\", line_numbers=True),\n                title=\"Code\",\n                border_style=\"blue\",\n            )\n        )\n\n    if part.code_execution_result is not None:\n        console.print(\n            Panel(\n                part.code_execution_result.output,\n                title=\"Output\",\n                border_style=\"green\",\n            )\n        )\n\n    if part.inline_data is not None:\n        console.print(\n            \"[yellow]Image data available but cannot be displayed in terminal[/yellow]\"\n        )\n\n    console.print(\"---\")\n",
+          "display_code": "        language = (\n            \"python\"\n            if \"def \" in code or \"import \" in code or \"print(\" in code\n            else \"text\"\n        )\n        console.print(\n            Panel(\n                Syntax(code, language, theme=\"monokai\", line_numbers=True),\n                title=\"Code\",\n                border_style=\"blue\",\n            )\n        )\n\n    if part.code_execution_result is not None:\n        console.print(\n            Panel(\n                part.code_execution_result.output,\n                title=\"Output\",\n                border_style=\"green\",\n            )\n        )\n\n    if part.inline_data is not None:\n        console.print(\n            \"[yellow]Image data available but cannot be displayed in terminal[/yellow]\"\n        )\n\n    console.print(\"---\")\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 40,
+          "line_range": [
+            40,
+            67
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library",
+          "command": "pip install google-generative-ai",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python code-execution.py",
+          "output": "Okay, I can help you find the sum of the first 50 prime numbers. Here's how I'll approach this:                                       \n 1 Generate a list of the first 50 prime numbers. I'll need an efficient way to identify prime numbers. I can use the Sieve of        \n   Eratosthenes method or a simpler trial division approach.                                                                          \n 2 Sum the prime numbers. Once I have the list, I'll simply add them up.                                                              \nHere's the Python code to accomplish this:                                                                                            \n---\n\u256d\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 Code \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256e\n\u2502    1 def is_prime(n):                                                                                                              \u2502\n\u2502    2     \"\"\"Efficiently determine if a number is prime.\"\"\"                                                                         \u2502\n\u2502    3     if n <= 1:                                                                                                                \u2502\n\u2502    4         return False                                                                                                          \u2502\n\u2502    5     if n <= 3:                                                                                                                \u2502\n\u2502    6         return True                                                                                                           \u2502\n\u2502    7     if n % 2 == 0 or n % 3 == 0:                                                                                              \u2502\n\u2502    8         return False                                                                                                          \u2502\n\u2502    9     i = 5                                                                                                                     \u2502\n\u2502   10     while i * i <= n:                                                                                                         \u2502\n\u2502   11         if n % i == 0 or n % (i + 2) == 0:                                                                                    \u2502\n\u2502   12             return False                                                                                                      \u2502\n\u2502   13         i += 6                                                                                                                \u2502\n\u2502   14     return True                                                                                                               \u2502\n\u2502   15                                                                                                                               \u2502\n\u2502   16 primes = []                                                                                                                   \u2502\n\u2502   17 num = 2                                                                                                                       \u2502\n\u2502   18 while len(primes) < 50:                                                                                                       \u2502\n\u2502   19     if is_prime(num):                                                                                                         \u2502\n\u2502   20         primes.append(num)                                                                                                    \u2502\n\u2502   21     num += 1                                                                                                                  \u2502\n\u2502   22                                                                                                                               \u2502\n\u2502   23 print(f'{primes=}')                                                                                                           \u2502\n\u2502   24 print(f'{sum(primes)=}')                                                                                                      \u2502\n\u2502   25                                                                                                                               \u2502\n\u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256f\n---\n\u256d\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500 Output \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256e\n\u2502 primes=[2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113,   \u2502\n\u2502 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179, 181, 191, 193, 197, 199, 211, 223, 227, 229]                                \u2502\n\u2502 sum(primes)=5117                                                                                                                   \u2502\n\u2502                                                                                                                                    \u2502\n\u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256f\n---\nThe sum of the first 50 prime numbers is 5117.                                                                                        \n---"
+        }
+      ],
+      "image_data": [
+        {
+          "path": "examples/022-code-execution/code_execution.png",
+          "filename": "code_execution.png",
+          "caption": "code_execution"
+        }
+      ],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/code-execution?lang=python",
+        "https://ai.google.dev/gemini-api/docs/code-execution?lang=rest"
+      ],
+      "section_id": "006-agentic",
+      "section_title": "Agentic behaviour"
     }
   ],
   "sections": [

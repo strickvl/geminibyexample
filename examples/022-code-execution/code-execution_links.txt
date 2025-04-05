@@ -1,0 +1,2 @@
+https://ai.google.dev/gemini-api/docs/code-execution?lang=python
+https://ai.google.dev/gemini-api/docs/code-execution?lang=rest
