@@ -5,7 +5,7 @@
       "title": "Basic Examples: Text",
       "description": "",
       "order": 1,
-      "examples": ["001-basic-generation", "002-streaming-text"]
+      "examples": ["001-basic-generation", "002-streaming-text", "003-system-prompt"]
     },
     {
       "id": "002-basic-images",

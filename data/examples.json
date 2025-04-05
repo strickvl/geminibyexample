@@ -365,8 +365,8 @@
         }
       ],
       "image_data": [],
-      "section_id": "999-misc",
-      "section_title": "Miscellaneous Examples"
+      "section_id": "001-basic-text",
+      "section_title": "Basic Examples: Text"
     }
   ],
   "sections": [
@@ -377,7 +377,8 @@
       "order": 1,
       "examples": [
         "001-basic-generation",
-        "002-streaming-text"
+        "002-streaming-text",
+        "003-system-prompt"
       ]
     },
     {
@@ -386,12 +387,6 @@
       "description": "",
       "order": 2,
       "examples": []
-    },
-    {
-      "id": "999-misc",
-      "title": "Miscellaneous Examples",
-      "description": "Additional examples that don't fit into other categories",
-      "order": 999
     }
   ]
 }

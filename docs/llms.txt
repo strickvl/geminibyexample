@@ -8,7 +8,6 @@ It's organized by sections, with each example's Python code and terminal command
 * Basic Examples: Text
   * Simple text generation
   * Streaming Text Generation using the HTTP API
-* Miscellaneous Examples
   * System Instructions Example
 
 ## Basic Examples: Text
@@ -65,10 +64,6 @@ $ pip install google-generative-ai
 $ python streaming-generation.py
 AI, or Artificial Intelligence, is a broad field of computer science focused on creating machines capable of performing tasks that typically require human intelligence. It involves developing algorithms and models that enable computers to learn from data, reason, solve problems, understand natural language, perceive their environment, and make decisions.
 ```
-
-## Miscellaneous Examples
-
-Additional examples that don't fit into other categories
 
 ### System Instructions Example
 
