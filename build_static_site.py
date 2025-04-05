@@ -403,7 +403,10 @@ def generate_index_html(
             </p>
             <p style="margin: 20px 0; color: #444; line-height: 1.6;">
                 Gemini by Example is a hands-on introduction to Google's Gemini SDK and API using annotated code examples. Check out the <a href="{examples[0]["id"]}/">first example</a> 
-                or browse the full list of sections below.
+                or browse the full list of sections below. This site takes
+                inspiration from <a href="https://gobyexample.com"
+                target="_blank">gobyexample.com</a>, from which I learned many
+                things about the Go programming language.
             </p>
             <p style="margin: 20px 0; color: #444; line-height: 1.6;">
                 Examples here assume Python <code>&gt;=3.9</code> and
