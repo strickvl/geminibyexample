@@ -10,7 +10,7 @@ It's organized by sections, with each example's Python code and terminal command
   * Streaming text
   * System prompt
 * Images Basics
-  * Gemini Vision with Cats
+  * Understanding images
 
 ## Text Basics
 
@@ -80,7 +80,7 @@ Ahoy there, matey! What be on yer mind?
 
 ## Images Basics
 
-### Gemini Vision with Cats
+### Understanding images
 
 This example demonstrates how to use the Gemini API to analyze or understand images of cats, including using image URLs and base64 encoding.
 

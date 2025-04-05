@@ -370,7 +370,7 @@
     },
     {
       "id": "004-image-q-a",
-      "title": "Gemini Vision with Cats",
+      "title": "Understanding images",
       "description": "This example demonstrates how to use the Gemini API to analyze or understand images of cats, including using image URLs and base64 encoding.",
       "order": 4,
       "code_segments": [
