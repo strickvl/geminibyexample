@@ -314,7 +314,7 @@
     {
       "id": "002-basic-images",
       "title": "Basic Examples: Images",
-      "description": "Getting started with Gemini API",
+      "description": "",
       "order": 2,
       "examples": [
         "002-values"

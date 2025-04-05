@@ -257,10 +257,17 @@ def generate_html_head(
 
 
 def generate_html_footer() -> str:
-    """Generate HTML footer section."""
-    return """        </main>
+    """Generate HTML footer section with current date."""
+    from datetime import datetime
+
+    current_date = datetime.now().strftime("%B %d, %Y")
+
+    return (
+        """        </main>
         <footer>
-            <p>Gemini by Example | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <a href="https://mlops.systems">Blog</a></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: """
+        + current_date
+        + """</span></p>
         </footer>
     </div>
     <script>
@@ -338,6 +345,7 @@ def generate_html_footer() -> str:
 </body>
 </html>
 """
+    )
 
 
 def generate_index_html(
@@ -356,15 +364,16 @@ def generate_index_html(
         # Page content
         f.write(f"""            <h1>{SITE_TITLE}</h1>
             <p style="margin: 20px 0; color: #444; line-height: 1.6;">
-                Gemini by Example is a hands-on introduction to <a href="https://ai.google.dev/gemini-api/docs" target="_blank">Google's Gemini
-                SDK and API</a> using annotated code examples.
+                Gemini is Google's most capable AI model for generating text, code, images, and more. Please visit the <a href="https://ai.google.dev/gemini-api/docs" target="_blank">official documentation</a> to learn more.
             </p>
             <p style="margin: 20px 0; color: #444; line-height: 1.6;">
-                Check out the <a href="{examples[0]["id"]}/">first example</a> 
-                or browse the sections below.
+                Gemini by Example is a hands-on introduction to Google's Gemini SDK and API using annotated code examples. Check out the <a href="{examples[0]["id"]}/">first example</a> 
+                or browse the full list of sections below.
             </p>
             <p style="margin: 20px 0; color: #444; line-height: 1.6;">
-                Examples here assume Python >=3.9.
+                Examples here assume Python <code>&gt;=3.9</code> and
+                the latest version of the Gemini SDK/API (the <a href="https://pypi.org/project/google-genai/" target="_blank"><code>google-genai</code></a> package).
+                Try to upgrade to the latest versions if something isn't working.
             </p>
             <div style="margin-top: 30px;">
 """)
@@ -637,15 +646,16 @@ if __name__ == "__main__":
     # First run the examples builder by importing it directly
     logger.info("Running examples builder first...")
     import sys
-    
+
     # Add the build_examples directory to sys.path if needed
     build_examples_dir = Path(__file__).parent / "build_examples"
     if str(build_examples_dir) not in sys.path:
         sys.path.append(str(build_examples_dir))
-    
+
     # Import and run the main function from build_examples
     from build_examples import main as build_examples_main
+
     build_examples_main()
-    
+
     # Then generate the static site
     generate_static_site()
