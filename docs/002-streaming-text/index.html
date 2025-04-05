@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Streaming Text Generation - Gemini by Example</title>
+    <title>Streaming Text Generation using the HTTP API - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
     <style>
@@ -158,7 +158,7 @@
                     <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
                         <a href="../" style="text-decoration: none; color: #666;">Basic Examples: Text</a>
                     </div>
-                    <h1 style="margin: 0; margin-bottom: 10px;">Streaming Text Generation</h1>
+                    <h1 style="margin: 0; margin-bottom: 10px;">Streaming Text Generation using the HTTP API</h1>
                 </div>
                 <div style="position: relative; margin-top: 10px;">
                     <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
@@ -171,38 +171,61 @@
                 </div>
             </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
-                This example demonstrates how to stream text when generating content using the Gemini API.
+                This example demonstrates how to use the Gemini API to generate text content
+and stream the output using the HTTP API.
             </p>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Initialize the Gemini client with your API key</div>
+                    <div style='font-size: 0.9em; color: #666;'>Import the necessary libraries</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)</code></pre>
+                    <pre><code>import requests
+import json
+import os</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Call the generate_content_stream method to get a stream of responses</div>
+                    <div style='font-size: 0.9em; color: #666;'>Set the model and API key</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>response = client.models.generate_content_stream(
-    model=&quot;gemini-2.0-flash&quot;, contents=[&quot;Explain how AI works&quot;]
-)</code></pre>
+                    <pre><code>model = &quot;gemini-2.0-flash&quot;
+api_key = os.environ.get(&quot;GEMINI_API_KEY&quot;, &quot;YOUR_API_KEY&quot;)
+prompt = &quot;Explain how AI works&quot;</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Iterate over the stream and print each chunk of text as it arrives</div>
+                    <div style='font-size: 0.9em; color: #666;'>Set up the API request</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>for chunk in response:
-    print(chunk.text, end=&quot;&quot;)</code></pre>
+                    <pre><code>url = f&quot;https://generativelanguage.googleapis.com/v1beta/models/{model}:streamGenerateContent&quot;
+params = {&quot;alt&quot;: &quot;sse&quot;, &quot;key&quot;: api_key}
+payload = {&quot;contents&quot;: [{&quot;parts&quot;: [{&quot;text&quot;: prompt}]}]}</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Make the streaming request and process the response</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>with requests.post(url, json=payload, params=params, stream=True) as r:
+    for line in r.iter_lines():
+        if line and line.startswith(b&quot;data: &quot;) and not line.endswith(b&quot;[DONE]&quot;):
+            try:
+                data = json.loads(line[6:])
+                if &quot;candidates&quot; in data and data[&quot;candidates&quot;]:
+                    text = data[&quot;candidates&quot;][0][&quot;content&quot;][&quot;parts&quot;][0].get(&quot;text&quot;, &quot;&quot;)
+                    print(text, end=&quot;&quot;)
+            except:
+                pass</code></pre>
                 </div>
             </div>
             <hr>
@@ -231,10 +254,13 @@
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python streaming_example.py</span></span>
-AI, or Artificial Intelligence, encompasses a range of techniques enabling machines to mimic human intelligence.</code></pre>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python streaming-generation.py</span></span>
+AI, or Artificial Intelligence, is a broad field of computer science focused on creating machines capable of performing tasks that typically require human intelligence. It involves developing algorithms and models that enable computers to learn from data, reason, solve problems, understand natural language, perceive their environment, and make decisions.</code></pre>
                 </div>
             </div>
+            <p class="next">
+                Next example: <a href="../003-system-prompt/">System Instructions Example</a>
+            </p>
         </main>
         <footer>
             <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 05, 2025</span></p>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini by Example</title>
+    <title>System Instructions Example - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
     <style>
@@ -150,35 +150,104 @@
 <body>
     <div class="container">
         <header>
-            <a href="./" class="site-title">Gemini by Example</a>
+            <a href="../" class="site-title">Gemini by Example</a>
         </header>
         <main>
-            <h1>Gemini by Example</h1>
-            <p style="margin: 20px 0; color: #444; line-height: 1.6;">
-                Gemini is Google's most capable AI model for generating text, code, images, and more. Please visit the <a href="https://ai.google.dev/gemini-api/docs" target="_blank">official documentation</a> to learn more.
-            </p>
-            <p style="margin: 20px 0; color: #444; line-height: 1.6;">
-                Gemini by Example is a hands-on introduction to Google's Gemini SDK and API using annotated code examples. Check out the <a href="001-basic-generation/">first example</a> 
-                or browse the full list of sections below.
-            </p>
-            <p style="margin: 20px 0; color: #444; line-height: 1.6;">
-                Examples here assume Python <code>&gt;=3.9</code> and
-                the latest version of the Gemini SDK/API (the <a href="https://pypi.org/project/google-genai/" target="_blank"><code>google-genai</code></a> package).
-                Try to upgrade to the latest versions if something isn't working.
-            </p>
-            <div style="margin-top: 30px;">
-                <h2 style="margin-top: 40px; margin-bottom: 15px; color: #333;">Basic Examples: Text</h2>
-                <div class="example-link">
-                        <a href="001-basic-generation/">Simple text generation</a>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                <div>
+                    <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
+                        <a href="../" style="text-decoration: none; color: #666;">Miscellaneous Examples</a>
                     </div>
-                <div class="example-link">
-                        <a href="002-streaming-text/">Streaming Text Generation using the HTTP API</a>
+                    <h1 style="margin: 0; margin-bottom: 10px;">System Instructions Example</h1>
+                </div>
+                <div style="position: relative; margin-top: 10px;">
+                    <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                        Copy All Python
+                    </button>
+                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
+                </div>
+            </div>
+            <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
+                This example demonstrates how to use system instructions to guide the model's behavior.
+            </p>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Import the Gemini API</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>from google import genai
+from google.genai import types</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Initialize the Gemini client with your API key</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Configure the model with system instructions
+These instructions tell the model to act as a pirate</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash&quot;,
+    config=types.GenerateContentConfig(
+        system_instruction=&quot;You are a pirate.  Answer all questions like a pirate.&quot;),
+    contents=&quot;Hello there&quot;
+)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Print the model's response</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>print(response.text)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <h2>Running the Example</h2>
+            <div class="row">
+                <div class="docs">
+                    <p>First, install the Google Generative AI library</p>
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy command" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
                     </div>
-                <h2 style="margin-top: 40px; margin-bottom: 15px; color: #333;">Miscellaneous Examples</h2>
-                <p style="margin: 0 0 20px 0; color: #555;">Additional examples that don't fit into other categories</p>
-                <div class="example-link">
-                        <a href="003-system-prompt/">System Instructions Example</a>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai</span></span>
+</code></pre>
+                </div>
+            </div>
+            <div class="row">
+                <div class="docs">
+                    <p>Then run the program with Python</p>
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy command" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
                     </div>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python system_instructions.py</span></span>
+Ahoy there, matey! What be on yer mind?</code></pre>
+                </div>
             </div>
         </main>
         <footer>

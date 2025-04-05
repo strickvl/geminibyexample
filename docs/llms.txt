@@ -7,7 +7,9 @@ It's organized by sections, with each example's Python code and terminal command
 
 * Basic Examples: Text
   * Simple text generation
-  * Streaming Text Generation
+  * Streaming Text Generation using the HTTP API
+* Miscellaneous Examples
+  * System Instructions Example
 
 ## Basic Examples: Text
 
@@ -31,23 +33,63 @@ AI works by learning patterns from data, then using those patterns to make predi
 
 *This example includes images which can be viewed on the website.*
 
-### Streaming Text Generation
+### Streaming Text Generation using the HTTP API
 
-This example demonstrates how to stream text when generating content using the Gemini API.
+This example demonstrates how to use the Gemini API to generate text content
+and stream the output using the HTTP API.
 
 ```python
-from google import genai
-client = genai.Client(api_key="YOUR_API_KEY")
-response = client.models.generate_content_stream(
-    model="gemini-2.0-flash", contents=["Explain how AI works"]
-)
-for chunk in response:
-    print(chunk.text, end="")
+import requests
+import json
+import os
+model = "gemini-2.0-flash"
+api_key = os.environ.get("GEMINI_API_KEY", "YOUR_API_KEY")
+prompt = "Explain how AI works"
+url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:streamGenerateContent"
+params = {"alt": "sse", "key": api_key}
+payload = {"contents": [{"parts": [{"text": prompt}]}]}
+with requests.post(url, json=payload, params=params, stream=True) as r:
+    for line in r.iter_lines():
+        if line and line.startswith(b"data: ") and not line.endswith(b"[DONE]"):
+            try:
+                data = json.loads(line[6:])
+                if "candidates" in data and data["candidates"]:
+                    text = data["candidates"][0]["content"]["parts"][0].get("text", "")
+                    print(text, end="")
+            except:
+                pass
 ```
 
 ```shell
 $ pip install google-generative-ai
-$ python streaming_example.py
-AI, or Artificial Intelligence, encompasses a range of techniques enabling machines to mimic human intelligence.
+$ python streaming-generation.py
+AI, or Artificial Intelligence, is a broad field of computer science focused on creating machines capable of performing tasks that typically require human intelligence. It involves developing algorithms and models that enable computers to learn from data, reason, solve problems, understand natural language, perceive their environment, and make decisions.
+```
+
+## Miscellaneous Examples
+
+Additional examples that don't fit into other categories
+
+### System Instructions Example
+
+This example demonstrates how to use system instructions to guide the model's behavior.
+
+```python
+from google import genai
+from google.genai import types
+client = genai.Client(api_key="YOUR_API_KEY")
+response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    config=types.GenerateContentConfig(
+        system_instruction="You are a pirate.  Answer all questions like a pirate."),
+    contents="Hello there"
+)
+print(response.text)
+```
+
+```shell
+$ pip install google-generative-ai
+$ python system_instructions.py
+Ahoy there, matey! What be on yer mind?
 ```
 
