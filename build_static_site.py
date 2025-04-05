@@ -85,6 +85,43 @@ def find_next_example(
     return None
 
 
+def find_prev_example(
+    examples: List[Dict[str, Any]], current_example: Dict[str, Any]
+) -> Optional[Dict[str, Any]]:
+    """
+    Find the previous example based on the example order and section.
+    This function respects section organization, going back to the previous section when needed.
+
+    Args:
+        examples: List of all examples
+        current_example: The current example
+
+    Returns:
+        The previous example or None if there is no previous example
+    """
+    current_order = current_example["order"]
+    current_section_id = current_example.get("section_id")
+
+    # First, try to find the previous example in the same section
+    if current_section_id:
+        same_section_examples = [
+            e for e in examples if e.get("section_id") == current_section_id
+        ]
+        prev_example = None
+        for example in sorted(same_section_examples, key=lambda e: e["order"], reverse=True):
+            if example["order"] < current_order:
+                return example
+
+    # If we're at the beginning of a section or there's no section info,
+    # find the previous example in any section
+    prev_example = None
+    for example in sorted(examples, key=lambda e: e["order"], reverse=True):
+        if example["order"] < current_order:
+            return example
+
+    return None
+
+
 def generate_html_head(
     title: str, include_main_css: bool = True, base_url: str = "."
 ) -> str:
@@ -231,11 +268,27 @@ def generate_html_head(
         .command-text {
             font-weight: bold;
         }
-        .next {
+        .navigation {
             margin-top: 30px;
-            font-weight: 500;
             padding-top: 15px;
             border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .prev, .next {
+            margin: 5px 0;
+            font-weight: 500;
+        }
+        .prev {
+            margin-right: auto;
+        }
+        .next {
+            margin-left: auto;
+        }
+        .prev span, .next span {
+            color: #666;
+            font-weight: normal;
         }
         @media (max-width: 768px) {
             .row {
@@ -514,8 +567,9 @@ def generate_example_html(
     # Create index.html in the example directory
     output_file = example_dir / "index.html"
 
-    # Find the next example
+    # Find the next and previous examples
     next_example = find_next_example(examples, example)
+    prev_example = find_prev_example(examples, example)
 
     with open(output_file, "w") as f:
         f.write(generate_html_head(f"{example['title']} - {SITE_TITLE}", base_url=".."))
@@ -721,11 +775,25 @@ def generate_example_html(
             f.write("""            </ul>
 """)
 
+        # Navigation links
+        f.write("""            <div class="navigation">
+""")
+        
+        # Previous example link
+        if prev_example:
+            f.write(f"""                <p class="prev">
+                    <span>← Previous:</span> <a href="../{prev_example["id"]}/">{prev_example["title"]}</a>
+                </p>
+""")
+            
         # Next example link
         if next_example:
-            f.write(f"""            <p class="next">
-                Next example: <a href="../{next_example["id"]}/">{next_example["title"]}</a>
-            </p>
+            f.write(f"""                <p class="next">
+                    <span>Next:</span> <a href="../{next_example["id"]}/">{next_example["title"]}</a> →
+                </p>
+""")
+            
+        f.write("""            </div>
 """)
 
         f.write(generate_html_footer())
