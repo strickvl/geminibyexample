@@ -360,7 +360,7 @@ def generate_index_html(
                 SDK and API</a> using annotated code examples.
             </p>
             <p style="margin: 20px 0; color: #444; line-height: 1.6;">
-                Check out the <a href="{examples[0]["id"]}/">{examples[0]["title"]}</a> 
+                Check out the <a href="{examples[0]["id"]}/">first example</a> 
                 or browse the sections below.
             </p>
             <p style="margin: 20px 0; color: #444; line-height: 1.6;">
