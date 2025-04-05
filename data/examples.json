@@ -90,7 +90,7 @@
         }
       ],
       "section_id": "001-basic-text",
-      "section_title": "Basic Examples: Text"
+      "section_title": "Text Basics"
     },
     {
       "id": "002-streaming-text",
@@ -228,7 +228,7 @@
       ],
       "image_data": [],
       "section_id": "001-basic-text",
-      "section_title": "Basic Examples: Text"
+      "section_title": "Text Basics"
     },
     {
       "id": "003-system-prompt",
@@ -366,13 +366,13 @@
       ],
       "image_data": [],
       "section_id": "001-basic-text",
-      "section_title": "Basic Examples: Text"
+      "section_title": "Text Basics"
     }
   ],
   "sections": [
     {
       "id": "001-basic-text",
-      "title": "Basic Examples: Text",
+      "title": "Text Basics",
       "description": "",
       "order": 1,
       "examples": [
@@ -383,7 +383,7 @@
     },
     {
       "id": "002-basic-images",
-      "title": "Basic Examples: Images",
+      "title": "Images Basics",
       "description": "",
       "order": 2,
       "examples": []

@@ -5,12 +5,12 @@ It's organized by sections, with each example's Python code and terminal command
 
 ## Table of Contents
 
-* Basic Examples: Text
+* Text Basics
   * Simple text generation
   * Streaming Text Generation
   * System Instructions Example
 
-## Basic Examples: Text
+## Text Basics
 
 ### Simple text generation
 
