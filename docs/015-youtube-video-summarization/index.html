@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio question answering - Gemini by Example</title>
+    <title>YouTube video summarization - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
     <style>
@@ -157,9 +157,9 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
                 <div>
                     <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
-                        <a href="../" style="text-decoration: none; color: #666;">Audio basics</a>
+                        <a href="../" style="text-decoration: none; color: #666;">Video basics</a>
                     </div>
-                    <h1 style="margin: 0; margin-bottom: 10px;">Audio question answering</h1>
+                    <h1 style="margin: 0; margin-bottom: 10px;">YouTube video summarization</h1>
                 </div>
                 <div style="position: relative; margin-top: 10px;">
                     <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
@@ -172,91 +172,73 @@
                 </div>
             </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
-                This example demonstrates how to ask a question about the content of an audio file using the Gemini API.
+                This example demonstrates how to summarize a YouTube video using its URL.
             </p>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Import the necessary libraries</div>
+                    <div style='font-size: 0.9em; color: #666;'>Import the Gemini API</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>from google import genai
-from google.genai import types
-import requests
-import os</code></pre>
+                    <pre><code>from google import genai</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Replace with your actual API key</div>
+                    <div style='font-size: 0.9em; color: #666;'>Initialize the Gemini client with your API key</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
+                    <pre><code>client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Define a descriptive User-Agent following Wikimedia's policy</div>
+                    <div style='font-size: 0.9em; color: #666;'>Construct the prompt with the YouTube video URL</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>user_agent = &quot;GeminiByExample/1.0 (https://github.com/strickvl/geminibyexample; contact@example.org) python-requests/2.0&quot;</code></pre>
+                    <pre><code>youtube_url = &quot;https://www.youtube.com/watch?v=tAP1eZYEuKA&quot;
+prompt = f&quot;Summarize the content of this YouTube video: {youtube_url}&quot;</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Download the audio file from the URL</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>url = &quot;https://upload.wikimedia.org/wikipedia/commons/1/1f/%22DayBreak%22_with_Jay_Young_on_the_USA_Radio_Network.ogg&quot;
-headers = {&quot;User-Agent&quot;: user_agent}
-response = requests.get(url, headers=headers)
-response.raise_for_status()  # Raise an exception for bad status codes</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Save the content to a variable
-Note: If your audio file is larger than 20MB, you should use the File API to upload the file first.
-The File API allows you to upload larger files and then reference them in your requests.</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>audio_bytes = response.content</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>You can now pass that audio file along with the prompt to Gemini</div>
+                    <div style='font-size: 0.9em; color: #666;'>Call the API to generate content</div>
 
                 </div>
                 <div class="code">
                     <pre><code>response = client.models.generate_content(
     model=&quot;gemini-2.0-flash&quot;,
     contents=[
-        &quot;What is the main topic of this audio?&quot;,
-        types.Part.from_bytes(
-            data=audio_bytes,
-            mime_type=&quot;audio/ogg&quot;,
-        ),
+        {
+            &quot;parts&quot;: [
+                {&quot;text&quot;: &quot;Can you summarize this video?&quot;},
+                {&quot;file_data&quot;: {&quot;file_uri&quot;: youtube_url}},
+            ]
+        }
     ],
-)
+)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Print the generated summary</div>
 
-print(response.text)</code></pre>
+                </div>
+                <div class="code">
+                    <pre><code>print(response.text)</code></pre>
                 </div>
             </div>
             <hr>
             <h2>Running the Example</h2>
             <div class="row">
                 <div class="docs" style='font-size: 0.9em; color: #666;'>
-                    First, install the Google Generative AI library and requests
+                    First, install the Google Generative AI library
                 </div>
                 <div class="code">
                     <div class="buttons">
@@ -264,7 +246,7 @@ print(response.text)</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai requests</span></span>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai</span></span>
 </code></pre>
                 </div>
             </div>
@@ -278,19 +260,16 @@ print(response.text)</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python audio-question.py</span></span>
-This audio features a male host and a travel expert, Pete Trabucco.</code></pre>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python youtube-summarization.py</span></span>
+Sure, here is a summary of the video!</code></pre>
                 </div>
             </div>
             <hr>
             <h4>Further Information</h4>
             <ul style="font-size: 0.9em;">
-                <li><a href="https://ai.google.dev/gemini-api/docs/audio?lang=python"
+                <li><a href="https://ai.google.dev/gemini-api/docs/vision?lang=python#youtube"
                          target="_blank">Gemini docs link 1</a></li>
             </ul>
-            <p class="next">
-                Next example: <a href="../010-audio-transcription/">Audio transcription</a>
-            </p>
         </main>
         <footer>
             <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>

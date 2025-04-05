@@ -93,7 +93,7 @@
         "https://ai.google.dev/gemini-api/docs/text-generation"
       ],
       "section_id": "001-basic-text",
-      "section_title": "Text Basics"
+      "section_title": "Text basics"
     },
     {
       "id": "002-streaming-text",
@@ -234,7 +234,7 @@
         "https://ai.google.dev/gemini-api/docs/text-generation"
       ],
       "section_id": "001-basic-text",
-      "section_title": "Text Basics"
+      "section_title": "Text basics"
     },
     {
       "id": "003-system-prompt",
@@ -375,7 +375,7 @@
         "https://ai.google.dev/gemini-api/docs/text-generation#system-instructions"
       ],
       "section_id": "001-basic-text",
-      "section_title": "Text Basics"
+      "section_title": "Text basics"
     },
     {
       "id": "004-image-q-a",
@@ -599,7 +599,7 @@
         "https://ai.google.dev/gemini-api/docs/vision?lang=python"
       ],
       "section_id": "002-basic-images",
-      "section_title": "Images Basics"
+      "section_title": "Images basics"
     },
     {
       "id": "005-image-generation",
@@ -798,7 +798,7 @@
         "https://ai.google.dev/gemini-api/docs/image-generation"
       ],
       "section_id": "002-basic-images",
-      "section_title": "Images Basics"
+      "section_title": "Images basics"
     },
     {
       "id": "006-editing-images",
@@ -1023,7 +1023,7 @@
         "https://ai.google.dev/gemini-api/docs/image-generation#gemini-image-editing"
       ],
       "section_id": "002-basic-images",
-      "section_title": "Images Basics"
+      "section_title": "Images basics"
     },
     {
       "id": "007-bounding-boxes",
@@ -1242,7 +1242,7 @@
         "https://ai.google.dev/gemini-api/docs/vision?lang=python#bbox"
       ],
       "section_id": "002-basic-images",
-      "section_title": "Images Basics"
+      "section_title": "Images basics"
     },
     {
       "id": "008-image-segmentation",
@@ -1727,7 +1727,7 @@
         "https://ai.google.dev/gemini-api/docs/vision?lang=python#image_segmentation"
       ],
       "section_id": "002-basic-images",
-      "section_title": "Images Basics"
+      "section_title": "Images basics"
     },
     {
       "id": "009-audio-q-a",
@@ -1920,7 +1920,7 @@
         "https://ai.google.dev/gemini-api/docs/audio?lang=python"
       ],
       "section_id": "003-basic-audio",
-      "section_title": "Audio Basics"
+      "section_title": "Audio basics"
     },
     {
       "id": "010-audio-transcription",
@@ -2139,7 +2139,7 @@
         "https://ai.google.dev/gemini-api/docs/audio?lang=python"
       ],
       "section_id": "003-basic-audio",
-      "section_title": "Audio Basics"
+      "section_title": "Audio basics"
     },
     {
       "id": "011-audio-summarization",
@@ -2332,13 +2332,707 @@
         "https://ai.google.dev/gemini-api/docs/audio?lang=python"
       ],
       "section_id": "003-basic-audio",
-      "section_title": "Audio Basics"
+      "section_title": "Audio basics"
+    },
+    {
+      "id": "012-video-q-a",
+      "title": "Video question answering",
+      "description": "This example demonstrates how to ask questions about a video using the Gemini API.\nNote: For videos larger than 20MB, you must use the File API for uploading.",
+      "order": 12,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ]
+        },
+        {
+          "code": "# Import the Gemini API\n",
+          "display_code": "",
+          "annotation": "Import the Gemini API",
+          "is_comment": true,
+          "start_line": 5,
+          "line_range": [
+            5,
+            5
+          ],
+          "target_line_range": [
+            6,
+            10
+          ]
+        },
+        {
+          "code": "from google import genai\nfrom google.genai import types\nimport os\nimport requests\n\n",
+          "display_code": "from google import genai\nfrom google.genai import types\nimport os\nimport requests\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 6,
+          "line_range": [
+            6,
+            10
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 11,
+          "line_range": [
+            11,
+            11
+          ],
+          "target_line_range": [
+            12,
+            15
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\nvideo_url = \"https://download.samplelib.com/mp4/sample-5s.mp4\"\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\nvideo_url = \"https://download.samplelib.com/mp4/sample-5s.mp4\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 12,
+          "line_range": [
+            12,
+            15
+          ]
+        },
+        {
+          "code": "# Download the video file.\n# Read the video file as bytes for inline upload.\n",
+          "display_code": "",
+          "annotation": "Download the video file.\nRead the video file as bytes for inline upload.",
+          "is_comment": true,
+          "start_line": 16,
+          "line_range": [
+            16,
+            17
+          ],
+          "target_line_range": [
+            18,
+            20
+          ]
+        },
+        {
+          "code": "response = requests.get(video_url)\nvideo_bytes = response.content\n\n",
+          "display_code": "response = requests.get(video_url)\nvideo_bytes = response.content\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 18,
+          "line_range": [
+            18,
+            20
+          ]
+        },
+        {
+          "code": "# Create a Gemini request with the video and a question\n",
+          "display_code": "",
+          "annotation": "Create a Gemini request with the video and a question",
+          "is_comment": true,
+          "start_line": 21,
+          "line_range": [
+            21,
+            21
+          ],
+          "target_line_range": [
+            22,
+            31
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=types.Content(\n        parts=[\n            types.Part(text=\"Describe the tone and genre of this video.\"),\n            types.Part(inline_data=types.Blob(data=video_bytes, mime_type=\"video/mp4\")),\n        ]\n    ),\n)\n\n",
+          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=types.Content(\n        parts=[\n            types.Part(text=\"Describe the tone and genre of this video.\"),\n            types.Part(inline_data=types.Blob(data=video_bytes, mime_type=\"video/mp4\")),\n        ]\n    ),\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 22,
+          "line_range": [
+            22,
+            31
+          ]
+        },
+        {
+          "code": "# Print the model's response\n",
+          "display_code": "",
+          "annotation": "Print the model's response",
+          "is_comment": true,
+          "start_line": 32,
+          "line_range": [
+            32,
+            32
+          ],
+          "target_line_range": [
+            33,
+            33
+          ]
+        },
+        {
+          "code": "print(response.text)\n",
+          "display_code": "print(response.text)\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 33,
+          "line_range": [
+            33,
+            33
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library",
+          "command": "pip install google-generative-ai",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python video_question_answering.py",
+          "output": "Certainly! Here's a description of the tone and genre of the video clip:"
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/vision?lang=python#prompting-video"
+      ],
+      "section_id": "004-basic-video",
+      "section_title": "Video basics"
+    },
+    {
+      "id": "013-video-summarization",
+      "title": "Video summarization",
+      "description": "This example demonstrates how to summarize the content of a video using the Gemini API.\nNote: For videos larger than 20MB, you must use the File API for uploading.",
+      "order": 13,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ]
+        },
+        {
+          "code": "# Import the Gemini API\n",
+          "display_code": "",
+          "annotation": "Import the Gemini API",
+          "is_comment": true,
+          "start_line": 5,
+          "line_range": [
+            5,
+            5
+          ],
+          "target_line_range": [
+            6,
+            10
+          ]
+        },
+        {
+          "code": "from google import genai\nfrom google.genai import types\nimport os\nimport requests\n\n",
+          "display_code": "from google import genai\nfrom google.genai import types\nimport os\nimport requests\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 6,
+          "line_range": [
+            6,
+            10
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 11,
+          "line_range": [
+            11,
+            11
+          ],
+          "target_line_range": [
+            12,
+            15
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\nvideo_url = \"https://download.samplelib.com/mp4/sample-5s.mp4\"\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\nvideo_url = \"https://download.samplelib.com/mp4/sample-5s.mp4\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 12,
+          "line_range": [
+            12,
+            15
+          ]
+        },
+        {
+          "code": "# Download the video file.\n# Read the video file as bytes for inline upload.\n",
+          "display_code": "",
+          "annotation": "Download the video file.\nRead the video file as bytes for inline upload.",
+          "is_comment": true,
+          "start_line": 16,
+          "line_range": [
+            16,
+            17
+          ],
+          "target_line_range": [
+            18,
+            20
+          ]
+        },
+        {
+          "code": "response = requests.get(video_url)\nvideo_bytes = response.content\n\n",
+          "display_code": "response = requests.get(video_url)\nvideo_bytes = response.content\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 18,
+          "line_range": [
+            18,
+            20
+          ]
+        },
+        {
+          "code": "# Create a Gemini request with the video and a question\n",
+          "display_code": "",
+          "annotation": "Create a Gemini request with the video and a question",
+          "is_comment": true,
+          "start_line": 21,
+          "line_range": [
+            21,
+            21
+          ],
+          "target_line_range": [
+            22,
+            31
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=types.Content(\n        parts=[\n            types.Part(text=\"Summarize the content of this video.\"),\n            types.Part(inline_data=types.Blob(data=video_bytes, mime_type=\"video/mp4\")),\n        ]\n    ),\n)\n\n",
+          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=types.Content(\n        parts=[\n            types.Part(text=\"Summarize the content of this video.\"),\n            types.Part(inline_data=types.Blob(data=video_bytes, mime_type=\"video/mp4\")),\n        ]\n    ),\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 22,
+          "line_range": [
+            22,
+            31
+          ]
+        },
+        {
+          "code": "# Print the model's response\n",
+          "display_code": "",
+          "annotation": "Print the model's response",
+          "is_comment": true,
+          "start_line": 32,
+          "line_range": [
+            32,
+            32
+          ],
+          "target_line_range": [
+            33,
+            33
+          ]
+        },
+        {
+          "code": "print(response.text)\n",
+          "display_code": "print(response.text)\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 33,
+          "line_range": [
+            33,
+            33
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library",
+          "command": "pip install google-generative-ai",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python video_summarization.py",
+          "output": "The video shows a park with trees next to a busy street with cars and buses passing by. The sun shines through the leaves of the trees."
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/vision?lang=python#prompting-video"
+      ],
+      "section_id": "004-basic-video",
+      "section_title": "Video basics"
+    },
+    {
+      "id": "014-video-transcription",
+      "title": "Video transcription",
+      "description": "This example demonstrates how to transcribe the content of a video using the Gemini API.\nNote: For videos larger than 20MB, you must use the File API for uploading.",
+      "order": 14,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ]
+        },
+        {
+          "code": "# Import the Gemini API\n",
+          "display_code": "",
+          "annotation": "Import the Gemini API",
+          "is_comment": true,
+          "start_line": 5,
+          "line_range": [
+            5,
+            5
+          ],
+          "target_line_range": [
+            6,
+            10
+          ]
+        },
+        {
+          "code": "from google import genai\nfrom google.genai import types\nimport os\nimport requests\n\n",
+          "display_code": "from google import genai\nfrom google.genai import types\nimport os\nimport requests\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 6,
+          "line_range": [
+            6,
+            10
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 11,
+          "line_range": [
+            11,
+            11
+          ],
+          "target_line_range": [
+            12,
+            15
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\nvideo_url = \"https://download.samplelib.com/mp4/sample-5s.mp4\"\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\nvideo_url = \"https://download.samplelib.com/mp4/sample-5s.mp4\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 12,
+          "line_range": [
+            12,
+            15
+          ]
+        },
+        {
+          "code": "# Download the video file.\n# Read the video file as bytes for inline upload.\n",
+          "display_code": "",
+          "annotation": "Download the video file.\nRead the video file as bytes for inline upload.",
+          "is_comment": true,
+          "start_line": 16,
+          "line_range": [
+            16,
+            17
+          ],
+          "target_line_range": [
+            18,
+            20
+          ]
+        },
+        {
+          "code": "response = requests.get(video_url)\nvideo_bytes = response.content\n\n",
+          "display_code": "response = requests.get(video_url)\nvideo_bytes = response.content\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 18,
+          "line_range": [
+            18,
+            20
+          ]
+        },
+        {
+          "code": "# Define our prompt\n",
+          "display_code": "",
+          "annotation": "Define our prompt",
+          "is_comment": true,
+          "start_line": 21,
+          "line_range": [
+            21,
+            21
+          ],
+          "target_line_range": [
+            22,
+            26
+          ]
+        },
+        {
+          "code": "prompt = (\n    \"Transcribe the audio from this video, giving timestamps for \"\n    \"salient events in the video. Also provide visual descriptions.\"\n)\n\n",
+          "display_code": "prompt = (\n    \"Transcribe the audio from this video, giving timestamps for \"\n    \"salient events in the video. Also provide visual descriptions.\"\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 22,
+          "line_range": [
+            22,
+            26
+          ]
+        },
+        {
+          "code": "# Create a Gemini request with the video and our prompt.\n",
+          "display_code": "",
+          "annotation": "Create a Gemini request with the video and our prompt.",
+          "is_comment": true,
+          "start_line": 27,
+          "line_range": [
+            27,
+            27
+          ],
+          "target_line_range": [
+            28,
+            37
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=types.Content(\n        parts=[\n            types.Part(text=prompt),\n            types.Part(inline_data=types.Blob(data=video_bytes, mime_type=\"video/mp4\")),\n        ]\n    ),\n)\n\n",
+          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=types.Content(\n        parts=[\n            types.Part(text=prompt),\n            types.Part(inline_data=types.Blob(data=video_bytes, mime_type=\"video/mp4\")),\n        ]\n    ),\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 28,
+          "line_range": [
+            28,
+            37
+          ]
+        },
+        {
+          "code": "# Print the model's response\n",
+          "display_code": "",
+          "annotation": "Print the model's response",
+          "is_comment": true,
+          "start_line": 38,
+          "line_range": [
+            38,
+            38
+          ],
+          "target_line_range": [
+            39,
+            39
+          ]
+        },
+        {
+          "code": "print(response.text)\n",
+          "display_code": "print(response.text)\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 39,
+          "line_range": [
+            39,
+            39
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library",
+          "command": "pip install google-generative-ai",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python video_transcription.py",
+          "output": "Okay, here's the transcription and visual descriptions of the video:"
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/vision?lang=python#prompting-video"
+      ],
+      "section_id": "004-basic-video",
+      "section_title": "Video basics"
+    },
+    {
+      "id": "015-youtube-video-summarization",
+      "title": "YouTube video summarization",
+      "description": "This example demonstrates how to summarize a YouTube video using its URL.",
+      "order": 15,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import the Gemini API\n",
+          "display_code": "",
+          "annotation": "Import the Gemini API",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ],
+          "target_line_range": [
+            5,
+            6
+          ]
+        },
+        {
+          "code": "from google import genai\n\n",
+          "display_code": "from google import genai\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            6
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 7,
+          "line_range": [
+            7,
+            7
+          ],
+          "target_line_range": [
+            8,
+            9
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=\"YOUR_API_KEY\")\n\n",
+          "display_code": "client = genai.Client(api_key=\"YOUR_API_KEY\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 8,
+          "line_range": [
+            8,
+            9
+          ]
+        },
+        {
+          "code": "# Construct the prompt with the YouTube video URL\n",
+          "display_code": "",
+          "annotation": "Construct the prompt with the YouTube video URL",
+          "is_comment": true,
+          "start_line": 10,
+          "line_range": [
+            10,
+            10
+          ],
+          "target_line_range": [
+            11,
+            13
+          ]
+        },
+        {
+          "code": "youtube_url = \"https://www.youtube.com/watch?v=tAP1eZYEuKA\"\nprompt = f\"Summarize the content of this YouTube video: {youtube_url}\"\n\n",
+          "display_code": "youtube_url = \"https://www.youtube.com/watch?v=tAP1eZYEuKA\"\nprompt = f\"Summarize the content of this YouTube video: {youtube_url}\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 11,
+          "line_range": [
+            11,
+            13
+          ]
+        },
+        {
+          "code": "# Call the API to generate content\n",
+          "display_code": "",
+          "annotation": "Call the API to generate content",
+          "is_comment": true,
+          "start_line": 14,
+          "line_range": [
+            14,
+            14
+          ],
+          "target_line_range": [
+            15,
+            26
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\n        {\n            \"parts\": [\n                {\"text\": \"Can you summarize this video?\"},\n                {\"file_data\": {\"file_uri\": youtube_url}},\n            ]\n        }\n    ],\n)\n\n",
+          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\n        {\n            \"parts\": [\n                {\"text\": \"Can you summarize this video?\"},\n                {\"file_data\": {\"file_uri\": youtube_url}},\n            ]\n        }\n    ],\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 15,
+          "line_range": [
+            15,
+            26
+          ]
+        },
+        {
+          "code": "# Print the generated summary\n",
+          "display_code": "",
+          "annotation": "Print the generated summary",
+          "is_comment": true,
+          "start_line": 27,
+          "line_range": [
+            27,
+            27
+          ],
+          "target_line_range": [
+            28,
+            28
+          ]
+        },
+        {
+          "code": "print(response.text)\n",
+          "display_code": "print(response.text)\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 28,
+          "line_range": [
+            28,
+            28
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library",
+          "command": "pip install google-generative-ai",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python youtube-summarization.py",
+          "output": "Sure, here is a summary of the video!"
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/vision?lang=python#youtube"
+      ],
+      "section_id": "004-basic-video",
+      "section_title": "Video basics"
     }
   ],
   "sections": [
     {
       "id": "001-basic-text",
-      "title": "Text Basics",
+      "title": "Text basics",
       "description": "",
       "order": 1,
       "examples": [
@@ -2349,7 +3043,7 @@
     },
     {
       "id": "002-basic-images",
-      "title": "Images Basics",
+      "title": "Images basics",
       "description": "",
       "order": 2,
       "examples": [
@@ -2362,13 +3056,38 @@
     },
     {
       "id": "003-basic-audio",
-      "title": "Audio Basics",
+      "title": "Audio basics",
       "description": "",
       "order": 3,
       "examples": [
         "009-audio-q-a",
         "010-audio-transcription",
         "011-audio-summarization"
+      ]
+    },
+    {
+      "id": "004-basic-video",
+      "title": "Video basics",
+      "description": "",
+      "order": 4,
+      "examples": [
+        "012-video-q-a",
+        "013-video-summarization",
+        "014-video-transcription",
+        "015-youtube-video-summarization"
+      ]
+    },
+    {
+      "id": "005-other-data-types",
+      "title": "PDFs and other data types",
+      "description": "",
+      "order": 5,
+      "examples": [
+        "016-pdf-analysis",
+        "017-content-conversion",
+        "018-content-summarization",
+        "019-content-translation",
+        "020-structured-extraction"
       ]
     }
   ]
