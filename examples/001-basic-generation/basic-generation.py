@@ -1,4 +1,4 @@
-# Simple generation
+# Simple text generation
 
 # Our first example demonstrates how to use the Gemini API
 # to generate content with a simple prompt.
