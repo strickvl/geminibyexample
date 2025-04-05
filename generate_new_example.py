@@ -114,6 +114,12 @@ def main():
         "[yellow]What specific aspect should this example focus on?[/yellow] (e.g., streaming text, multi-turn chat, etc.)"
     )
 
+    # Ask for topical theme
+    theme = Prompt.ask(
+        "[yellow]Do you want a specific topical theme for this example?[/yellow] (e.g., cats, astronomy, cooking, etc. Leave blank for no theme)",
+        default=""
+    )
+
     # Ask for documentation URLs
     urls = []
     rprint(
@@ -151,6 +157,8 @@ Your task today is to take some documentation from the Google Gemini SDK docs an
 
 ## Focus Area
 This example should specifically focus on: {focus}
+
+{f'## Topical Theme\nThis example should incorporate the thematic elements of: {theme}' if theme else ''}
 
 ## Documentation Content
 {docs_content}
@@ -195,6 +203,7 @@ Here's an example of the requests code format:
 ```
 
 Based on the documentation provided, please generate a concise, illustrative example that demonstrates the key concepts clearly, focusing specifically on {focus}. If the documentation contains multiple examples or topics, prioritize content related to {focus} and ignore unrelated sections.
+{f"Try to incorporate elements of the theme: {theme} in your example where it makes sense, such as in prompts, variables, or example text." if theme else ""}
 
 For the requests_code, ONLY include this if you find actual curl examples in the documentation. If curl examples exist, translate them to Python code using the requests library. Do NOT create requests code if there are no curl examples in the documentation.
 """
