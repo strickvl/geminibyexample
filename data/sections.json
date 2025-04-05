@@ -94,7 +94,6 @@
         "030-async-requests",
         "031-embeddings",
         "032-safety-filters",
-        "033-study-with-learnlm"
       ]
     }
   ]

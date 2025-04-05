@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF and CSV data analysis and summarization - Gemini by Example</title>
+    <title>Safety settings and filters - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
     <style>
@@ -172,7 +172,7 @@
         <main>
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
                 <div>
-                    <h1 style="margin: 0; margin-bottom: 10px;">PDF and CSV data analysis and summarization</h1>
+                    <h1 style="margin: 0; margin-bottom: 10px;">Safety settings and filters</h1>
                 </div>
                 <div style="position: relative; margin-top: 10px;">
                     <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
@@ -185,17 +185,16 @@
                 </div>
             </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
-                This example demonstrates how to use the Gemini API to analyze data from PDF and CSV files.
+                This example demonstrates how to adjust safety settings to block content based on the probability of unsafe content.
             </p>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Import necessary libraries</div>
+                    <div style='font-size: 0.9em; color: #666;'>Import the Gemini API and required types</div>
 
                 </div>
                 <div class="code">
                     <pre><code>from google import genai
 from google.genai import types
-import httpx
 import os</code></pre>
                 </div>
             </div>
@@ -212,112 +211,76 @@ import os</code></pre>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>We start with the PDF analysis.
-Download the PDF file</div>
+                    <div style='font-size: 0.9em; color: #666;'>Define safety settings to block low and above probability for harassment and
+hate speech.
+There are other categories like HARM_CATEGORY_HARASSMENT, HARM_CATEGORY_HATE_SPEECH,
+HARM_CATEGORY_SEXUALLY_EXPLICIT, HARM_CATEGORY_DANGEROUS_CONTENT, and
+HARM_CATEGORY_CIVIC_INTEGRITY (relating to elections). These categories are defined in HarmCategory. The Gemini
+models only support these specific harm categories.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>pdf_url = &quot;https://www.princexml.com/samples/invoice/invoicesample.pdf&quot;
-pdf_data = httpx.get(pdf_url).content</code></pre>
+                    <pre><code>safety_settings = [
+    {
+        &quot;category&quot;: types.HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+        &quot;threshold&quot;: types.HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+    },
+    {
+        &quot;category&quot;: types.HarmCategory.HARM_CATEGORY_HARASSMENT,
+        &quot;threshold&quot;: types.HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+    },
+]</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Prompt to extract main players from the PDF</div>
+                    <div style='font-size: 0.9em; color: #666;'>Configure the generation with the defined safety settings</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>pdf_prompt = (
-    &quot;Identify the main companies or entities mentioned in this invoice. &quot;
-    &quot;Summarize the data.&quot;
+                    <pre><code>generation_config = types.GenerateContentConfig(safety_settings=safety_settings)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Generate content with the specified safety settings</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash-lite&quot;,
+    contents=&quot;Write something that could be interpreted as offensive.&quot;,
+    config=generation_config,
 )</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Generate content with the PDF and the prompt</div>
+                    <div style='font-size: 0.9em; color: #666;'>Print the generated text (if not blocked by safety settings).
+The Gemini models will actually not generate content like this, so it's a bit
+hard to trigger without writing something offensive here in the content.
+I hope you get the idea, though, about how to use this.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>pdf_response = client.models.generate_content(
-    model=&quot;gemini-2.0-flash&quot;,
-    contents=[
-        types.Part.from_bytes(data=pdf_data, mime_type=&quot;application/pdf&quot;),
-        pdf_prompt,
-    ],
-)</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Print the PDF analysis result</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>print(&quot;PDF Analysis Result:\n&quot;, pdf_response.text)</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Moving on to the CSV analysis now. You'll note that the process is very
-similar.
-You can also pass in code files, XML, RTF, Markdown, and more.
-We download the CSV file here.</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>csv_url = &quot;https://gist.githubusercontent.com/suellenstringer-hye/f2231b3383538bcb1a5b051c7908f5b7/raw/0f4e0733a434733cda8e749bbbf33a93c2b5bbde/test.csv&quot;
-csv_data = httpx.get(csv_url).content</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Prompt to analyze the CSV data</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>csv_prompt = &quot;Analyze this data and tell me about the contents. Summarize the data.&quot;</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Generate content with the CSV data and the prompt</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>csv_response = client.models.generate_content(
-    model=&quot;gemini-2.0-flash&quot;,
-    contents=[
-        types.Part.from_bytes(
-            data=csv_data,
-            mime_type=&quot;text/csv&quot;,
-        ),
-        csv_prompt,
-    ],
-)</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Print the CSV analysis result</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>print(&quot;\nCSV Analysis Result:\n&quot;, csv_response.text)</code></pre>
+                    <pre><code>if (
+    hasattr(response, &quot;prompt_feedback&quot;)
+    and response.prompt_feedback
+    and hasattr(response.prompt_feedback, &quot;block_reason&quot;)
+):
+    print(&quot;The prompt was blocked due to: &quot;, response.prompt_feedback.block_reason)
+else:
+    print(response.text)</code></pre>
                 </div>
             </div>
             <hr>
             <h2>Running the Example</h2>
             <div class="row">
                 <div class="docs" style='font-size: 0.9em; color: #666;'>
-                    First, install the Google Generative AI library and httpx (for downloading files)
+                    First, install the Google Generative AI library
                 </div>
                 <div class="code">
                     <div class="buttons">
@@ -325,7 +288,7 @@ csv_data = httpx.get(csv_url).content</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai httpx pandas</span></span>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai</span></span>
 </code></pre>
                 </div>
             </div>
@@ -339,45 +302,19 @@ csv_data = httpx.get(csv_url).content</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python pdf_csv_analysis.py</span></span>
-PDF Analysis Result:
- The main company mentioned in the invoice is Sunny Farm.
-CSV Analysis Result:
- Okay, I&#x27;ve analyzed the provided data. Here&#x27;s a summary of its contents:
-**Data Format:**
-*   The data appears to be in CSV (Comma Separated Values) format.
-*   The first line is a header row defining the fields.
-*   Each subsequent line represents a record containing information about a person.
-**Fields Present:**
-The data includes the following fields for each person:
-1.  **first\_name:** The person&#x27;s first name.
-2.  **last\_name:** The person&#x27;s last name.
-3.  **company\_name:** The name of the company they are associated with.
-4.  **address:** The street address.
-5.  **city:** The city.
-6.  **county:** The county.
-7.  **state:** The state.
-8.  **zip:** The zip code.
-9.  **phone1:** The primary phone number.
-10. **phone2:** A secondary phone number.
-11. **email:** The email address.
-12. **web:** The website address (presumably for the associated company).</code></pre>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python safety-settings.py</span></span>
+I am programmed to be a harmless AI assistant. I am unable to provide responses that are offensive or discriminatory.</code></pre>
                 </div>
             </div>
             <hr>
             <h4>Further Information</h4>
             <ul style="font-size: 0.9em;">
-                <li><a href="https://ai.google.dev/gemini-api/docs/document-processing?lang=python"
+                <li><a href="https://ai.google.dev/gemini-api/docs/safety-settings#python"
                          target="_blank">Gemini docs link 1</a></li>
-                <li><a href="https://ai.google.dev/gemini-api/docs/document-processing?lang=rest"
-                         target="_blank">Gemini docs link 2</a></li>
             </ul>
             <div class="navigation">
                 <p class="prev">
-                    <span>← Previous:</span> <a href="../015-youtube-video-summarization/">YouTube video summarization</a>
-                </p>
-                <p class="next">
-                    <span>Next:</span> <a href="../017-content-translation/">Translate documents</a> →
+                    <span>← Previous:</span> <a href="../031-embeddings/">Embeddings generation</a>
                 </p>
             </div>
         </main>
