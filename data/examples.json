@@ -5132,8 +5132,8 @@
     },
     {
       "id": "024-grounded-responses",
-      "title": "Grounded Responses with Search Tool",
-      "description": "This example demonstrates how to use the Gemini API with the Search tool to get grounded responses.",
+      "title": "Grounded responses with search tool",
+      "description": "This example demonstrates how to use the Gemini API with the Search tool to\nget grounded responses.\nThis means that you can ask questions to the LLM which will incorporate live\nor dynamic search results into the response.",
       "order": 24,
       "code_segments": [
         {
@@ -5141,10 +5141,10 @@
           "display_code": "\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 3,
+          "start_line": 6,
           "line_range": [
-            3,
-            3
+            6,
+            6
           ]
         },
         {
@@ -5152,25 +5152,25 @@
           "display_code": "",
           "annotation": "Import the Gemini API and necessary tools",
           "is_comment": true,
-          "start_line": 4,
+          "start_line": 7,
           "line_range": [
-            4,
-            4
+            7,
+            7
           ],
           "target_line_range": [
-            5,
-            7
+            8,
+            11
           ]
         },
         {
-          "code": "from google import genai\nfrom google.genai.types import Tool, GenerateContentConfig, GoogleSearch\n\n",
-          "display_code": "from google import genai\nfrom google.genai.types import Tool, GenerateContentConfig, GoogleSearch\n\n",
+          "code": "from google import genai\nfrom google.genai.types import Tool, GenerateContentConfig, GoogleSearch\nimport os\n\n",
+          "display_code": "from google import genai\nfrom google.genai.types import Tool, GenerateContentConfig, GoogleSearch\nimport os\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 5,
+          "start_line": 8,
           "line_range": [
-            5,
-            7
+            8,
+            11
           ]
         },
         {
@@ -5178,25 +5178,25 @@
           "display_code": "",
           "annotation": "Initialize the Gemini client with your API key",
           "is_comment": true,
-          "start_line": 8,
+          "start_line": 12,
           "line_range": [
-            8,
-            8
+            12,
+            12
           ],
           "target_line_range": [
-            9,
-            10
+            13,
+            14
           ]
         },
         {
-          "code": "client = genai.Client(api_key=\"YOUR_API_KEY\")\n\n",
-          "display_code": "client = genai.Client(api_key=\"YOUR_API_KEY\")\n\n",
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 9,
+          "start_line": 13,
           "line_range": [
-            9,
-            10
+            13,
+            14
           ]
         },
         {
@@ -5204,14 +5204,14 @@
           "display_code": "",
           "annotation": "Specify the model to use (Gemini 2.0 models or later support search as a tool)",
           "is_comment": true,
-          "start_line": 11,
+          "start_line": 15,
           "line_range": [
-            11,
-            11
+            15,
+            15
           ],
           "target_line_range": [
-            12,
-            13
+            16,
+            17
           ]
         },
         {
@@ -5219,10 +5219,10 @@
           "display_code": "model_id = \"gemini-2.0-flash\"\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 12,
+          "start_line": 16,
           "line_range": [
-            12,
-            13
+            16,
+            17
           ]
         },
         {
@@ -5230,25 +5230,25 @@
           "display_code": "",
           "annotation": "Configure the Google Search tool",
           "is_comment": true,
-          "start_line": 14,
+          "start_line": 18,
           "line_range": [
-            14,
-            14
+            18,
+            18
           ],
           "target_line_range": [
-            15,
-            18
+            19,
+            20
           ]
         },
         {
-          "code": "google_search_tool = Tool(\n    google_search = GoogleSearch()\n)\n\n",
-          "display_code": "google_search_tool = Tool(\n    google_search = GoogleSearch()\n)\n\n",
+          "code": "google_search_tool = Tool(google_search=GoogleSearch())\n\n",
+          "display_code": "google_search_tool = Tool(google_search=GoogleSearch())\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 15,
+          "start_line": 19,
           "line_range": [
-            15,
-            18
+            19,
+            20
           ]
         },
         {
@@ -5256,25 +5256,25 @@
           "display_code": "",
           "annotation": "Craft your query.  This one asks for films in Delft cinemas on a specific date.",
           "is_comment": true,
-          "start_line": 19,
+          "start_line": 21,
           "line_range": [
-            19,
-            19
+            21,
+            21
           ],
           "target_line_range": [
-            20,
-            21
+            22,
+            23
           ]
         },
         {
-          "code": "query = \"What films are showing in Delft on October 27, 2024, particularly at Filmhuis Lumen and Pathe cinemas?\"\n\n",
-          "display_code": "query = \"What films are showing in Delft on October 27, 2024, particularly at Filmhuis Lumen and Pathe cinemas?\"\n\n",
+          "code": "query = \"What films are showing in Delft on April 5, 2025, particularly at Filmhuis Lumen and Pathe cinemas?\"\n\n",
+          "display_code": "query = \"What films are showing in Delft on April 5, 2025, particularly at Filmhuis Lumen and Pathe cinemas?\"\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 20,
+          "start_line": 22,
           "line_range": [
-            20,
-            21
+            22,
+            23
           ]
         },
         {
@@ -5282,25 +5282,25 @@
           "display_code": "",
           "annotation": "Call the API to generate content, including the search tool in the configuration",
           "is_comment": true,
-          "start_line": 22,
+          "start_line": 24,
           "line_range": [
-            22,
-            22
+            24,
+            24
           ],
           "target_line_range": [
-            23,
-            31
+            25,
+            33
           ]
         },
         {
-          "code": "response = client.models.generate_content(\n    model=model_id,\n    contents=query,\n    config=GenerateContentConfig(\n        tools=[google_search_tool],\n        response_modalities=[\"TEXT\"],\n    )\n)\n\n",
-          "display_code": "response = client.models.generate_content(\n    model=model_id,\n    contents=query,\n    config=GenerateContentConfig(\n        tools=[google_search_tool],\n        response_modalities=[\"TEXT\"],\n    )\n)\n\n",
+          "code": "response = client.models.generate_content(\n    model=model_id,\n    contents=query,\n    config=GenerateContentConfig(\n        tools=[google_search_tool],\n        response_modalities=[\"TEXT\"],\n    ),\n)\n\n",
+          "display_code": "response = client.models.generate_content(\n    model=model_id,\n    contents=query,\n    config=GenerateContentConfig(\n        tools=[google_search_tool],\n        response_modalities=[\"TEXT\"],\n    ),\n)\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 23,
+          "start_line": 25,
           "line_range": [
-            23,
-            31
+            25,
+            33
           ]
         },
         {
@@ -5308,14 +5308,14 @@
           "display_code": "",
           "annotation": "Print the generated text response",
           "is_comment": true,
-          "start_line": 32,
+          "start_line": 34,
           "line_range": [
-            32,
-            32
+            34,
+            34
           ],
           "target_line_range": [
-            33,
-            35
+            35,
+            37
           ]
         },
         {
@@ -5323,36 +5323,36 @@
           "display_code": "for each in response.candidates[0].content.parts:\n    print(each.text)\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 33,
+          "start_line": 35,
           "line_range": [
-            33,
-            35
+            35,
+            37
           ]
         },
         {
-          "code": "# Print the grounding metadata (web content used to ground the response).\n",
+          "code": "# (Optional) Print the grounding metadata (web content used to ground the response).\n# You'll get a lot of HTML data and content when you print this.\n",
           "display_code": "",
-          "annotation": "Print the grounding metadata (web content used to ground the response).",
+          "annotation": "(Optional) Print the grounding metadata (web content used to ground the response).\nYou'll get a lot of HTML data and content when you print this.",
           "is_comment": true,
-          "start_line": 36,
+          "start_line": 38,
           "line_range": [
-            36,
-            36
+            38,
+            39
           ],
           "target_line_range": [
-            37,
-            37
+            40,
+            40
           ]
         },
         {
-          "code": "print(response.candidates[0].grounding_metadata.search_entry_point.rendered_content)",
-          "display_code": "print(response.candidates[0].grounding_metadata.search_entry_point.rendered_content)",
+          "code": "print(response.candidates[0].grounding_metadata.search_entry_point.rendered_content)\n",
+          "display_code": "print(response.candidates[0].grounding_metadata.search_entry_point.rendered_content)\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 37,
+          "start_line": 40,
           "line_range": [
-            37,
-            37
+            40,
+            40
           ]
         }
       ],
@@ -5380,6 +5380,199 @@
       ],
       "section_id": "006-agentic",
       "section_title": "Agentic behaviour"
+    },
+    {
+      "id": "025-model-context-windows",
+      "title": "Model context windows",
+      "description": "This example demonstrates how to access the input and output token limits for different Gemini models.",
+      "order": 25,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import the Gemini API\n",
+          "display_code": "",
+          "annotation": "Import the Gemini API",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ],
+          "target_line_range": [
+            5,
+            7
+          ]
+        },
+        {
+          "code": "from google import genai\nimport os\n\n",
+          "display_code": "from google import genai\nimport os\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            7
+          ]
+        },
+        {
+          "code": "# Configure the client with your API key\n",
+          "display_code": "",
+          "annotation": "Configure the client with your API key",
+          "is_comment": true,
+          "start_line": 8,
+          "line_range": [
+            8,
+            8
+          ],
+          "target_line_range": [
+            9,
+            10
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 9,
+          "line_range": [
+            9,
+            10
+          ]
+        },
+        {
+          "code": "# Get information about the gemini-2.0-flash model\n",
+          "display_code": "",
+          "annotation": "Get information about the gemini-2.0-flash model",
+          "is_comment": true,
+          "start_line": 11,
+          "line_range": [
+            11,
+            11
+          ],
+          "target_line_range": [
+            12,
+            13
+          ]
+        },
+        {
+          "code": "model_info = client.models.get(model=\"models/gemini-2.0-flash\")\n\n",
+          "display_code": "model_info = client.models.get(model=\"models/gemini-2.0-flash\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 12,
+          "line_range": [
+            12,
+            13
+          ]
+        },
+        {
+          "code": "# Print the input and output token limits for gemini-2.0-flash\n",
+          "display_code": "",
+          "annotation": "Print the input and output token limits for gemini-2.0-flash",
+          "is_comment": true,
+          "start_line": 14,
+          "line_range": [
+            14,
+            14
+          ],
+          "target_line_range": [
+            15,
+            22
+          ]
+        },
+        {
+          "code": "print(\"Gemini 2.0 Flash:\")\nprint(\n    f\"  Input token limit: {model_info.input_token_limit:,} tokens (1 million tokens)\"\n)\nprint(\n    f\"  Output token limit: {model_info.output_token_limit:,} tokens (8 thousand tokens)\"\n)\n\n",
+          "display_code": "print(\"Gemini 2.0 Flash:\")\nprint(\n    f\"  Input token limit: {model_info.input_token_limit:,} tokens (1 million tokens)\"\n)\nprint(\n    f\"  Output token limit: {model_info.output_token_limit:,} tokens (8 thousand tokens)\"\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 15,
+          "line_range": [
+            15,
+            22
+          ]
+        },
+        {
+          "code": "# Get information about the gemini-2.5-pro-preview-03-25 model\n",
+          "display_code": "",
+          "annotation": "Get information about the gemini-2.5-pro-preview-03-25 model",
+          "is_comment": true,
+          "start_line": 23,
+          "line_range": [
+            23,
+            23
+          ],
+          "target_line_range": [
+            24,
+            25
+          ]
+        },
+        {
+          "code": "pro_model_info = client.models.get(model=\"models/gemini-2.5-pro-preview-03-25\")\n\n",
+          "display_code": "pro_model_info = client.models.get(model=\"models/gemini-2.5-pro-preview-03-25\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 24,
+          "line_range": [
+            24,
+            25
+          ]
+        },
+        {
+          "code": "# Print the input and output token limits for gemini-2.5-pro-preview-03-25\n",
+          "display_code": "",
+          "annotation": "Print the input and output token limits for gemini-2.5-pro-preview-03-25",
+          "is_comment": true,
+          "start_line": 26,
+          "line_range": [
+            26,
+            26
+          ],
+          "target_line_range": [
+            27,
+            33
+          ]
+        },
+        {
+          "code": "print(\"\\nGemini 2.5 Pro:\")\nprint(\n    f\"  Input token limit: {pro_model_info.input_token_limit:,} tokens (1 million tokens)\"\n)\nprint(\n    f\"  Output token limit: {pro_model_info.output_token_limit:,} tokens (65 thousand tokens)\"\n)\n",
+          "display_code": "print(\"\\nGemini 2.5 Pro:\")\nprint(\n    f\"  Input token limit: {pro_model_info.input_token_limit:,} tokens (1 million tokens)\"\n)\nprint(\n    f\"  Output token limit: {pro_model_info.output_token_limit:,} tokens (65 thousand tokens)\"\n)\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 27,
+          "line_range": [
+            27,
+            33
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library",
+          "command": "pip install google-generative-ai",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python model_context.py",
+          "output": "Gemini 2.0 Flash:\n  Input token limit: 1,048,576 tokens (1 million tokens)\n  Output token limit: 8,192 tokens (8 thousand tokens)\nGemini 2.5 Pro:\n  Input token limit: 1,048,576 tokens (1 million tokens)\n  Output token limit: 65,536 tokens (65 thousand tokens)"
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/tokens?lang=python"
+      ],
+      "section_id": "007-tokens-context-windows",
+      "section_title": "Token counting & context windows"
     }
   ],
   "sections": [
@@ -5453,6 +5646,18 @@
         "022-code-execution",
         "023-mcp-model-context-protocol",
         "024-grounded-responses"
+      ]
+    },
+    {
+      "id": "007-tokens-context-windows",
+      "title": "Token counting & context windows",
+      "description": "",
+      "order": 7,
+      "examples": [
+        "025-model-context-windows",
+        "026-token-counting",
+        "027-calculate-input-tokens",
+        "028-context-caching"
       ]
     }
   ]

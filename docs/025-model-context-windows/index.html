@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grounded responses with search tool - Gemini by Example</title>
+    <title>Model context windows - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
     <style>
@@ -173,9 +173,9 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
                 <div>
                     <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
-                        <a href="../" style="text-decoration: none; color: #666;">Agentic behaviour</a>
+                        <a href="../" style="text-decoration: none; color: #666;">Token counting & context windows</a>
                     </div>
-                    <h1 style="margin: 0; margin-bottom: 10px;">Grounded responses with search tool</h1>
+                    <h1 style="margin: 0; margin-bottom: 10px;">Model context windows</h1>
                 </div>
                 <div style="position: relative; margin-top: 10px;">
                     <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
@@ -188,26 +188,22 @@
                 </div>
             </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
-                This example demonstrates how to use the Gemini API with the Search tool to
-get grounded responses.
-This means that you can ask questions to the LLM which will incorporate live
-or dynamic search results into the response.
+                This example demonstrates how to access the input and output token limits for different Gemini models.
             </p>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Import the Gemini API and necessary tools</div>
+                    <div style='font-size: 0.9em; color: #666;'>Import the Gemini API</div>
 
                 </div>
                 <div class="code">
                     <pre><code>from google import genai
-from google.genai.types import Tool, GenerateContentConfig, GoogleSearch
 import os</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Initialize the Gemini client with your API key</div>
+                    <div style='font-size: 0.9em; color: #666;'>Configure the client with your API key</div>
 
                 </div>
                 <div class="code">
@@ -217,70 +213,53 @@ import os</code></pre>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Specify the model to use (Gemini 2.0 models or later support search as a tool)</div>
+                    <div style='font-size: 0.9em; color: #666;'>Get information about the gemini-2.0-flash model</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>model_id = &quot;gemini-2.0-flash&quot;</code></pre>
+                    <pre><code>model_info = client.models.get(model=&quot;models/gemini-2.0-flash&quot;)</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Configure the Google Search tool</div>
+                    <div style='font-size: 0.9em; color: #666;'>Print the input and output token limits for gemini-2.0-flash</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>google_search_tool = Tool(google_search=GoogleSearch())</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Craft your query.  This one asks for films in Delft cinemas on a specific date.</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>query = &quot;What films are showing in Delft on April 5, 2025, particularly at Filmhuis Lumen and Pathe cinemas?&quot;</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Call the API to generate content, including the search tool in the configuration</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>response = client.models.generate_content(
-    model=model_id,
-    contents=query,
-    config=GenerateContentConfig(
-        tools=[google_search_tool],
-        response_modalities=[&quot;TEXT&quot;],
-    ),
+                    <pre><code>print(&quot;Gemini 2.0 Flash:&quot;)
+print(
+    f&quot;  Input token limit: {model_info.input_token_limit:,} tokens (1 million tokens)&quot;
+)
+print(
+    f&quot;  Output token limit: {model_info.output_token_limit:,} tokens (8 thousand tokens)&quot;
 )</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Print the generated text response</div>
+                    <div style='font-size: 0.9em; color: #666;'>Get information about the gemini-2.5-pro-preview-03-25 model</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>for each in response.candidates[0].content.parts:
-    print(each.text)</code></pre>
+                    <pre><code>pro_model_info = client.models.get(model=&quot;models/gemini-2.5-pro-preview-03-25&quot;)</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>(Optional) Print the grounding metadata (web content used to ground the response).
-You'll get a lot of HTML data and content when you print this.</div>
+                    <div style='font-size: 0.9em; color: #666;'>Print the input and output token limits for gemini-2.5-pro-preview-03-25</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>print(response.candidates[0].grounding_metadata.search_entry_point.rendered_content)</code></pre>
+                    <pre><code>print(&quot;\nGemini 2.5 Pro:&quot;)
+print(
+    f&quot;  Input token limit: {pro_model_info.input_token_limit:,} tokens (1 million tokens)&quot;
+)
+print(
+    f&quot;  Output token limit: {pro_model_info.output_token_limit:,} tokens (65 thousand tokens)&quot;
+)</code></pre>
                 </div>
             </div>
             <hr>
@@ -309,66 +288,24 @@ You'll get a lot of HTML data and content when you print this.</div>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python grounded_search.py</span></span>
-[Example output - this will vary based on search results]
-Okay, here&#x27;s what I&#x27;ve found regarding films playing in Delft on April 5, 2025:
-**Filmhuis Lumen:**
-*   **Vermiglio:** An Italian family chronicle about a large family in a mountain village during the last year of World War II.
-*   **Vingt Dieux:** A heartwarming film about an 18-year-old whose carefree life ends when his father suddenly dies.
-*   **En Fanfare:** A feel-good film about how music connects people and how unlikely family ties can lead to genuine friendships.
-*   **I&#x27;m Still Here** (Playing at 21:00)
-*   **De Propagandist** (Documentary)
-**Pathe Delft:**
-Please note that film schedules are often updated weekly (typically on Mondays or Wednesdays), so the listings available right now might not be entirely accurate for April 5, 2025.
-Based on current information, these films *might* be playing at Pathé Delft on that date:
-*   A Minecraft Movie (Original version)
-*   A Minecraft Movie (Dutch version)
-*   A Working Man
-*   Disney Snow White (Original version)
-*   Mickey 17
-*   Novocaine
-*   Ne Zha 2
-*   Vaiana 2 (Dutch version)
-To get the most accurate listings for Pathe Delft, I recommend checking their website ([https://www.pathe.nl/](https://www.pathe.nl/)) closer to the date, likely after Monday, March 31, 2025.
-&lt;style&gt;
-.container {
-  align-items: center;
-  border-radius: 8px;
-  display: flex;
-  font-family: Google Sans, Roboto, sans-serif;
-  font-size: 14px;
-  line-height: 20px;
-  padding: 8px 12px;
-}
-.chip {
-  display: inline-block;
-  border: solid 1px;
-  border-radius: 16px;
-  min-width: 14px;
-etc...</code></pre>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python model_context.py</span></span>
+Gemini 2.0 Flash:
+  Input token limit: 1,048,576 tokens (1 million tokens)
+  Output token limit: 8,192 tokens (8 thousand tokens)
+Gemini 2.5 Pro:
+  Input token limit: 1,048,576 tokens (1 million tokens)
+  Output token limit: 65,536 tokens (65 thousand tokens)</code></pre>
                 </div>
-            </div>
-            <hr>
-            <div style="margin: 30px 0; text-align: center;">
-                <figure>
-                    <img src="images/grounded-responses.png" alt="An illustration or output
-                    from the example code" style="max-width: 100%; border: 1px solid #eee;
-                    border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <figcaption style="margin-top: 10px; color: #666; font-style: italic;"></figcaption>
-                </figure>
             </div>
             <hr>
             <h4>Further Information</h4>
             <ul style="font-size: 0.9em;">
-                <li><a href="https://ai.google.dev/gemini-api/docs/grounding?lang=python"
+                <li><a href="https://ai.google.dev/gemini-api/docs/tokens?lang=python"
                          target="_blank">Gemini docs link 1</a></li>
             </ul>
             <div class="navigation">
                 <p class="prev">
-                    <span>← Previous:</span> <a href="../023-mcp-model-context-protocol/">Model Context Protocol</a>
-                </p>
-                <p class="next">
-                    <span>Next:</span> <a href="../025-model-context-windows/">Model context windows</a> →
+                    <span>← Previous:</span> <a href="../024-grounded-responses/">Grounded responses with search tool</a>
                 </p>
             </div>
         </main>

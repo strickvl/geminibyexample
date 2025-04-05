@@ -34,7 +34,9 @@ It's organized by sections, with each example's Python code and terminal command
   * Function calling & tool use
   * Code execution
   * Model Context Protocol
-  * Grounded Responses with Search Tool
+  * Grounded responses with search tool
+* Token counting & context windows
+  * Model context windows
 
 ## Text
 
@@ -1345,26 +1347,28 @@ Tool Result: {"2025-04-05T00:00":11.4,"2025-04-05T01:00":10.3,"2025-04-05T02:00"
 For more information, see the original documentation:
 - https://ai.google.dev/gemini-api/docs/function-calling?example=weather#use_model_context_protocol_mcp
 
-### Grounded Responses with Search Tool
+### Grounded responses with search tool
 
-This example demonstrates how to use the Gemini API with the Search tool to get grounded responses.
+This example demonstrates how to use the Gemini API with the Search tool to
+get grounded responses.
+This means that you can ask questions to the LLM which will incorporate live
+or dynamic search results into the response.
 
 ```python
 from google import genai
 from google.genai.types import Tool, GenerateContentConfig, GoogleSearch
-client = genai.Client(api_key="YOUR_API_KEY")
+import os
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 model_id = "gemini-2.0-flash"
-google_search_tool = Tool(
-    google_search = GoogleSearch()
-)
-query = "What films are showing in Delft on October 27, 2024, particularly at Filmhuis Lumen and Pathe cinemas?"
+google_search_tool = Tool(google_search=GoogleSearch())
+query = "What films are showing in Delft on April 5, 2025, particularly at Filmhuis Lumen and Pathe cinemas?"
 response = client.models.generate_content(
     model=model_id,
     contents=query,
     config=GenerateContentConfig(
         tools=[google_search_tool],
         response_modalities=["TEXT"],
-    )
+    ),
 )
 for each in response.candidates[0].content.parts:
     print(each.text)
@@ -1416,4 +1420,46 @@ etc...
 
 For more information, see the original documentation:
 - https://ai.google.dev/gemini-api/docs/grounding?lang=python
+
+## Token counting & context windows
+
+### Model context windows
+
+This example demonstrates how to access the input and output token limits for different Gemini models.
+
+```python
+from google import genai
+import os
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+model_info = client.models.get(model="models/gemini-2.0-flash")
+print("Gemini 2.0 Flash:")
+print(
+    f"  Input token limit: {model_info.input_token_limit:,} tokens (1 million tokens)"
+)
+print(
+    f"  Output token limit: {model_info.output_token_limit:,} tokens (8 thousand tokens)"
+)
+pro_model_info = client.models.get(model="models/gemini-2.5-pro-preview-03-25")
+print("\nGemini 2.5 Pro:")
+print(
+    f"  Input token limit: {pro_model_info.input_token_limit:,} tokens (1 million tokens)"
+)
+print(
+    f"  Output token limit: {pro_model_info.output_token_limit:,} tokens (65 thousand tokens)"
+)
+```
+
+```shell
+$ pip install google-generative-ai
+$ python model_context.py
+Gemini 2.0 Flash:
+  Input token limit: 1,048,576 tokens (1 million tokens)
+  Output token limit: 8,192 tokens (8 thousand tokens)
+Gemini 2.5 Pro:
+  Input token limit: 1,048,576 tokens (1 million tokens)
+  Output token limit: 65,536 tokens (65 thousand tokens)
+```
+
+For more information, see the original documentation:
+- https://ai.google.dev/gemini-api/docs/tokens?lang=python
 

@@ -71,6 +71,18 @@
         "023-mcp-model-context-protocol",
         "024-grounded-responses"
       ]
+    },
+    {
+      "id": "007-tokens-context-windows",
+      "title": "Token counting & context windows",
+      "description": "",
+      "order": 7,
+      "examples": [
+        "025-model-context-windows",
+        "026-token-counting",
+        "027-calculate-input-tokens",
+        "028-context-caching"
+      ]
     }
   ]
 }
