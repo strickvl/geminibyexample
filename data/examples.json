@@ -367,6 +367,227 @@
       "image_data": [],
       "section_id": "001-basic-text",
       "section_title": "Text Basics"
+    },
+    {
+      "id": "004-image-q-a",
+      "title": "Gemini Vision with Cats",
+      "description": "This example demonstrates how to use the Gemini API to analyze or understand images of cats, including using image URLs and base64 encoding.",
+      "order": 4,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import necessary libraries\n",
+          "display_code": "",
+          "annotation": "Import necessary libraries",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ],
+          "target_line_range": [
+            5,
+            9
+          ]
+        },
+        {
+          "code": "from google import genai\nfrom google.genai import types\nimport requests\nimport base64\n\n",
+          "display_code": "from google import genai\nfrom google.genai import types\nimport requests\nimport base64\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            9
+          ]
+        },
+        {
+          "code": "# Replace with your Gemini API key\n",
+          "display_code": "",
+          "annotation": "Replace with your Gemini API key",
+          "is_comment": true,
+          "start_line": 10,
+          "line_range": [
+            10,
+            10
+          ],
+          "target_line_range": [
+            11,
+            12
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=\"YOUR_API_KEY\")\n\n",
+          "display_code": "client = genai.Client(api_key=\"YOUR_API_KEY\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 11,
+          "line_range": [
+            11,
+            12
+          ]
+        },
+        {
+          "code": "# We'll start by using an image URL.\n# Load an image of a cat from a URL\n",
+          "display_code": "",
+          "annotation": "We'll start by using an image URL.\nLoad an image of a cat from a URL",
+          "is_comment": true,
+          "start_line": 13,
+          "line_range": [
+            13,
+            14
+          ],
+          "target_line_range": [
+            15,
+            18
+          ]
+        },
+        {
+          "code": "image_url = \"https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1\"\nimage_response = requests.get(image_url)\nimage_content = image_response.content\n\n",
+          "display_code": "image_url = \"https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1\"\nimage_response = requests.get(image_url)\nimage_content = image_response.content\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 15,
+          "line_range": [
+            15,
+            18
+          ]
+        },
+        {
+          "code": "# Ask Gemini about the cat in the image\n",
+          "display_code": "",
+          "annotation": "Ask Gemini about the cat in the image",
+          "is_comment": true,
+          "start_line": 19,
+          "line_range": [
+            19,
+            19
+          ],
+          "target_line_range": [
+            20,
+            26
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\"What breed of cat is this?\", types.Part.from_bytes(data=image_content, mime_type=\"image/jpeg\")]\n)\n\nprint(\"Response from URL Image:\\n\", response.text)\n\n",
+          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\"What breed of cat is this?\", types.Part.from_bytes(data=image_content, mime_type=\"image/jpeg\")]\n)\n\nprint(\"Response from URL Image:\\n\", response.text)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 20,
+          "line_range": [
+            20,
+            26
+          ]
+        },
+        {
+          "code": "# Now we'll use a local image file.\n# Load a local image of a cat and encode it as Base64\n",
+          "display_code": "",
+          "annotation": "Now we'll use a local image file.\nLoad a local image of a cat and encode it as Base64",
+          "is_comment": true,
+          "start_line": 27,
+          "line_range": [
+            27,
+            28
+          ],
+          "target_line_range": [
+            29,
+            31
+          ]
+        },
+        {
+          "code": "with open(\"cat.jpg\", \"rb\") as image_file:\n    encoded_string = base64.b64encode(image_file.read())\n\n",
+          "display_code": "with open(\"cat.jpg\", \"rb\") as image_file:\n    encoded_string = base64.b64encode(image_file.read())\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 29,
+          "line_range": [
+            29,
+            31
+          ]
+        },
+        {
+          "code": "# Ensure the encoded string is a string\n",
+          "display_code": "",
+          "annotation": "Ensure the encoded string is a string",
+          "is_comment": true,
+          "start_line": 32,
+          "line_range": [
+            32,
+            32
+          ],
+          "target_line_range": [
+            33,
+            34
+          ]
+        },
+        {
+          "code": "encoded_string = encoded_string.decode('utf-8')\n\n",
+          "display_code": "encoded_string = encoded_string.decode('utf-8')\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 33,
+          "line_range": [
+            33,
+            34
+          ]
+        },
+        {
+          "code": "# Ask Gemini a question about the cat, providing the image as a Base64 string\n",
+          "display_code": "",
+          "annotation": "Ask Gemini a question about the cat, providing the image as a Base64 string",
+          "is_comment": true,
+          "start_line": 35,
+          "line_range": [
+            35,
+            35
+          ],
+          "target_line_range": [
+            36,
+            41
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\"Is this cat fluffy?\", types.Part.from_bytes(data=base64.b64decode(encoded_string), mime_type=\"image/jpeg\")]\n)\n\nprint(\"\\nResponse from Base64 Image:\\n\", response.text)\n",
+          "display_code": "response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\"Is this cat fluffy?\", types.Part.from_bytes(data=base64.b64decode(encoded_string), mime_type=\"image/jpeg\")]\n)\n\nprint(\"\\nResponse from Base64 Image:\\n\", response.text)\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 36,
+          "line_range": [
+            36,
+            41
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library and requests",
+          "command": "pip install google-generative-ai requests",
+          "output": ""
+        },
+        {
+          "explanation": "Download an example cat image (replace with your own if needed)",
+          "command": "wget https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1 -O cat.jpg",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python gemini-cat.py",
+          "output": "Response from URL Image:\n This looks like a British Shorthair cat."
+        }
+      ],
+      "image_data": [],
+      "section_id": "002-basic-images",
+      "section_title": "Images Basics"
     }
   ],
   "sections": [
@@ -386,7 +607,9 @@
       "title": "Images Basics",
       "description": "",
       "order": 2,
-      "examples": []
+      "examples": [
+        "004-image-q-a"
+      ]
     }
   ]
 }

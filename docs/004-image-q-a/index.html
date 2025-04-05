@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>System prompt - Gemini by Example</title>
+    <title>Gemini Vision with Cats - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
     <style>
@@ -156,9 +156,9 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
                 <div>
                     <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
-                        <a href="../" style="text-decoration: none; color: #666;">Text Basics</a>
+                        <a href="../" style="text-decoration: none; color: #666;">Images Basics</a>
                     </div>
-                    <h1 style="margin: 0; margin-bottom: 10px;">System prompt</h1>
+                    <h1 style="margin: 0; margin-bottom: 10px;">Gemini Vision with Cats</h1>
                 </div>
                 <div style="position: relative; margin-top: 10px;">
                     <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
@@ -171,22 +171,24 @@
                 </div>
             </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
-                This example demonstrates how to use system instructions to guide the model's behavior.
+                This example demonstrates how to use the Gemini API to analyze or understand images of cats, including using image URLs and base64 encoding.
             </p>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Import the Gemini API</div>
+                    <div style='font-size: 0.9em; color: #666;'>Import necessary libraries</div>
 
                 </div>
                 <div class="code">
                     <pre><code>from google import genai
-from google.genai import types</code></pre>
+from google.genai import types
+import requests
+import base64</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Initialize the Gemini client with your API key</div>
+                    <div style='font-size: 0.9em; color: #666;'>Replace with your Gemini API key</div>
 
                 </div>
                 <div class="code">
@@ -196,34 +198,73 @@ from google.genai import types</code></pre>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Configure the model with system instructions
-These instructions tell the model to act as a pirate</div>
+                    <div style='font-size: 0.9em; color: #666;'>We'll start by using an image URL.
+Load an image of a cat from a URL</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>response = client.models.generate_content(
-    model=&quot;gemini-2.0-flash&quot;,
-    config=types.GenerateContentConfig(
-        system_instruction=&quot;You are a pirate.  Answer all questions like a pirate.&quot;),
-    contents=&quot;Hello there&quot;
-)</code></pre>
+                    <pre><code>image_url = &quot;https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1260&amp;h=750&amp;dpr=1&quot;
+image_response = requests.get(image_url)
+image_content = image_response.content</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Print the model's response</div>
+                    <div style='font-size: 0.9em; color: #666;'>Ask Gemini about the cat in the image</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>print(response.text)</code></pre>
+                    <pre><code>response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash&quot;,
+    contents=[&quot;What breed of cat is this?&quot;, types.Part.from_bytes(data=image_content, mime_type=&quot;image/jpeg&quot;)]
+)
+
+print(&quot;Response from URL Image:\n&quot;, response.text)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Now we'll use a local image file.
+Load a local image of a cat and encode it as Base64</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>with open(&quot;cat.jpg&quot;, &quot;rb&quot;) as image_file:
+    encoded_string = base64.b64encode(image_file.read())</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Ensure the encoded string is a string</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>encoded_string = encoded_string.decode(&#x27;utf-8&#x27;)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Ask Gemini a question about the cat, providing the image as a Base64 string</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash&quot;,
+    contents=[&quot;Is this cat fluffy?&quot;, types.Part.from_bytes(data=base64.b64decode(encoded_string), mime_type=&quot;image/jpeg&quot;)]
+)
+
+print(&quot;\nResponse from Base64 Image:\n&quot;, response.text)</code></pre>
                 </div>
             </div>
             <hr>
             <h2>Running the Example</h2>
             <div class="row">
                 <div class="docs">
-                    <p>First, install the Google Generative AI library</p>
+                    <p>First, install the Google Generative AI library and requests</p>
                 </div>
                 <div class="code">
                     <div class="buttons">
@@ -231,7 +272,21 @@ These instructions tell the model to act as a pirate</div>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai</span></span>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai requests</span></span>
+</code></pre>
+                </div>
+            </div>
+            <div class="row">
+                <div class="docs">
+                    <p>Download an example cat image (replace with your own if needed)</p>
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy command" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">wget https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1260&amp;h=750&amp;dpr=1 -O cat.jpg</span></span>
 </code></pre>
                 </div>
             </div>
@@ -245,13 +300,11 @@ These instructions tell the model to act as a pirate</div>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python system_instructions.py</span></span>
-Ahoy there, matey! What be on yer mind?</code></pre>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python gemini-cat.py</span></span>
+Response from URL Image:
+ This looks like a British Shorthair cat.</code></pre>
                 </div>
             </div>
-            <p class="next">
-                Next example: <a href="../004-image-q-a/">Gemini Vision with Cats</a>
-            </p>
         </main>
         <footer>
             <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 05, 2025</span></p>

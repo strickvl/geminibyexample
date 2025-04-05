@@ -9,6 +9,8 @@ It's organized by sections, with each example's Python code and terminal command
   * Simple text generation
   * Streaming text
   * System prompt
+* Images Basics
+  * Gemini Vision with Cats
 
 ## Text Basics
 
@@ -74,5 +76,45 @@ print(response.text)
 $ pip install google-generative-ai
 $ python system_instructions.py
 Ahoy there, matey! What be on yer mind?
+```
+
+## Images Basics
+
+### Gemini Vision with Cats
+
+This example demonstrates how to use the Gemini API to analyze or understand images of cats, including using image URLs and base64 encoding.
+
+```python
+from google import genai
+from google.genai import types
+import requests
+import base64
+client = genai.Client(api_key="YOUR_API_KEY")
+image_url = "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+image_response = requests.get(image_url)
+image_content = image_response.content
+response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents=["What breed of cat is this?", types.Part.from_bytes(data=image_content, mime_type="image/jpeg")]
+)
+
+print("Response from URL Image:\n", response.text)
+with open("cat.jpg", "rb") as image_file:
+    encoded_string = base64.b64encode(image_file.read())
+encoded_string = encoded_string.decode('utf-8')
+response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents=["Is this cat fluffy?", types.Part.from_bytes(data=base64.b64decode(encoded_string), mime_type="image/jpeg")]
+)
+
+print("\nResponse from Base64 Image:\n", response.text)
+```
+
+```shell
+$ pip install google-generative-ai requests
+$ wget https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1 -O cat.jpg
+$ python gemini-cat.py
+Response from URL Image:
+ This looks like a British Shorthair cat.
 ```
 
