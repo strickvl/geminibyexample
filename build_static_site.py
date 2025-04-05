@@ -313,10 +313,12 @@ def generate_index_html(examples, output_dir):
         # Page content
         f.write(f"""            <h1>{SITE_TITLE}</h1>
             <p style="margin: 20px 0; color: #444; line-height: 1.6;">
-                Gemini by Example is a hands-on introduction to Google's Gemini
-                SDK and API using 
-                annotated code examples. Check out the 
-                <a href="{examples[0]["id"]}/">first example</a> 
+                Gemini by Example is a hands-on introduction to [Google's Gemini
+                SDK and API](https://ai.google.dev/gemini-api/docs)
+                using annotated code examples.
+            </p>
+            <p style="margin: 20px 0; color: #444; line-height: 1.6;">
+                Check out the <a href="{examples[0]["id"]}/index.html">first example</a> 
                 or browse the full list below.
             </p>
             <p style="margin: 20px 0; color: #444; line-height: 1.6;">
