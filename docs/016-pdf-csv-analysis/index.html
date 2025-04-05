@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube video summarization - Gemini by Example</title>
+    <title>PDF and CSV data analysis - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
     <style>
@@ -157,9 +157,9 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
                 <div>
                     <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
-                        <a href="../" style="text-decoration: none; color: #666;">Video basics</a>
+                        <a href="../" style="text-decoration: none; color: #666;">PDFs and other data types</a>
                     </div>
-                    <h1 style="margin: 0; margin-bottom: 10px;">YouTube video summarization</h1>
+                    <h1 style="margin: 0; margin-bottom: 10px;">PDF and CSV data analysis</h1>
                 </div>
                 <div style="position: relative; margin-top: 10px;">
                     <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
@@ -172,15 +172,18 @@
                 </div>
             </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
-                This example demonstrates how to summarize a YouTube video using its URL.
+                This example demonstrates how to use the Gemini API to analyze data from PDF and CSV files.
             </p>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Import the Gemini API</div>
+                    <div style='font-size: 0.9em; color: #666;'>Import necessary libraries</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>from google import genai</code></pre>
+                    <pre><code>from google import genai
+from google.genai import types
+import httpx
+import os</code></pre>
                 </div>
             </div>
             <hr>
@@ -190,36 +193,43 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)</code></pre>
+                    <pre><code>client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Construct the prompt with the YouTube video URL</div>
+                    <div style='font-size: 0.9em; color: #666;'>We start with the PDF analysis.
+Download the PDF file</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>youtube_url = &quot;https://www.youtube.com/watch?v=tAP1eZYEuKA&quot;
-prompt = f&quot;Summarize the content of this YouTube video: {youtube_url}&quot;</code></pre>
+                    <pre><code>pdf_url = &quot;https://www.princexml.com/samples/invoice/invoicesample.pdf&quot;
+pdf_data = httpx.get(pdf_url).content</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Call the API to generate content</div>
+                    <div style='font-size: 0.9em; color: #666;'>Prompt to extract main players from the PDF</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>response = client.models.generate_content(
+                    <pre><code>pdf_prompt = &quot;Identify the main companies or entities mentioned in this invoice.&quot;</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Generate content with the PDF and the prompt</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>pdf_response = client.models.generate_content(
     model=&quot;gemini-2.0-flash&quot;,
     contents=[
-        {
-            &quot;parts&quot;: [
-                {&quot;text&quot;: &quot;Can you summarize this video?&quot;},
-                {&quot;file_data&quot;: {&quot;file_uri&quot;: youtube_url}},
-            ]
-        }
+        types.Part.from_bytes(data=pdf_data, mime_type=&quot;application/pdf&quot;),
+        pdf_prompt,
     ],
 )</code></pre>
                 </div>
@@ -227,18 +237,69 @@ prompt = f&quot;Summarize the content of this YouTube video: {youtube_url}&quot;
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Print the generated summary</div>
+                    <div style='font-size: 0.9em; color: #666;'>Print the PDF analysis result</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>print(response.text)</code></pre>
+                    <pre><code>print(&quot;PDF Analysis Result:\n&quot;, pdf_response.text)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Moving on to the CSV analysis now.
+We download the CSV file</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>csv_url = &quot;https://gist.githubusercontent.com/suellenstringer-hye/f2231b3383538bcb1a5b051c7908f5b7/raw/0f4e0733a434733cda8e749bbbf33a93c2b5bbde/test.csv&quot;
+csv_data = httpx.get(csv_url).content</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Prompt to analyze the CSV data</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>csv_prompt = &quot;Analyze this data and tell me about the contents.&quot;</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Generate content with the CSV data and the prompt</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>csv_response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash&quot;,
+    contents=[
+        types.Part.from_bytes(
+            data=csv_data,
+            mime_type=&quot;text/csv&quot;,
+        ),
+        csv_prompt,
+    ],
+)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Print the CSV analysis result</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>print(&quot;\nCSV Analysis Result:\n&quot;, csv_response.text)</code></pre>
                 </div>
             </div>
             <hr>
             <h2>Running the Example</h2>
             <div class="row">
                 <div class="docs" style='font-size: 0.9em; color: #666;'>
-                    First, install the Google Generative AI library
+                    First, install the Google Generative AI library and httpx (for downloading files)
                 </div>
                 <div class="code">
                     <div class="buttons">
@@ -246,7 +307,7 @@ prompt = f&quot;Summarize the content of this YouTube video: {youtube_url}&quot;
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai</span></span>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai httpx pandas</span></span>
 </code></pre>
                 </div>
             </div>
@@ -260,19 +321,19 @@ prompt = f&quot;Summarize the content of this YouTube video: {youtube_url}&quot;
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python youtube-summarization.py</span></span>
-Sure, here is a summary of the video!</code></pre>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python pdf_csv_analysis.py</span></span>
+PDF Analysis Result:
+ The main company mentioned in the invoice is Sunny Farm.</code></pre>
                 </div>
             </div>
             <hr>
             <h4>Further Information</h4>
             <ul style="font-size: 0.9em;">
-                <li><a href="https://ai.google.dev/gemini-api/docs/vision?lang=python#youtube"
+                <li><a href="https://ai.google.dev/gemini-api/docs/document-processing?lang=python"
                          target="_blank">Gemini docs link 1</a></li>
+                <li><a href="https://ai.google.dev/gemini-api/docs/document-processing?lang=rest"
+                         target="_blank">Gemini docs link 2</a></li>
             </ul>
-            <p class="next">
-                Next example: <a href="../016-pdf-csv-analysis/">PDF and CSV data analysis</a>
-            </p>
         </main>
         <footer>
             <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>

@@ -53,11 +53,10 @@
       "description": "",
       "order": 5,
       "examples": [
-        "016-pdf-analysis",
-        "017-content-conversion",
-        "018-content-summarization",
-        "019-content-translation",
-        "020-structured-extraction"
+        "016-pdf-csv-analysis",
+        "017-content-summarization",
+        "018-content-translation",
+        "019-structured-data-extraction"
       ]
     }
   ]

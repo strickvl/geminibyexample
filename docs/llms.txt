@@ -24,6 +24,8 @@ It's organized by sections, with each example's Python code and terminal command
   * Video summarization
   * Video transcription
   * YouTube video summarization
+* PDFs and other data types
+  * PDF and CSV data analysis
 
 ## Text basics
 
@@ -613,4 +615,54 @@ Sure, here is a summary of the video!
 
 For more information, see the original documentation:
 - https://ai.google.dev/gemini-api/docs/vision?lang=python#youtube
+
+## PDFs and other data types
+
+### PDF and CSV data analysis
+
+This example demonstrates how to use the Gemini API to analyze data from PDF and CSV files.
+
+```python
+from google import genai
+from google.genai import types
+import httpx
+import os
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+pdf_url = "https://www.princexml.com/samples/invoice/invoicesample.pdf"
+pdf_data = httpx.get(pdf_url).content
+pdf_prompt = "Identify the main companies or entities mentioned in this invoice."
+pdf_response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents=[
+        types.Part.from_bytes(data=pdf_data, mime_type="application/pdf"),
+        pdf_prompt,
+    ],
+)
+print("PDF Analysis Result:\n", pdf_response.text)
+csv_url = "https://gist.githubusercontent.com/suellenstringer-hye/f2231b3383538bcb1a5b051c7908f5b7/raw/0f4e0733a434733cda8e749bbbf33a93c2b5bbde/test.csv"
+csv_data = httpx.get(csv_url).content
+csv_prompt = "Analyze this data and tell me about the contents."
+csv_response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents=[
+        types.Part.from_bytes(
+            data=csv_data,
+            mime_type="text/csv",
+        ),
+        csv_prompt,
+    ],
+)
+print("\nCSV Analysis Result:\n", csv_response.text)
+```
+
+```shell
+$ pip install google-generative-ai httpx pandas
+$ python pdf_csv_analysis.py
+PDF Analysis Result:
+ The main company mentioned in the invoice is Sunny Farm.
+```
+
+For more information, see the original documentation:
+- https://ai.google.dev/gemini-api/docs/document-processing?lang=python
+- https://ai.google.dev/gemini-api/docs/document-processing?lang=rest
 

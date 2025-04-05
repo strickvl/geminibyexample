@@ -3027,6 +3027,304 @@
       ],
       "section_id": "004-basic-video",
       "section_title": "Video basics"
+    },
+    {
+      "id": "016-pdf-csv-analysis",
+      "title": "PDF and CSV data analysis",
+      "description": "This example demonstrates how to use the Gemini API to analyze data from PDF and CSV files.",
+      "order": 16,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import necessary libraries\n",
+          "display_code": "",
+          "annotation": "Import necessary libraries",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ],
+          "target_line_range": [
+            5,
+            9
+          ]
+        },
+        {
+          "code": "from google import genai\nfrom google.genai import types\nimport httpx\nimport os\n\n",
+          "display_code": "from google import genai\nfrom google.genai import types\nimport httpx\nimport os\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            9
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 10,
+          "line_range": [
+            10,
+            10
+          ],
+          "target_line_range": [
+            11,
+            12
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 11,
+          "line_range": [
+            11,
+            12
+          ]
+        },
+        {
+          "code": "# We start with the PDF analysis.\n# Download the PDF file\n",
+          "display_code": "",
+          "annotation": "We start with the PDF analysis.\nDownload the PDF file",
+          "is_comment": true,
+          "start_line": 13,
+          "line_range": [
+            13,
+            14
+          ],
+          "target_line_range": [
+            15,
+            17
+          ]
+        },
+        {
+          "code": "pdf_url = \"https://www.princexml.com/samples/invoice/invoicesample.pdf\"\npdf_data = httpx.get(pdf_url).content\n\n",
+          "display_code": "pdf_url = \"https://www.princexml.com/samples/invoice/invoicesample.pdf\"\npdf_data = httpx.get(pdf_url).content\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 15,
+          "line_range": [
+            15,
+            17
+          ]
+        },
+        {
+          "code": "# Prompt to extract main players from the PDF\n",
+          "display_code": "",
+          "annotation": "Prompt to extract main players from the PDF",
+          "is_comment": true,
+          "start_line": 18,
+          "line_range": [
+            18,
+            18
+          ],
+          "target_line_range": [
+            19,
+            20
+          ]
+        },
+        {
+          "code": "pdf_prompt = \"Identify the main companies or entities mentioned in this invoice.\"\n\n",
+          "display_code": "pdf_prompt = \"Identify the main companies or entities mentioned in this invoice.\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 19,
+          "line_range": [
+            19,
+            20
+          ]
+        },
+        {
+          "code": "# Generate content with the PDF and the prompt\n",
+          "display_code": "",
+          "annotation": "Generate content with the PDF and the prompt",
+          "is_comment": true,
+          "start_line": 21,
+          "line_range": [
+            21,
+            21
+          ],
+          "target_line_range": [
+            22,
+            29
+          ]
+        },
+        {
+          "code": "pdf_response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\n        types.Part.from_bytes(data=pdf_data, mime_type=\"application/pdf\"),\n        pdf_prompt,\n    ],\n)\n\n",
+          "display_code": "pdf_response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\n        types.Part.from_bytes(data=pdf_data, mime_type=\"application/pdf\"),\n        pdf_prompt,\n    ],\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 22,
+          "line_range": [
+            22,
+            29
+          ]
+        },
+        {
+          "code": "# Print the PDF analysis result\n",
+          "display_code": "",
+          "annotation": "Print the PDF analysis result",
+          "is_comment": true,
+          "start_line": 30,
+          "line_range": [
+            30,
+            30
+          ],
+          "target_line_range": [
+            31,
+            32
+          ]
+        },
+        {
+          "code": "print(\"PDF Analysis Result:\\n\", pdf_response.text)\n\n",
+          "display_code": "print(\"PDF Analysis Result:\\n\", pdf_response.text)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 31,
+          "line_range": [
+            31,
+            32
+          ]
+        },
+        {
+          "code": "# Moving on to the CSV analysis now.\n# We download the CSV file\n",
+          "display_code": "",
+          "annotation": "Moving on to the CSV analysis now.\nWe download the CSV file",
+          "is_comment": true,
+          "start_line": 33,
+          "line_range": [
+            33,
+            34
+          ],
+          "target_line_range": [
+            35,
+            37
+          ]
+        },
+        {
+          "code": "csv_url = \"https://gist.githubusercontent.com/suellenstringer-hye/f2231b3383538bcb1a5b051c7908f5b7/raw/0f4e0733a434733cda8e749bbbf33a93c2b5bbde/test.csv\"\ncsv_data = httpx.get(csv_url).content\n\n",
+          "display_code": "csv_url = \"https://gist.githubusercontent.com/suellenstringer-hye/f2231b3383538bcb1a5b051c7908f5b7/raw/0f4e0733a434733cda8e749bbbf33a93c2b5bbde/test.csv\"\ncsv_data = httpx.get(csv_url).content\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 35,
+          "line_range": [
+            35,
+            37
+          ]
+        },
+        {
+          "code": "# Prompt to analyze the CSV data\n",
+          "display_code": "",
+          "annotation": "Prompt to analyze the CSV data",
+          "is_comment": true,
+          "start_line": 38,
+          "line_range": [
+            38,
+            38
+          ],
+          "target_line_range": [
+            39,
+            40
+          ]
+        },
+        {
+          "code": "csv_prompt = \"Analyze this data and tell me about the contents.\"\n\n",
+          "display_code": "csv_prompt = \"Analyze this data and tell me about the contents.\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 39,
+          "line_range": [
+            39,
+            40
+          ]
+        },
+        {
+          "code": "# Generate content with the CSV data and the prompt\n",
+          "display_code": "",
+          "annotation": "Generate content with the CSV data and the prompt",
+          "is_comment": true,
+          "start_line": 41,
+          "line_range": [
+            41,
+            41
+          ],
+          "target_line_range": [
+            42,
+            52
+          ]
+        },
+        {
+          "code": "csv_response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\n        types.Part.from_bytes(\n            data=csv_data,\n            mime_type=\"text/csv\",\n        ),\n        csv_prompt,\n    ],\n)\n\n",
+          "display_code": "csv_response = client.models.generate_content(\n    model=\"gemini-2.0-flash\",\n    contents=[\n        types.Part.from_bytes(\n            data=csv_data,\n            mime_type=\"text/csv\",\n        ),\n        csv_prompt,\n    ],\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 42,
+          "line_range": [
+            42,
+            52
+          ]
+        },
+        {
+          "code": "# Print the CSV analysis result\n",
+          "display_code": "",
+          "annotation": "Print the CSV analysis result",
+          "is_comment": true,
+          "start_line": 53,
+          "line_range": [
+            53,
+            53
+          ],
+          "target_line_range": [
+            54,
+            54
+          ]
+        },
+        {
+          "code": "print(\"\\nCSV Analysis Result:\\n\", csv_response.text)\n",
+          "display_code": "print(\"\\nCSV Analysis Result:\\n\", csv_response.text)\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 54,
+          "line_range": [
+            54,
+            54
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library and httpx (for downloading files)",
+          "command": "pip install google-generative-ai httpx pandas",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python pdf_csv_analysis.py",
+          "output": "PDF Analysis Result:\n The main company mentioned in the invoice is Sunny Farm."
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/document-processing?lang=python",
+        "https://ai.google.dev/gemini-api/docs/document-processing?lang=rest"
+      ],
+      "section_id": "005-other-data-types",
+      "section_title": "PDFs and other data types"
     }
   ],
   "sections": [
@@ -3083,7 +3381,7 @@
       "description": "",
       "order": 5,
       "examples": [
-        "016-pdf-analysis",
+        "016-pdf-csv-analysis",
         "017-content-conversion",
         "018-content-summarization",
         "019-content-translation",
