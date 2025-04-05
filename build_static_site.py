@@ -25,8 +25,8 @@ SITE_TITLE = "Gemini by Example"
 SITE_DESCRIPTION = "Learn the Gemini API through annotated examples"
 
 
-def load_examples() -> List[Dict[str, Any]]:
-    """Load examples from the JSON file."""
+def load_examples_data() -> Dict[str, Any]:
+    """Load examples and sections from the JSON file."""
     try:
         data_file = Path(__file__).parent / "data" / "examples.json"
         logger.info("Loading examples from %s" % data_file)
@@ -34,22 +34,59 @@ def load_examples() -> List[Dict[str, Any]]:
             data = json.load(f)
 
         examples = data.get("examples", [])
-        logger.info("Loaded %d examples" % len(examples))
-        return examples
+        sections = data.get("sections", [])
+        logger.info(
+            "Loaded %d examples and %d sections" % (len(examples), len(sections))
+        )
+        return {"examples": examples, "sections": sections}
     except Exception as e:
         logger.error("Error loading examples: %s" % e)
-        return []
+        return {"examples": [], "sections": []}
 
 
-def find_next_example(examples: List[Dict[str, Any]], current_order: int) -> Optional[Dict[str, Any]]:
-    """Find the next example based on order."""
-    for example in examples:
+def load_examples() -> List[Dict[str, Any]]:
+    """Load examples from the JSON file (backward compatibility)."""
+    return load_examples_data().get("examples", [])
+
+
+def find_next_example(
+    examples: List[Dict[str, Any]], current_example: Dict[str, Any]
+) -> Optional[Dict[str, Any]]:
+    """
+    Find the next example based on the example order and section.
+    This function respects section organization, continuing to the next section when needed.
+
+    Args:
+        examples: List of all examples
+        current_example: The current example
+
+    Returns:
+        The next example or None if there is no next example
+    """
+    current_order = current_example["order"]
+    current_section_id = current_example.get("section_id")
+
+    # First, try to find the next example in the same section
+    if current_section_id:
+        same_section_examples = [
+            e for e in examples if e.get("section_id") == current_section_id
+        ]
+        for example in sorted(same_section_examples, key=lambda e: e["order"]):
+            if example["order"] > current_order:
+                return example
+
+    # If we're at the end of a section or there's no section info,
+    # find the next example in any section
+    for example in sorted(examples, key=lambda e: e["order"]):
         if example["order"] > current_order:
             return example
+
     return None
 
 
-def generate_html_head(title: str, include_main_css: bool = True, base_url: str = ".") -> str:
+def generate_html_head(
+    title: str, include_main_css: bool = True, base_url: str = "."
+) -> str:
     """Generate HTML head section.
 
     Args:
@@ -76,7 +113,7 @@ def generate_html_head(title: str, include_main_css: bool = True, base_url: str 
             padding: 0;
         }
         .container {
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 0 20px;
         }
@@ -303,9 +340,14 @@ def generate_html_footer() -> str:
 """
 
 
-def generate_index_html(examples: List[Dict[str, Any]], output_dir: Path) -> None:
-    """Generate index.html page."""
-    logger.info("Generating index page with %d examples" % len(examples))
+def generate_index_html(
+    examples: List[Dict[str, Any]], sections: List[Dict[str, Any]], output_dir: Path
+) -> None:
+    """Generate index.html page with section grouping."""
+    logger.info(
+        "Generating index page with %d examples and %d sections"
+        % (len(examples), len(sections))
+    )
 
     output_file = output_dir / "index.html"
     with open(output_file, "w") as f:
@@ -314,13 +356,12 @@ def generate_index_html(examples: List[Dict[str, Any]], output_dir: Path) -> Non
         # Page content
         f.write(f"""            <h1>{SITE_TITLE}</h1>
             <p style="margin: 20px 0; color: #444; line-height: 1.6;">
-                Gemini by Example is a hands-on introduction to [Google's Gemini
-                SDK and API](https://ai.google.dev/gemini-api/docs)
-                using annotated code examples.
+                Gemini by Example is a hands-on introduction to <a href="https://ai.google.dev/gemini-api/docs" target="_blank">Google's Gemini
+                SDK and API</a> using annotated code examples.
             </p>
             <p style="margin: 20px 0; color: #444; line-height: 1.6;">
-                Check out the <a href="{examples[0]["id"]}/index.html">first example</a> 
-                or browse the full list below.
+                Check out the <a href="{examples[0]["id"]}/">{examples[0]["title"]}</a> 
+                or browse the sections below.
             </p>
             <p style="margin: 20px 0; color: #444; line-height: 1.6;">
                 Examples here assume Python >=3.9.
@@ -328,11 +369,43 @@ def generate_index_html(examples: List[Dict[str, Any]], output_dir: Path) -> Non
             <div style="margin-top: 30px;">
 """)
 
-        # Example links
-        for example in examples:
-            f.write(f"""                <div class="example-link">
-                    <a href="{example["id"]}/">{example["title"]}</a>
-                </div>
+        # If we have sections defined, group examples by section
+        if sections:
+            # Group examples by section_id
+            examples_by_section = {}
+            for example in examples:
+                section_id = example.get("section_id", "999-misc")
+                if section_id not in examples_by_section:
+                    examples_by_section[section_id] = []
+                examples_by_section[section_id].append(example)
+
+            # Display sections and their examples
+            for section in sorted(sections, key=lambda s: s["order"]):
+                section_examples = examples_by_section.get(section["id"], [])
+                if not section_examples:
+                    continue
+
+                # Section header
+                f.write(f"""                <h2 style="margin-top: 40px; margin-bottom: 15px; color: #333;">{section["title"]}</h2>
+""")
+                # Only include description paragraph if it's not empty
+                description = section.get("description", "")
+                if description:
+                    f.write(f"""                <p style="margin: 0 0 20px 0; color: #555;">{description}</p>
+""")
+
+                # Example links for this section
+                for example in sorted(section_examples, key=lambda e: e["order"]):
+                    f.write(f"""                <div class="example-link">
+                        <a href="{example["id"]}/">{example["title"]}</a>
+                    </div>
+""")
+        else:
+            # Fallback to flat list if no sections
+            for example in examples:
+                f.write(f"""                <div class="example-link">
+                        <a href="{example["id"]}/">{example["title"]}</a>
+                    </div>
 """)
 
         f.write("            </div>\n")
@@ -341,7 +414,9 @@ def generate_index_html(examples: List[Dict[str, Any]], output_dir: Path) -> Non
     logger.info("Generated index page at %s" % output_file)
 
 
-def generate_example_html(example: Dict[str, Any], examples: List[Dict[str, Any]], output_dir: Path) -> None:
+def generate_example_html(
+    example: Dict[str, Any], examples: List[Dict[str, Any]], output_dir: Path
+) -> None:
     """Generate an individual example page."""
     logger.info(
         "Generating page for example: %s - %s" % (example["id"], example["title"])
@@ -355,13 +430,21 @@ def generate_example_html(example: Dict[str, Any], examples: List[Dict[str, Any]
     output_file = example_dir / "index.html"
 
     # Find the next example
-    next_example = find_next_example(examples, example["order"])
+    next_example = find_next_example(examples, example)
 
     with open(output_file, "w") as f:
         f.write(generate_html_head(f"{example['title']} - {SITE_TITLE}", base_url=".."))
 
-        # Page title
-        f.write(f"""            <h1>{example["title"]}</h1>
+        # Section and page title
+        section_title = example.get("section_title", "")
+        if section_title:
+            f.write(f"""            <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
+                <a href="../" style="text-decoration: none; color: #666;">{section_title}</a>
+            </div>
+            <h1>{example["title"]}</h1>
+""")
+        else:
+            f.write(f"""            <h1>{example["title"]}</h1>
 """)
 
         # Description if available
@@ -519,7 +602,10 @@ def copy_static_files(source_dir: Path, output_dir: Path) -> None:
 
 def generate_static_site() -> None:
     """Generate the complete static site."""
-    examples = load_examples()
+    data = load_examples_data()
+    examples = data.get("examples", [])
+    sections = data.get("sections", [])
+
     if not examples:
         logger.error("No examples found. Exiting.")
         return
@@ -536,7 +622,7 @@ def generate_static_site() -> None:
     copy_static_files(static_dir, output_dir)
 
     # Generate index page
-    generate_index_html(examples, output_dir)
+    generate_index_html(examples, sections, output_dir)
 
     # Generate example pages
     for example in examples:

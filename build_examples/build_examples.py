@@ -4,6 +4,7 @@ Build script for Gemini by Example.
 
 This script processes example directories containing source files (Python code,
 shell commands, annotations) and compiles them into an optimised data format (JSON).
+It also supports organizing examples into sections.
 """
 
 import os
@@ -12,7 +13,7 @@ import re
 import argparse
 import logging
 from pathlib import Path
-from typing import Dict, List, Any, Optional, Tuple
+from typing import Dict, List, Any, Optional, Tuple, Set
 
 # Configure logging
 logging.basicConfig(
@@ -245,27 +246,104 @@ def process_example_directory(example_dir: Path) -> Dict[str, Any]:
     return example_data
 
 
-def process_examples(example_dirs: List[Path]) -> Dict[str, Any]:
+def load_sections(project_root: Path) -> Dict[str, Any]:
+    """
+    Load section definitions from sections.json file.
+    
+    Args:
+        project_root: Path to the project root directory
+        
+    Returns:
+        Dictionary containing section definitions
+    """
+    sections_file = project_root / "data" / "sections.json"
+    if not sections_file.exists():
+        logger.warning(f"No sections.json file found at {sections_file}. Using flat structure.")
+        return {"sections": []}
+    
+    try:
+        with open(sections_file, "r") as f:
+            return json.load(f)
+    except Exception as e:
+        logger.error(f"Error loading sections.json: {e}. Using flat structure.")
+        return {"sections": []}
+
+
+def process_examples(example_dirs: List[Path], project_root: Path) -> Dict[str, Any]:
     """
     Process all example directories and compile them into a JSON structure.
+    Organizes examples into sections if sections.json is available.
 
     Args:
         example_dirs: List of paths to example directories
+        project_root: Path to the project root directory
 
     Returns:
-        Dictionary representing the compiled examples data
+        Dictionary representing the compiled examples data with sections
     """
+    # Process all examples
     examples = []
+    example_ids = set()
 
     for example_dir in example_dirs:
         logger.info(f"Processing example: {example_dir.name}")
         example_data = process_example_directory(example_dir)
         if example_data:
             examples.append(example_data)
+            example_ids.add(example_data["id"])
 
     # Sort examples by order
     examples.sort(key=lambda e: e["order"])
-
+    
+    # Load sections if available
+    sections_data = load_sections(project_root)
+    sections = sections_data.get("sections", [])
+    
+    # If we have sections defined, organize examples by section
+    if sections:
+        # Add section information to each example
+        for section in sections:
+            section_id = section["id"]
+            for example_id in section.get("examples", []):
+                if example_id in example_ids:
+                    # Find the example and add section info
+                    for example in examples:
+                        if example["id"] == example_id:
+                            example["section_id"] = section_id
+                            example["section_title"] = section["title"]
+                            break
+        
+        # For examples not assigned to a section, create a default section
+        uncategorized_examples = [e for e in examples if "section_id" not in e]
+        if uncategorized_examples:
+            default_section = {
+                "id": "999-misc",
+                "title": "Miscellaneous Examples",
+                "description": "Additional examples that don't fit into other categories",
+                "order": 999
+            }
+            for example in uncategorized_examples:
+                example["section_id"] = default_section["id"]
+                example["section_title"] = default_section["title"]
+            
+            # Add default section if needed
+            sections.append(default_section)
+        
+        # Final sorted list based on section order then example order
+        sorted_examples = sorted(
+            examples, 
+            key=lambda e: (
+                next((s["order"] for s in sections if s["id"] == e.get("section_id", "999-misc")), 999),
+                e["order"]
+            )
+        )
+        
+        return {
+            "examples": sorted_examples,
+            "sections": sections
+        }
+    
+    # If no sections, return flat structure
     return {"examples": examples}
 
 
@@ -302,7 +380,7 @@ def main():
     logger.info(f"Found {len(example_dirs)} example directories")
 
     logger.info("Processing examples...")
-    data = process_examples(example_dirs)
+    data = process_examples(example_dirs, project_root)
 
     logger.info(f"Writing output to {output_file}")
     output_file.parent.mkdir(parents=True, exist_ok=True)

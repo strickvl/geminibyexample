@@ -81,7 +81,9 @@
           "command": "python basic-generation.py",
           "output": "AI works by learning patterns from data, then using those patterns to make predictions or generate new content. It processes information through neural networks that mimic human brain connections, identifying features and relationships to perform tasks like recognition, prediction, and generation."
         }
-      ]
+      ],
+      "section_id": "001-basic-text",
+      "section_title": "Basic Examples: Text"
     },
     {
       "id": "002-values",
@@ -294,6 +296,28 @@
           "command": "python -c \"print('Hello from Python!'); print(1 + 2)\"",
           "output": "Hello from Python!\n3"
         }
+      ],
+      "section_id": "002-basic-images",
+      "section_title": "Basic Examples: Images"
+    }
+  ],
+  "sections": [
+    {
+      "id": "001-basic-text",
+      "title": "Basic Examples: Text",
+      "description": "",
+      "order": 1,
+      "examples": [
+        "001-basic-generation"
+      ]
+    },
+    {
+      "id": "002-basic-images",
+      "title": "Basic Examples: Images",
+      "description": "Getting started with Gemini API",
+      "order": 2,
+      "examples": [
+        "002-values"
       ]
     }
   ]

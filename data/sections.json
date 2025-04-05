@@ -1,0 +1,18 @@
+{
+  "sections": [
+    {
+      "id": "001-basic-text",
+      "title": "Basic Examples: Text",
+      "description": "",
+      "order": 1,
+      "examples": ["001-basic-generation"]
+    },
+    {
+      "id": "002-basic-images",
+      "title": "Basic Examples: Images",
+      "description": "Getting started with Gemini API",
+      "order": 2,
+      "examples": ["002-values"]
+    }
+  ]
+}
