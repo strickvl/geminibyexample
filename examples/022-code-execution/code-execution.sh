@@ -1,5 +1,5 @@
 # First, install the Google Generative AI library
-$ pip install google-generative-ai rich
+$ pip install google-genai rich
 
 # Save the code to code-execution.py
 # Then run the program with Python

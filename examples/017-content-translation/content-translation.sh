@@ -1,5 +1,5 @@
 # First, install the Google Generative AI library and requests
-$ pip install google-generative-ai requests
+$ pip install google-genai requests
 
 # Save the code to translate.py
 # Then run the program with Python

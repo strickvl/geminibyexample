@@ -1,0 +1,2 @@
+https://ai.google.dev/gemini-api/docs/caching?lang=python
+https://ai.google.dev/api/caching

@@ -1,5 +1,5 @@
 # First, install the Google Generative AI library and httpx (for downloading files)
-$ pip install google-generative-ai httpx pandas
+$ pip install google-genai httpx pandas
 
 # Then run the program with Python
 $ python pdf_csv_analysis.py

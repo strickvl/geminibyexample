@@ -73,7 +73,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library",
-          "command": "pip install google-generative-ai",
+          "command": "pip install google-genai",
           "output": ""
         },
         {
@@ -220,7 +220,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library",
-          "command": "pip install google-generative-ai",
+          "command": "pip install google-genai",
           "output": ""
         },
         {
@@ -361,7 +361,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library",
-          "command": "pip install google-generative-ai",
+          "command": "pip install google-genai",
           "output": ""
         },
         {
@@ -502,7 +502,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library",
-          "command": "pip install google-generative-ai",
+          "command": "pip install google-genai",
           "output": ""
         },
         {
@@ -721,7 +721,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library and pydantic",
-          "command": "pip install google-generative-ai pydantic",
+          "command": "pip install google-genai pydantic",
           "output": ""
         },
         {
@@ -941,7 +941,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library and requests",
-          "command": "pip install google-generative-ai requests",
+          "command": "pip install google-genai requests",
           "output": ""
         },
         {
@@ -1139,7 +1139,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library",
-          "command": "pip install google-generative-ai Pillow",
+          "command": "pip install google-genai Pillow",
           "output": ""
         },
         {
@@ -1364,7 +1364,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library",
-          "command": "pip install google-generative-ai Pillow requests",
+          "command": "pip install google-genai Pillow requests",
           "output": ""
         },
         {
@@ -1589,7 +1589,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library, requests, and Pillow",
-          "command": "pip install google-generative-ai Pillow requests",
+          "command": "pip install google-genai Pillow requests",
           "output": ""
         },
         {
@@ -2068,7 +2068,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library",
-          "command": "pip install google-generative-ai",
+          "command": "pip install google-genai",
           "output": ""
         },
         {
@@ -2267,7 +2267,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library and requests",
-          "command": "pip install google-generative-ai requests",
+          "command": "pip install google-genai requests",
           "output": ""
         },
         {
@@ -2486,7 +2486,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library",
-          "command": "pip install google-generative-ai",
+          "command": "pip install google-genai",
           "output": ""
         },
         {
@@ -2679,7 +2679,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library and requests",
-          "command": "pip install google-generative-ai requests",
+          "command": "pip install google-genai requests",
           "output": ""
         },
         {
@@ -2846,7 +2846,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library",
-          "command": "pip install google-generative-ai",
+          "command": "pip install google-genai",
           "output": ""
         },
         {
@@ -3013,7 +3013,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library",
-          "command": "pip install google-generative-ai",
+          "command": "pip install google-genai",
           "output": ""
         },
         {
@@ -3206,7 +3206,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library",
-          "command": "pip install google-generative-ai",
+          "command": "pip install google-genai",
           "output": ""
         },
         {
@@ -3373,7 +3373,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library",
-          "command": "pip install google-generative-ai",
+          "command": "pip install google-genai",
           "output": ""
         },
         {
@@ -3670,7 +3670,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library and httpx (for downloading files)",
-          "command": "pip install google-generative-ai httpx pandas",
+          "command": "pip install google-genai httpx pandas",
           "output": ""
         },
         {
@@ -3890,7 +3890,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library and requests",
-          "command": "pip install google-generative-ai requests",
+          "command": "pip install google-genai requests",
           "output": ""
         },
         {
@@ -4162,7 +4162,7 @@
       "shell_segments": [
         {
           "explanation": "Install the Google Generative AI library and Pydantic",
-          "command": "pip install google-generative-ai pydantic requests",
+          "command": "pip install google-genai pydantic requests",
           "output": ""
         },
         {
@@ -4772,7 +4772,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library and requests",
-          "command": "pip install google-generative-ai requests",
+          "command": "pip install google-genai requests",
           "output": ""
         },
         {
@@ -4914,7 +4914,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library",
-          "command": "pip install google-generative-ai rich",
+          "command": "pip install google-genai rich",
           "output": ""
         },
         {
@@ -5114,7 +5114,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the necessary libraries",
-          "command": "pip install google-generative-ai mcp",
+          "command": "pip install google-genai mcp",
           "output": ""
         },
         {
@@ -5359,7 +5359,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library",
-          "command": "pip install google-generative-ai",
+          "command": "pip install google-genai",
           "output": ""
         },
         {
@@ -5558,7 +5558,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library",
-          "command": "pip install google-generative-ai",
+          "command": "pip install google-genai",
           "output": ""
         },
         {
@@ -5777,7 +5777,7 @@
       "shell_segments": [
         {
           "explanation": "Install the Google Generative AI library",
-          "command": "pip install google-generative-ai",
+          "command": "pip install google-genai",
           "output": ""
         },
         {
@@ -5925,6 +5925,330 @@
       "image_data": [],
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/tokens?lang=python#multimodal-tokens"
+      ],
+      "section_id": "007-tokens-context-windows",
+      "section_title": "Token counting & context windows"
+    },
+    {
+      "id": "028-context-caching",
+      "title": "Context caching",
+      "description": "This example demonstrates how to use the Gemini API's context caching feature to\nefficiently query a large document multiple times without resending it with each request.\nThis can reduce costs when repeatedly referencing the same content.",
+      "order": 28,
+      "code_segments": [
+        {
+          "code": "\nfrom google import genai\nfrom google.genai.types import CreateCachedContentConfig, GenerateContentConfig\nimport os\nimport time\nimport requests\n\n",
+          "display_code": "\nfrom google import genai\nfrom google.genai.types import CreateCachedContentConfig, GenerateContentConfig\nimport os\nimport time\nimport requests\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            11
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 12,
+          "line_range": [
+            12,
+            12
+          ],
+          "target_line_range": [
+            13,
+            14
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 13,
+          "line_range": [
+            13,
+            14
+          ]
+        },
+        {
+          "code": "# Specify a versioned model that supports context caching\n# Note: Must use explicit version suffix (-001) for caching\n",
+          "display_code": "",
+          "annotation": "Specify a versioned model that supports context caching\nNote: Must use explicit version suffix (-001) for caching",
+          "is_comment": true,
+          "start_line": 15,
+          "line_range": [
+            15,
+            16
+          ],
+          "target_line_range": [
+            17,
+            18
+          ]
+        },
+        {
+          "code": "model_id = \"gemini-1.5-flash-001\"\n\n",
+          "display_code": "model_id = \"gemini-1.5-flash-001\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 17,
+          "line_range": [
+            17,
+            18
+          ]
+        },
+        {
+          "code": "# Load a large document (e.g., technical documentation).\n# For this example, we assume the document is in markdown format.\n",
+          "display_code": "",
+          "annotation": "Load a large document (e.g., technical documentation).\nFor this example, we assume the document is in markdown format.",
+          "is_comment": true,
+          "start_line": 19,
+          "line_range": [
+            19,
+            20
+          ],
+          "target_line_range": [
+            21,
+            24
+          ]
+        },
+        {
+          "code": "response = requests.get(\"https://zenml.io/llms.txt\")\nresponse.raise_for_status()  # Raise an exception for HTTP errors\napi_docs = response.text\n\n",
+          "display_code": "response = requests.get(\"https://zenml.io/llms.txt\")\nresponse.raise_for_status()  # Raise an exception for HTTP errors\napi_docs = response.text\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 21,
+          "line_range": [
+            21,
+            24
+          ]
+        },
+        {
+          "code": "# Create a cache with the document and system instructions\n",
+          "display_code": "",
+          "annotation": "Create a cache with the document and system instructions",
+          "is_comment": true,
+          "start_line": 25,
+          "line_range": [
+            25,
+            25
+          ],
+          "target_line_range": [
+            26,
+            39
+          ]
+        },
+        {
+          "code": "cache = client.caches.create(\n    model=model_id,\n    config=CreateCachedContentConfig(\n        display_name=\"ZenML LLMs.txt Documentation Cache\",  # Used to identify the cache\n        system_instruction=(\n            \"You are a technical documentation expert. \"\n            \"Answer questions about the ZenML documentation provided. \"\n            \"Keep your answers concise and to the point.\"\n        ),\n        contents=[api_docs],\n        ttl=\"900s\",  # Cache for 15 minutes\n    ),\n)\n\n",
+          "display_code": "cache = client.caches.create(\n    model=model_id,\n    config=CreateCachedContentConfig(\n        display_name=\"ZenML LLMs.txt Documentation Cache\",  # Used to identify the cache\n        system_instruction=(\n            \"You are a technical documentation expert. \"\n            \"Answer questions about the ZenML documentation provided. \"\n            \"Keep your answers concise and to the point.\"\n        ),\n        contents=[api_docs],\n        ttl=\"900s\",  # Cache for 15 minutes\n    ),\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 26,
+          "line_range": [
+            26,
+            39
+          ]
+        },
+        {
+          "code": "# Display cache information\n",
+          "display_code": "",
+          "annotation": "Display cache information",
+          "is_comment": true,
+          "start_line": 40,
+          "line_range": [
+            40,
+            40
+          ],
+          "target_line_range": [
+            41,
+            44
+          ]
+        },
+        {
+          "code": "print(f\"Cache created with name: {cache.name}\")\nprint(f\"Cached token count: {cache.usage_metadata.total_token_count}\")\nprint(f\"Cache expires at: {cache.expire_time}\")\n\n",
+          "display_code": "print(f\"Cache created with name: {cache.name}\")\nprint(f\"Cached token count: {cache.usage_metadata.total_token_count}\")\nprint(f\"Cache expires at: {cache.expire_time}\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 41,
+          "line_range": [
+            41,
+            44
+          ]
+        },
+        {
+          "code": "# Define multiple queries to demonstrate reuse of cached content\n",
+          "display_code": "",
+          "annotation": "Define multiple queries to demonstrate reuse of cached content",
+          "is_comment": true,
+          "start_line": 45,
+          "line_range": [
+            45,
+            45
+          ],
+          "target_line_range": [
+            46,
+            50
+          ]
+        },
+        {
+          "code": "queries = [\n    \"What are the recommended use cases for ZenML's pipeline orchestration?\",\n    \"How does ZenML integrate with cloud providers?\",\n]\n\n",
+          "display_code": "queries = [\n    \"What are the recommended use cases for ZenML's pipeline orchestration?\",\n    \"How does ZenML integrate with cloud providers?\",\n]\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 46,
+          "line_range": [
+            46,
+            50
+          ]
+        },
+        {
+          "code": "# Run multiple queries using the same cached content\n",
+          "display_code": "",
+          "annotation": "Run multiple queries using the same cached content",
+          "is_comment": true,
+          "start_line": 51,
+          "line_range": [
+            51,
+            51
+          ],
+          "target_line_range": [
+            52,
+            54
+          ]
+        },
+        {
+          "code": "for query in queries:\n    print(f\"\\nQuery: {query}\")\n\n",
+          "display_code": "for query in queries:\n    print(f\"\\nQuery: {query}\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 52,
+          "line_range": [
+            52,
+            54
+          ]
+        },
+        {
+          "code": "    # Generate response using the cached content\n",
+          "display_code": "",
+          "annotation": "Generate response using the cached content",
+          "is_comment": true,
+          "start_line": 55,
+          "line_range": [
+            55,
+            55
+          ],
+          "target_line_range": [
+            56,
+            61
+          ]
+        },
+        {
+          "code": "    response = client.models.generate_content(\n        model=model_id,\n        contents=query,\n        config=GenerateContentConfig(cached_content=cache.name),\n    )\n\n",
+          "display_code": "    response = client.models.generate_content(\n        model=model_id,\n        contents=query,\n        config=GenerateContentConfig(cached_content=cache.name),\n    )\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 56,
+          "line_range": [
+            56,
+            61
+          ]
+        },
+        {
+          "code": "    # Print token usage statistics to demonstrate savings\n",
+          "display_code": "",
+          "annotation": "Print token usage statistics to demonstrate savings",
+          "is_comment": true,
+          "start_line": 62,
+          "line_range": [
+            62,
+            62
+          ],
+          "target_line_range": [
+            63,
+            66
+          ]
+        },
+        {
+          "code": "    print(f\"Total tokens: {response.usage_metadata.total_token_count}\")\n    print(f\"Cached tokens: {response.usage_metadata.cached_content_token_count}\")\n    print(f\"Output tokens: {response.usage_metadata.candidates_token_count}\")\n\n",
+          "display_code": "    print(f\"Total tokens: {response.usage_metadata.total_token_count}\")\n    print(f\"Cached tokens: {response.usage_metadata.cached_content_token_count}\")\n    print(f\"Output tokens: {response.usage_metadata.candidates_token_count}\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 63,
+          "line_range": [
+            63,
+            66
+          ]
+        },
+        {
+          "code": "    # Print the response (truncated for brevity)\n",
+          "display_code": "",
+          "annotation": "Print the response (truncated for brevity)",
+          "is_comment": true,
+          "start_line": 67,
+          "line_range": [
+            67,
+            67
+          ],
+          "target_line_range": [
+            68,
+            71
+          ]
+        },
+        {
+          "code": "    print(f\"Response: {response.text}...\")\n\n    time.sleep(1)  # Short delay between requests\n\n",
+          "display_code": "    print(f\"Response: {response.text}...\")\n\n    time.sleep(1)  # Short delay between requests\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 68,
+          "line_range": [
+            68,
+            71
+          ]
+        },
+        {
+          "code": "# When done with the cache, you can delete it to free up resources\n",
+          "display_code": "",
+          "annotation": "When done with the cache, you can delete it to free up resources",
+          "is_comment": true,
+          "start_line": 72,
+          "line_range": [
+            72,
+            72
+          ],
+          "target_line_range": [
+            73,
+            73
+          ]
+        },
+        {
+          "code": "client.caches.delete(name=cache.name)\n",
+          "display_code": "client.caches.delete(name=cache.name)\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 73,
+          "line_range": [
+            73,
+            73
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "Install the Google Generative AI library",
+          "command": "pip install google-genai",
+          "output": ""
+        },
+        {
+          "explanation": "Run the Python script",
+          "command": "python context-caching.py",
+          "output": "Cache created with name: cachedContents/n8upgecthnz7\nCached token count: 107203\nCache expires at: 2025-04-05 20:21:48.818511+00:00\nQuery: What are the recommended use cases for ZenML's pipeline orchestration?\nTotal tokens: 107387\nCached tokens: 107203\nOutput tokens: 168\nResponse: ZenML's pipeline orchestration is well-suited for a wide range of machine learning workflows, including:\n* **Data preprocessing:**  Ingesting, cleaning, transforming, and preparing data for model training.\n* **Model training:**  Training various types of machine learning models, including deep learning models.\n* **Model evaluation:**  Assessing model performance using different metrics and techniques.\n* **Model deployment:**  Deploying trained models to different environments for inference.\n* **Model monitoring:**  Monitoring the performance and health of deployed models in real-time.\n* **A/B testing:**  Experimenting with different model variations and comparing their performance.\n* **Hyperparameter tuning:**  Finding optimal hyperparameters for models.\n* **Feature engineering:**  Developing and evaluating new features for improving model performance. \n...\nQuery: How does ZenML integrate with cloud providers?\nTotal tokens: 107326\nCached tokens: 107203\nOutput tokens: 113\nResponse: ZenML integrates with cloud providers by offering stack components that are specific to each provider, such as:\n* **Artifact Stores:** S3 (AWS), GCS (GCP), Azure Blob Storage (Azure)\n* **Orchestrators:** Skypilot (AWS, GCP, Azure), Kubernetes (AWS, GCP, Azure)\n* **Container Registries:** ECR (AWS), GCR (GCP), ACR (Azure)\nThese components allow you to run pipelines on cloud infrastructure, enabling you to scale and leverage the benefits of cloud computing. \n..."
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/caching?lang=python",
+        "https://ai.google.dev/api/caching"
       ],
       "section_id": "007-tokens-context-windows",
       "section_title": "Token counting & context windows"

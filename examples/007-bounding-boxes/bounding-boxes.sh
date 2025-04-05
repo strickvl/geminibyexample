@@ -1,5 +1,5 @@
 # First, install the Google Generative AI library, requests, and Pillow
-$ pip install google-generative-ai Pillow requests
+$ pip install google-genai Pillow requests
 
 # Save the code to object-detection.py
 # Then run the program with Python

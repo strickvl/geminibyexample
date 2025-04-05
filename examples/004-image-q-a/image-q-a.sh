@@ -1,5 +1,5 @@
 # First, install the Google Generative AI library and requests
-$ pip install google-generative-ai requests
+$ pip install google-genai requests
 
 # Download an example cat image (replace with your own if needed)
 $ wget https://cataas.com/cat -O cat.jpg

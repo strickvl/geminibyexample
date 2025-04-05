@@ -1,5 +1,5 @@
 # First, install the Google Generative AI library
-$ pip install google-generative-ai Pillow
+$ pip install google-genai Pillow
 
 # Then run the program with Python
 $ python image-generation.py

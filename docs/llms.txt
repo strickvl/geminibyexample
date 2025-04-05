@@ -39,6 +39,7 @@ It's organized by sections, with each example's Python code and terminal command
   * Model context windows
   * Counting chat tokens
   * Calculating multimodal input tokens
+  * Context caching
 
 ## Text
 
@@ -55,7 +56,7 @@ print(response.text)
 ```
 
 ```shell
-$ pip install google-generative-ai
+$ pip install google-genai
 $ python basic-generation.py
 AI works by learning patterns from data, then using those patterns to make predictions or generate new content. It processes information through neural networks that mimic human brain connections, identifying features and relationships to perform tasks like recognition, prediction, and generation.
 ```
@@ -81,7 +82,7 @@ for chunk in response:
 ```
 
 ```shell
-$ pip install google-generative-ai
+$ pip install google-genai
 $ python streaming-generation.py
 AI, or Artificial Intelligence, is a broad field of computer science focused on creating machines capable of performing tasks that typically require human intelligence. It involves developing algorithms and models that enable computers to learn from data, reason, solve problems, understand natural language, perceive their environment, and make decisions.
 AI can be achieved through various techniques, including:
@@ -114,7 +115,7 @@ print(response.text)
 ```
 
 ```shell
-$ pip install google-generative-ai
+$ pip install google-genai
 $ python system_instructions.py
 Ahoy there, matey! What be on yer mind?
 ```
@@ -144,7 +145,7 @@ print(response.text)
 ```
 
 ```shell
-$ pip install google-generative-ai
+$ pip install google-genai
 $ python universe_reasoning.py
 This is a fantastic and very common question that gets to the heart of how we understand the universe based on Einstein's theory of General Relativity. The most accurate answer, according to our current understanding, is:
 **The universe isn't expanding *into* anything. Space itself is expanding.**
@@ -196,7 +197,7 @@ for cat in my_cats:
 ```
 
 ```shell
-$ pip install google-generative-ai pydantic
+$ pip install google-genai pydantic
 $ python structured_cats.py
 Name: Aria, Colour: tortoiseshell, Special Ability: Can teleport short distances
 Name: Blupus, Colour: ginger, Special Ability: Understands human speech
@@ -240,7 +241,7 @@ print("\nResponse from Base64 Image:\n", response.text)
 ```
 
 ```shell
-$ pip install google-generative-ai requests
+$ pip install google-genai requests
 $ wget https://cataas.com/cat -O cat.jpg
 $ python gemini-cat.py
 Response from URL Image:
@@ -291,7 +292,7 @@ for i, generated_image in enumerate(response.generated_images):
 ```
 
 ```shell
-$ pip install google-generative-ai Pillow
+$ pip install google-genai Pillow
 $ python image-generation.py
 # Expected output (will vary based on the model):
 # (Text describing the cat wizard image from Gemini 2.0 Flash)
@@ -338,7 +339,7 @@ image = Image.open(BytesIO(part.inline_data.data))
 ```
 
 ```shell
-$ pip install google-generative-ai Pillow requests
+$ pip install google-genai Pillow requests
 $ python edit_cat.py
 Image saved as cat_with_hat.png
 ```
@@ -376,7 +377,7 @@ x_max = (800 / 1000) * 1000  # 800
 ```
 
 ```shell
-$ pip install google-generative-ai Pillow requests
+$ pip install google-genai Pillow requests
 $ python object-detection.py
 [0.1, 0.2, 0.7, 0.8]
 ```
@@ -447,7 +448,7 @@ result.save(merged_filename)
 ```
 
 ```shell
-$ pip install google-generative-ai
+$ pip install google-genai
 $ python cat_segmentation.py
 # Expected output (example):
 # [{"box_2d": [100, 50, 900, 750], "mask": "base64_encoded_png_data", "label": "Main Coon Cat"}, ...]
@@ -491,7 +492,7 @@ print(response.text)
 ```
 
 ```shell
-$ pip install google-generative-ai requests
+$ pip install google-genai requests
 $ python audio-question.py
 This audio features a male host and a travel expert, Pete Trabucco.
 ```
@@ -528,7 +529,7 @@ print(response.text)
 ```
 
 ```shell
-$ pip install google-generative-ai
+$ pip install google-genai
 $ python audio-transcription.py
 We're joined once again by our travel expert and also author of America's Top Roller Coasters and Amusement Parks, Pete Trabucco. Good morning and welcome back to Daybreak USA. Well, thanks for having me on. If someone's lucky enough to go on vacation to an exotic location, and then maybe not so lucky to have some kind of a disaster happen while they're there, maybe some civil unrest. What should they do now? What's the next step? Well, whenever you're going on vacation whether it's locally or internationally, you've got to be uh very careful.
 ```
@@ -567,7 +568,7 @@ print(response.text)
 ```
 
 ```shell
-$ pip install google-generative-ai requests
+$ pip install google-genai requests
 $ python audio-summarization.py
 This audio is about travel tips, particularly what to do in the event of a disaster while on vacation.
 The speaker emphasizes the importance of staying informed about the destination, traveling with a buddy,
@@ -608,7 +609,7 @@ print(response.text)
 ```
 
 ```shell
-$ pip install google-generative-ai
+$ pip install google-genai
 $ python video_question_answering.py
 Certainly! Here's a description of the tone and genre of the video clip:
 **Genre:**  Travel or scenery/ambient video
@@ -646,7 +647,7 @@ print(response.text)
 ```
 
 ```shell
-$ pip install google-generative-ai
+$ pip install google-genai
 $ python video_summarization.py
 The video shows a park with trees next to a busy street with cars and buses passing by. The sun shines through the leaves of the trees.
 ```
@@ -686,7 +687,7 @@ print(response.text)
 ```
 
 ```shell
-$ pip install google-generative-ai
+$ pip install google-genai
 $ python video_transcription.py
 Okay, here's the transcription and visual descriptions of the video:
 **Video Description:**
@@ -723,7 +724,7 @@ print(response.text)
 ```
 
 ```shell
-$ pip install google-generative-ai
+$ pip install google-genai
 $ python youtube-summarization.py
 Sure, here is a summary of the video!
 Thomas, the father, is sharing his son Max's story of having Alexander Disease, a rare ultra-rare genetic disorder. After having a difficult time conceiving and finally being successful and welcoming Max to their family, they were dealt a devastating blow when Max had his first seizure at a very young age. 
@@ -777,7 +778,7 @@ print("\nCSV Analysis Result:\n", csv_response.text)
 ```
 
 ```shell
-$ pip install google-generative-ai httpx pandas
+$ pip install google-genai httpx pandas
 $ python pdf_csv_analysis.py
 PDF Analysis Result:
  The main company mentioned in the invoice is Sunny Farm.
@@ -831,7 +832,7 @@ print(model.text)
 ```
 
 ```shell
-$ pip install google-generative-ai requests
+$ pip install google-genai requests
 $ python translate.py
 ```chinese
 <div align="center">
@@ -918,7 +919,7 @@ print(invoice.model_dump_json(indent=2))
 ```
 
 ```shell
-$ pip install google-generative-ai pydantic requests
+$ pip install google-genai pydantic requests
 $ python structured-data-extraction.py
 {
   "sender": "SUNNY FARM",
@@ -1134,7 +1135,7 @@ if function_responses:
 ```
 
 ```shell
-$ pip install google-generative-ai requests
+$ pip install google-genai requests
 $ python function_calling_weather_calendar.py
 --- Example 1: Basic Function Calling ---
 Function to call: get_current_temperature
@@ -1217,7 +1218,7 @@ language = (
 ```
 
 ```shell
-$ pip install google-generative-ai rich
+$ pip install google-genai rich
 $ python code-execution.py
 Okay, I can help you find the sum of the first 50 prime numbers. Here's how I'll approach this:                                       
  1 Generate a list of the first 50 prime numbers. I'll need an efficient way to identify prime numbers. I can use the Sieve of        
@@ -1340,7 +1341,7 @@ asyncio.run(run())
 ```
 
 ```shell
-$ pip install google-generative-ai mcp
+$ pip install google-genai mcp
 $ python mcp_example.py
 Function call: id=None args={'date': '2025-04-05', 'location': 'Delft'} name='get_weather_forecast'
 Tool Result: {"2025-04-05T00:00":11.4,"2025-04-05T01:00":10.3,"2025-04-05T02:00":9.8,"2025-04-05T03:00":9.1,"2025-04-05T04:00":8,"2025-04-05T05:00":8,"2025-04-05T06:00":8.3,"2025-04-05T07:00":9.1,"2025-04-05T08:00":11.1,"2025-04-05T09:00":12.8,"2025-04-05T10:00":14.3,"2025-04-05T11:00":15.6,"2025-04-05T12:00":16,"2025-04-05T13:00":16.4,"2025-04-05T14:00":17,"2025-04-05T15:00":16.6,"2025-04-05T16:00":16.1,"2025-04-05T17:00":15,"2025-04-05T18:00":13.5,"2025-04-05T19:00":11.9,"2025-04-05T20:00":11.1,"2025-04-05T21:00":10.7,"2025-04-05T22:00":10.1,"2025-04-05T23:00":9.3}
@@ -1378,7 +1379,7 @@ print(response.candidates[0].grounding_metadata.search_entry_point.rendered_cont
 ```
 
 ```shell
-$ pip install google-generative-ai
+$ pip install google-genai
 $ python grounded_search.py
 [Example output - this will vary based on search results]
 Okay, here's what I've found regarding films playing in Delft on April 5, 2025:
@@ -1452,7 +1453,7 @@ print(
 ```
 
 ```shell
-$ pip install google-generative-ai
+$ pip install google-genai
 $ python model_context.py
 Gemini 2.0 Flash:
   Input token limit: 1,048,576 tokens (1 million tokens)
@@ -1510,7 +1511,7 @@ print(f"Total tokens with additional question: {final_count.total_tokens} tokens
 ```
 
 ```shell
-$ pip install google-generative-ai
+$ pip install google-genai
 $ python count_chat_tokens.py
 Tokens in initial chat history: 24 tokens
 Token usage for the last turn: input_tokens=30, output_tokens=843, total_tokens=873
@@ -1561,4 +1562,93 @@ Audio with duration 30 seconds will cost 960 tokens.
 
 For more information, see the original documentation:
 - https://ai.google.dev/gemini-api/docs/tokens?lang=python#multimodal-tokens
+
+### Context caching
+
+This example demonstrates how to use the Gemini API's context caching feature to
+efficiently query a large document multiple times without resending it with each request.
+This can reduce costs when repeatedly referencing the same content.
+
+```python
+from google import genai
+from google.genai.types import CreateCachedContentConfig, GenerateContentConfig
+import os
+import time
+import requests
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+model_id = "gemini-1.5-flash-001"
+response = requests.get("https://zenml.io/llms.txt")
+response.raise_for_status()  # Raise an exception for HTTP errors
+api_docs = response.text
+cache = client.caches.create(
+    model=model_id,
+    config=CreateCachedContentConfig(
+        display_name="ZenML LLMs.txt Documentation Cache",  # Used to identify the cache
+        system_instruction=(
+            "You are a technical documentation expert. "
+            "Answer questions about the ZenML documentation provided. "
+            "Keep your answers concise and to the point."
+        ),
+        contents=[api_docs],
+        ttl="900s",  # Cache for 15 minutes
+    ),
+)
+print(f"Cache created with name: {cache.name}")
+print(f"Cached token count: {cache.usage_metadata.total_token_count}")
+print(f"Cache expires at: {cache.expire_time}")
+queries = [
+    "What are the recommended use cases for ZenML's pipeline orchestration?",
+    "How does ZenML integrate with cloud providers?",
+]
+for query in queries:
+    print(f"\nQuery: {query}")
+response = client.models.generate_content(
+        model=model_id,
+        contents=query,
+        config=GenerateContentConfig(cached_content=cache.name),
+    )
+print(f"Total tokens: {response.usage_metadata.total_token_count}")
+    print(f"Cached tokens: {response.usage_metadata.cached_content_token_count}")
+    print(f"Output tokens: {response.usage_metadata.candidates_token_count}")
+print(f"Response: {response.text}...")
+
+    time.sleep(1)  # Short delay between requests
+client.caches.delete(name=cache.name)
+```
+
+```shell
+$ pip install google-genai
+$ python context-caching.py
+Cache created with name: cachedContents/n8upgecthnz7
+Cached token count: 107203
+Cache expires at: 2025-04-05 20:21:48.818511+00:00
+Query: What are the recommended use cases for ZenML's pipeline orchestration?
+Total tokens: 107387
+Cached tokens: 107203
+Output tokens: 168
+Response: ZenML's pipeline orchestration is well-suited for a wide range of machine learning workflows, including:
+* **Data preprocessing:**  Ingesting, cleaning, transforming, and preparing data for model training.
+* **Model training:**  Training various types of machine learning models, including deep learning models.
+* **Model evaluation:**  Assessing model performance using different metrics and techniques.
+* **Model deployment:**  Deploying trained models to different environments for inference.
+* **Model monitoring:**  Monitoring the performance and health of deployed models in real-time.
+* **A/B testing:**  Experimenting with different model variations and comparing their performance.
+* **Hyperparameter tuning:**  Finding optimal hyperparameters for models.
+* **Feature engineering:**  Developing and evaluating new features for improving model performance. 
+...
+Query: How does ZenML integrate with cloud providers?
+Total tokens: 107326
+Cached tokens: 107203
+Output tokens: 113
+Response: ZenML integrates with cloud providers by offering stack components that are specific to each provider, such as:
+* **Artifact Stores:** S3 (AWS), GCS (GCP), Azure Blob Storage (Azure)
+* **Orchestrators:** Skypilot (AWS, GCP, Azure), Kubernetes (AWS, GCP, Azure)
+* **Container Registries:** ECR (AWS), GCR (GCP), ACR (Azure)
+These components allow you to run pipelines on cloud infrastructure, enabling you to scale and leverage the benefits of cloud computing. 
+...
+```
+
+For more information, see the original documentation:
+- https://ai.google.dev/gemini-api/docs/caching?lang=python
+- https://ai.google.dev/api/caching
 

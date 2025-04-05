@@ -1,5 +1,5 @@
 # Install the Google Generative AI library and Pydantic
-$ pip install google-generative-ai pydantic requests
+$ pip install google-genai pydantic requests
 
 # Then run the program with Python
 $ python structured-data-extraction.py

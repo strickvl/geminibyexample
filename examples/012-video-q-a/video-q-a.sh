@@ -1,5 +1,5 @@
 # First, install the Google Generative AI library
-$ pip install google-generative-ai
+$ pip install google-genai
 
 # Save the code to video_question_answering.py
 # Then run the program with Python

@@ -1,5 +1,5 @@
 # First, install the necessary libraries
-$ pip install google-generative-ai mcp
+$ pip install google-genai mcp
 
 # Save the code to mcp_example.py.
 # Then run the program with Python

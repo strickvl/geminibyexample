@@ -1,5 +1,5 @@
 # Install the Google Generative AI library
-$ pip install google-generative-ai
+$ pip install google-genai
 
 # Run the Python script
 $ python count_chat_tokens.py

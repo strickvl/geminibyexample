@@ -1,5 +1,5 @@
 # First, install the Google Generative AI library and pydantic
-$ pip install google-generative-ai pydantic
+$ pip install google-genai pydantic
 
 # Save the code to structured_cats.py.
 # Then run the program with Python
