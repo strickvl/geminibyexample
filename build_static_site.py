@@ -316,7 +316,7 @@ def generate_index_html(examples, output_dir):
                 Gemini by Example is a hands-on introduction to Google's Gemini
                 SDK and API using 
                 annotated code examples. Check out the 
-                <a href="{examples[0]['id']}/index.html">first example</a> 
+                <a href="{examples[0]["id"]}/index.html">first example</a> 
                 or browse the full list below.
             </p>
             <p style="margin: 20px 0; color: #444; line-height: 1.6;">
@@ -328,7 +328,7 @@ def generate_index_html(examples, output_dir):
         # Example links
         for example in examples:
             f.write(f"""                <div class="example-link">
-                    <a href="{example['id']}/index.html">{example['title']}</a>
+                    <a href="{example["id"]}/index.html">{example["title"]}</a>
                 </div>
 """)
 
@@ -358,7 +358,7 @@ def generate_example_html(example, examples, output_dir):
         f.write(generate_html_head(f"{example['title']} - {SITE_TITLE}", base_url=".."))
 
         # Page title
-        f.write(f"""            <h1>{example['title']}</h1>
+        f.write(f"""            <h1>{example["title"]}</h1>
 """)
 
         # Description if available
@@ -490,7 +490,7 @@ def generate_example_html(example, examples, output_dir):
         # Next example link
         if next_example:
             f.write(f"""            <p class="next">
-                Next example: <a href="../{next_example['id']}/index.html">{next_example['title']}</a>
+                Next example: <a href="../{next_example["id"]}/index.html">{next_example["title"]}</a>
             </p>
 """)
 
@@ -522,7 +522,7 @@ def generate_static_site():
         return
 
     script_dir = Path(__file__).parent
-    output_dir = script_dir / "site"
+    output_dir = script_dir / "docs"
     static_dir = script_dir / "static"
 
     # Create output directory
