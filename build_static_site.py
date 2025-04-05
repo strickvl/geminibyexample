@@ -369,7 +369,10 @@ def generate_html_footer() -> str:
             }
             
             if (e.key === 'ArrowLeft') {
-                // We could implement previous page navigation in the future
+                const prevLink = document.querySelector('.prev a');
+                if (prevLink) {
+                    window.location.href = prevLink.getAttribute('href');
+                }
             }
         });
     </script>
