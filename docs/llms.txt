@@ -7,8 +7,8 @@ It's organized by sections, with each example's Python code and terminal command
 
 * Text Basics
   * Simple text generation
-  * Streaming Text Generation
-  * System Instructions Example
+  * Streaming text
+  * System prompt
 
 ## Text Basics
 
@@ -32,7 +32,7 @@ AI works by learning patterns from data, then using those patterns to make predi
 
 *This example includes images which can be viewed on the website.*
 
-### Streaming Text Generation
+### Streaming text
 
 This example demonstrates how to use the Gemini API to generate text content and stream the output.
 
@@ -53,7 +53,7 @@ $ python streaming-generation.py
 AI, or Artificial Intelligence, is a broad field of computer science focused on creating machines capable of performing tasks that typically require human intelligence. It involves developing algorithms and models that enable computers to learn from data, reason, solve problems, understand natural language, perceive their environment, and make decisions.
 ```
 
-### System Instructions Example
+### System prompt
 
 This example demonstrates how to use system instructions to guide the model's behavior.
 

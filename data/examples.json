@@ -94,7 +94,7 @@
     },
     {
       "id": "002-streaming-text",
-      "title": "Streaming Text Generation",
+      "title": "Streaming text",
       "description": "This example demonstrates how to use the Gemini API to generate text content and stream the output.",
       "order": 2,
       "code_segments": [
@@ -203,8 +203,8 @@
           ]
         },
         {
-          "code": "for chunk in response:\n    print(chunk.text, end=\"\")",
-          "display_code": "for chunk in response:\n    print(chunk.text, end=\"\")",
+          "code": "for chunk in response:\n    print(chunk.text, end=\"\")\n",
+          "display_code": "for chunk in response:\n    print(chunk.text, end=\"\")\n",
           "annotation": "",
           "is_comment": false,
           "start_line": 17,
@@ -232,7 +232,7 @@
     },
     {
       "id": "003-system-prompt",
-      "title": "System Instructions Example",
+      "title": "System prompt",
       "description": "This example demonstrates how to use system instructions to guide the model's behavior.",
       "order": 3,
       "code_segments": [
@@ -341,8 +341,8 @@
           ]
         },
         {
-          "code": "print(response.text)",
-          "display_code": "print(response.text)",
+          "code": "print(response.text)\n",
+          "display_code": "print(response.text)\n",
           "annotation": "",
           "is_comment": false,
           "start_line": 21,
