@@ -21,7 +21,7 @@ class GeminiExample(BaseModel):
     )
     requests_code: str = Field(
         description="Python code using the requests library that replicates any curl examples in the documentation",
-        default=None
+        default=None,
     )
     requires_image: bool = Field(
         description="Whether this example needs an image to be displayed (i.e. if it involves image generation)",
@@ -47,13 +47,12 @@ def fetch_url_content(url: str) -> str:
 
 def get_example_files_content():
     """Get content from example files."""
-    python_example = Path(
-        "examples/001-basic-generation/basic-generation.py"
+    python_example = Path("examples/002-streaming-text/streaming-text.py").read_text()
+    shell_example = Path("examples/002-streaming-text/streaming-text.sh").read_text()
+    requests_example = Path(
+        "examples/002-streaming-text/streaming-text_requests.py"
     ).read_text()
-    shell_example = Path(
-        "examples/001-basic-generation/basic-generation.sh"
-    ).read_text()
-    return python_example, shell_example
+    return python_example, shell_example, requests_example
 
 
 def get_contributing_guidelines():
@@ -139,7 +138,7 @@ def main():
             docs_content += f"\n\n--- Content from {url} ---\n\n{content}"
 
     # Get example files and contributing guidelines
-    python_example, shell_example = get_example_files_content()
+    python_example, shell_example, requests_example = get_example_files_content()
     python_format, shell_format, formatting_rules, shell_format_rules = (
         get_contributing_guidelines()
     )
@@ -189,6 +188,12 @@ Here's an example of the shell code format:
 {shell_example}
 ```
 
+Here's an example of the requests code format:
+
+```python
+{requests_example}
+```
+
 Based on the documentation provided, please generate a concise, illustrative example that demonstrates the key concepts clearly, focusing specifically on {focus}. If the documentation contains multiple examples or topics, prioritize content related to {focus} and ignore unrelated sections.
 
 For the requests_code, ONLY include this if you find actual curl examples in the documentation. If curl examples exist, translate them to Python code using the requests library. Do NOT create requests code if there are no curl examples in the documentation.
@@ -213,7 +218,7 @@ For the requests_code, ONLY include this if you find actual curl examples in the
         # Save Shell file
         shell_file = example_dir / f"{example_name}.sh"
         shell_file.write_text(result.shell_code)
-        
+
         # Save Requests file if curl examples were found
         if result.requests_code:
             requests_file = example_dir / f"{example_name}_requests.py"
