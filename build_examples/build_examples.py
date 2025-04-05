@@ -216,6 +216,13 @@ def process_example_directory(example_dir: Path) -> Dict[str, Any]:
     # Find Python and shell files
     python_files = list(example_dir.glob("*.py"))
     shell_files = list(example_dir.glob("*.sh"))
+    
+    # Find image files (PNG, JPG, JPEG, GIF)
+    image_files = list(example_dir.glob("*.png")) + list(example_dir.glob("*.jpg")) + \
+                  list(example_dir.glob("*.jpeg")) + list(example_dir.glob("*.gif"))
+    
+    # Sort image files by name for consistent order
+    image_files.sort(key=lambda p: p.name)
 
     if not python_files:
         logger.warning(f"No Python files found in {example_dir}")
@@ -232,6 +239,20 @@ def process_example_directory(example_dir: Path) -> Dict[str, Any]:
     shell_segments = []
     if shell_files:
         shell_segments = extract_shell_segments(shell_files[0])
+    
+    # Process image files
+    image_data = []
+    for image_file in image_files:
+        # Extract caption from filename (e.g., "01-image.png" -> "image")
+        filename = image_file.stem  # Get filename without extension
+        parts = filename.split("-", 1)
+        caption = parts[1].replace("-", " ").capitalize() if len(parts) > 1 else filename
+        
+        image_data.append({
+            "path": str(image_file.relative_to(example_dir.parent.parent)),
+            "filename": image_file.name,
+            "caption": caption
+        })
 
     # Compile the example data
     example_data = {
@@ -241,6 +262,7 @@ def process_example_directory(example_dir: Path) -> Dict[str, Any]:
         "order": order,
         "code_segments": code_segments,
         "shell_segments": shell_segments,
+        "image_data": image_data
     }
 
     return example_data

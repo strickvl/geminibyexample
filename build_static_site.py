@@ -423,6 +423,40 @@ def generate_index_html(
     logger.info("Generated index page at %s" % output_file)
 
 
+def copy_example_images(
+    example: Dict[str, Any], project_root: Path, output_dir: Path
+) -> None:
+    """
+    Copy images from the example directory to the output directory.
+
+    Args:
+        example: The example data
+        project_root: Project root path
+        output_dir: Output directory for the example
+    """
+    image_data = example.get("image_data", [])
+    if not image_data:
+        return
+
+    # Create images directory in the example output directory
+    images_dir = output_dir / "images"
+    images_dir.mkdir(exist_ok=True, parents=True)
+
+    # Copy each image
+    for image in image_data:
+        src_path = project_root / image["path"]
+        dst_path = images_dir / image["filename"]
+
+        if src_path.exists():
+            try:
+                shutil.copy2(src_path, dst_path)
+                logger.info(f"Copied image {src_path} to {dst_path}")
+            except Exception as e:
+                logger.error(f"Failed to copy image {src_path}: {e}")
+        else:
+            logger.warning(f"Image file not found: {src_path}")
+
+
 def generate_example_html(
     example: Dict[str, Any], examples: List[Dict[str, Any]], output_dir: Path
 ) -> None:
@@ -434,6 +468,10 @@ def generate_example_html(
     # Create directory for example
     example_dir = output_dir / example["id"]
     example_dir.mkdir(exist_ok=True, parents=True)
+
+    # Copy images if any
+    script_dir = Path(__file__).parent
+    copy_example_images(example, script_dir, example_dir)
 
     # Create index.html in the example directory
     output_file = example_dir / "index.html"
@@ -580,6 +618,26 @@ def generate_example_html(
 """)
 
                 f.write("""            </div>
+""")
+
+        # Images section if available
+        image_data = example.get("image_data", [])
+        if image_data:
+            f.write("""            <hr>
+""")
+
+            for image in image_data:
+                filename = image.get("filename", "")
+
+                # Create a figure with the image
+                f.write(f"""            <div style="margin: 30px 0; text-align: center;">
+                <figure>
+                    <img src="images/{filename}" alt="An illustration or output
+                    from the example code" style="max-width: 100%; border: 1px solid #eee;
+                    border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; color: #666; font-style: italic;"></figcaption>
+                </figure>
+            </div>
 """)
 
         # Next example link
