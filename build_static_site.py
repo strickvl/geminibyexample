@@ -13,6 +13,7 @@ import shutil
 from pathlib import Path
 from html import escape
 from typing import List, Dict, Any, Optional
+import re
 
 # Configure logging
 logging.basicConfig(
@@ -834,38 +835,38 @@ def generate_llms_txt(
 def clean_docs_directory(output_dir: Path) -> None:
     """
     Clean up old files and example directories in the docs directory.
-    
+
     Preserves important files like CNAME, .nojekyll, etc.
-    
+
     Args:
         output_dir: Path to the docs directory
     """
     logger.info("Cleaning up old example directories and files in %s" % output_dir)
-    
+
     # Files to preserve (never delete these)
     preserve_files = {
-        "CNAME",         # Custom domain configuration
-        ".nojekyll",     # GitHub Pages configuration
-        ".gitignore"     # Git ignore file
+        "CNAME",  # Custom domain configuration
+        ".nojekyll",  # GitHub Pages configuration
+        ".gitignore",  # Git ignore file
     }
-    
+
     # Directories to preserve (never delete these)
     preserve_dirs = {
-        "static"         # Static assets directory
+        "static"  # Static assets directory
     }
-    
+
     # Remove index.html
     index_file = output_dir / "index.html"
     if index_file.exists():
         index_file.unlink()
         logger.info("Removed %s" % index_file)
-    
+
     # Remove llms.txt
     llms_file = output_dir / "llms.txt"
     if llms_file.exists():
         llms_file.unlink()
         logger.info("Removed %s" % llms_file)
-    
+
     # Remove all example directories (folders that match the pattern \d{3}-*)
     for item in output_dir.iterdir():
         if item.is_dir() and item.name not in preserve_dirs:
@@ -892,7 +893,7 @@ def generate_static_site() -> None:
     # Create output directory
     output_dir.mkdir(exist_ok=True, parents=True)
     logger.info("Generating static site in %s" % output_dir)
-    
+
     # Clean up old files and directories
     clean_docs_directory(output_dir)
 
