@@ -97,17 +97,18 @@ def generate_example(prompt: str) -> GeminiExample:
 def get_next_example_number() -> int:
     """Determine the next available example number based on existing examples."""
     examples_dir = Path("examples")
-    
+
     if not examples_dir.exists():
         return 1  # Start with 001 if examples directory doesn't exist
-    
+
     # Get all example directories that match the pattern NNN-*
-    example_dirs = [d for d in examples_dir.iterdir() 
-                   if d.is_dir() and re.match(r"^\d{3}-", d.name)]
-    
+    example_dirs = [
+        d for d in examples_dir.iterdir() if d.is_dir() and re.match(r"^\d{3}-", d.name)
+    ]
+
     if not example_dirs:
         return 1  # Start with 001 if no examples exist
-    
+
     # Extract the numeric portion and find the max
     max_number = 0
     for dir_path in example_dirs:
@@ -115,27 +116,30 @@ def get_next_example_number() -> int:
         if match:
             number = int(match.group(1))
             max_number = max(max_number, number)
-    
+
     return max_number + 1
+
 
 def main():
     rprint("[bold blue]Welcome to the Gemini Example Generator![/bold blue]")
 
     # Automatically determine the next example number
     next_number = get_next_example_number()
-    
+
     # Ask for the text portion of the folder name
     example_name = Prompt.ask(
         "[yellow]Enter the name for this example[/yellow] (e.g., hello-world)"
     )
-    
+
     # Validate example name format (should be like hello-world)
     while not re.match(r"^[a-z0-9-]+$", example_name):
-        rprint("[bold red]Example name should only contain lowercase letters, numbers, and hyphens[/bold red]")
+        rprint(
+            "[bold red]Example name should only contain lowercase letters, numbers, and hyphens[/bold red]"
+        )
         example_name = Prompt.ask(
             "[yellow]Enter the name for this example[/yellow] (e.g., hello-world)"
         )
-    
+
     # Construct the full folder name with numeric prefix
     folder_name = f"{next_number:03d}-{example_name}"
     rprint(f"[green]Creating example in folder: {folder_name}[/green]")
@@ -148,7 +152,7 @@ def main():
     # Ask for topical theme
     theme = Prompt.ask(
         "[yellow]Do you want a specific topical theme for this example?[/yellow] (e.g., cats, astronomy, cooking, etc. Leave blank for no theme)",
-        default=""
+        default="",
     )
 
     # Ask for documentation URLs
@@ -189,7 +193,7 @@ Your task today is to take some documentation from the Google Gemini SDK docs an
 ## Focus Area
 This example should specifically focus on: {focus}
 
-{f'## Topical Theme\nThis example should incorporate the thematic elements of: {theme}' if theme else ''}
+{f"## Topical Theme\nThis example should incorporate the thematic elements of: {theme}" if theme else ""}
 
 ## Documentation Content
 {docs_content}
@@ -233,7 +237,12 @@ Here's an example of the requests code format:
 {requests_example}
 ```
 
-Based on the documentation provided, please generate a concise, illustrative example that demonstrates the key concepts clearly, focusing specifically on {focus}. If the documentation contains multiple examples or topics, prioritize content related to {focus} and ignore unrelated sections.
+Based on the documentation provided, please generate a concise, illustrative
+example that demonstrates the key concepts clearly, focusing specifically on
+{focus}. If the documentation contains multiple examples or topics, prioritize
+content related to {focus} and ignore unrelated sections. The title line (i.e.
+the first line of the Python file) should be very concise and focus on the core
+thing we're focusing on (e.g. "Streaming text", "Image generation", "Editing images", "Object detection").
 {f"Try to incorporate elements of the theme: {theme} in your example where it makes sense, such as in prompts, variables, or example text." if theme else ""}
 
 For the requests_code, ONLY include this if you find actual curl examples in the documentation. If curl examples exist, translate them to Python code using the requests library. Do NOT create requests code if there are no curl examples in the documentation.
