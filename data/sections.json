@@ -92,11 +92,9 @@
       "examples": [
         "029-rate-limits-retries",
         "030-async-requests",
-        "031-logprobs",
-        "032-citation-metadata",
-        "033-embeddings",
-        "034-safety-filters",
-        "035-study-with-learnlm"
+        "031-embeddings",
+        "032-safety-filters",
+        "033-study-with-learnlm"
       ]
     }
   ]

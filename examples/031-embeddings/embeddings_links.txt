@@ -1,0 +1,2 @@
+https://ai.google.dev/gemini-api/docs/embeddings
+https://ai.google.dev/gemini-api/docs/embeddings#resthttps://ai.google.dev/gemini-api/docs/embeddings#resthttps://ai.google.dev/gemini-api/docs/embeddings#rest

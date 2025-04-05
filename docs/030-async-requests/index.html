@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini by Example</title>
+    <title>Concurrent requests and generation - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
     <style>
@@ -167,127 +167,164 @@
 <body>
     <div class="container">
         <header>
-            <a href="./" class="site-title">Gemini by Example</a>
+            <a href="../" class="site-title">Gemini by Example</a>
         </header>
         <main>
-            <h1>Gemini by Example</h1>
-            <p style="margin: 20px 0; color: #444; line-height: 1.6;">
-                Gemini is Google's most capable AI model for generating text, code, images, and more. Please visit the <a href="https://ai.google.dev/gemini-api/docs" target="_blank">official documentation</a> to learn more.
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                <div>
+                    <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
+                        <a href="../" style="text-decoration: none; color: #666;">Miscellaneous</a>
+                    </div>
+                    <h1 style="margin: 0; margin-bottom: 10px;">Concurrent requests and generation</h1>
+                </div>
+                <div style="position: relative; margin-top: 10px;">
+                    <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                        Copy All Python
+                    </button>
+                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
+                </div>
+            </div>
+            <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
+                This example demonstrates how to generate text using concurrent.futures to make parallel requests to the Gemini API, with a focus on cat-related prompts.
             </p>
-            <p style="margin: 20px 0; color: #444; line-height: 1.6;">
-                Gemini by Example is a hands-on introduction to Google's Gemini SDK and API using annotated code examples. Check out the <a href="001-basic-generation/">first example</a> 
-                or browse the full list of sections below. This site takes
-                inspiration from <a href="https://gobyexample.com"
-                target="_blank">gobyexample.com</a>, from which I learned many
-                things about the Go programming language.
-            </p>
-            <p style="margin: 20px 0; color: #444; line-height: 1.6;">
-                Examples here assume Python <code>&gt;=3.9</code> and
-                the latest version of the Gemini SDK/API (the <a href="https://pypi.org/project/google-genai/" target="_blank"><code>google-genai</code></a> package).
-                Try to upgrade to the latest versions if something isn't working.
-            </p>
-            <div style="margin-top: 20px;">
-                <h3 style="margin-top: 25px; margin-bottom: 10px; color: #333; font-size: 1.3em;">Text</h3>
-                <div class="example-link">
-                        <a href="001-basic-generation/">Simple text generation</a>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Import the necessary libraries</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>import concurrent.futures
+from google import genai
+import os
+
+
+client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>A function to generate a fun fact about cats.</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>def generate_cat_fact(model):</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Generates a fun fact about cats.</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>response = client.models.generate_content(
+        model=model,
+        contents=&quot;Tell me a fun fact about cats.&quot;,
+    )
+    return response.text</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>A function to generate a short story about a cat.</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>def generate_cat_story(model):</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Generates a short story about a cat.</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>response = client.models.generate_content(
+        model=model,
+        contents=&quot;Write a ultra-short story about a cat who goes on an adventure.&quot;,
+    )
+    return response.text</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>The model to use for the requests.</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>model = &quot;gemini-2.0-flash-lite&quot;</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Use ThreadPoolExecutor to run the requests concurrently.
+We submit the tasks to the executor and then get the results.</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>with concurrent.futures.ThreadPoolExecutor() as executor:
+    fact_future = executor.submit(generate_cat_fact, model)
+    story_future = executor.submit(generate_cat_story, model)
+
+    cat_fact = fact_future.result()
+    cat_story = story_future.result()
+
+print(&quot;Cat Fact:\n&quot;, cat_fact)
+print(&quot;\nCat Story:\n&quot;, cat_story)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <h2>Running the Example</h2>
+            <div class="row">
+                <div class="docs" style='font-size: 0.9em; color: #666;'>
+                    First, install the Google Generative AI library
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy command" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
                     </div>
-                <div class="example-link">
-                        <a href="002-streaming-text/">Streaming text</a>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai</span></span>
+</code></pre>
+                </div>
+            </div>
+            <div class="row">
+                <div class="docs" style='font-size: 0.9em; color: #666;'>
+                    Then, run the async program with Python
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy command" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
                     </div>
-                <div class="example-link">
-                        <a href="003-system-prompt/">System prompt</a>
-                    </div>
-                <div class="example-link">
-                        <a href="019-reasoning-models/">Reasoning models</a>
-                    </div>
-                <div class="example-link">
-                        <a href="020-structured-output/">Structured output</a>
-                    </div>
-                <h3 style="margin-top: 25px; margin-bottom: 10px; color: #333; font-size: 1.3em;">Images</h3>
-                <div class="example-link">
-                        <a href="004-image-q-a/">Image question answering</a>
-                    </div>
-                <div class="example-link">
-                        <a href="005-image-generation/">Image generation (Gemini and Imagen)</a>
-                    </div>
-                <div class="example-link">
-                        <a href="006-editing-images/">Edit an image</a>
-                    </div>
-                <div class="example-link">
-                        <a href="007-bounding-boxes/">Bounding boxes</a>
-                    </div>
-                <div class="example-link">
-                        <a href="008-image-segmentation/">Image segmentation</a>
-                    </div>
-                <h3 style="margin-top: 25px; margin-bottom: 10px; color: #333; font-size: 1.3em;">Audio</h3>
-                <div class="example-link">
-                        <a href="009-audio-q-a/">Audio question answering</a>
-                    </div>
-                <div class="example-link">
-                        <a href="010-audio-transcription/">Audio transcription</a>
-                    </div>
-                <div class="example-link">
-                        <a href="011-audio-summarization/">Audio summarization</a>
-                    </div>
-                <h3 style="margin-top: 25px; margin-bottom: 10px; color: #333; font-size: 1.3em;">Video</h3>
-                <div class="example-link">
-                        <a href="012-video-q-a/">Video question answering</a>
-                    </div>
-                <div class="example-link">
-                        <a href="013-video-summarization/">Video summarization</a>
-                    </div>
-                <div class="example-link">
-                        <a href="014-video-transcription/">Video transcription</a>
-                    </div>
-                <div class="example-link">
-                        <a href="015-youtube-video-summarization/">YouTube video summarization</a>
-                    </div>
-                <h3 style="margin-top: 25px; margin-bottom: 10px; color: #333; font-size: 1.3em;">PDFs and other data types</h3>
-                <div class="example-link">
-                        <a href="016-pdf-csv-analysis/">PDF and CSV data analysis and summarization</a>
-                    </div>
-                <div class="example-link">
-                        <a href="017-content-translation/">Translate documents</a>
-                    </div>
-                <div class="example-link">
-                        <a href="018-structured-data-extraction/">Extract structured data from a PDF</a>
-                    </div>
-                <h3 style="margin-top: 25px; margin-bottom: 10px; color: #333; font-size: 1.3em;">Agentic behaviour</h3>
-                <div class="example-link">
-                        <a href="021-tool-use-function-calling/">Function calling & tool use</a>
-                    </div>
-                <div class="example-link">
-                        <a href="022-code-execution/">Code execution</a>
-                    </div>
-                <div class="example-link">
-                        <a href="023-mcp-model-context-protocol/">Model Context Protocol</a>
-                    </div>
-                <div class="example-link">
-                        <a href="024-grounded-responses/">Grounded responses with search tool</a>
-                    </div>
-                <h3 style="margin-top: 25px; margin-bottom: 10px; color: #333; font-size: 1.3em;">Token counting & context windows</h3>
-                <div class="example-link">
-                        <a href="025-model-context-windows/">Model context windows</a>
-                    </div>
-                <div class="example-link">
-                        <a href="026-token-counting/">Counting chat tokens</a>
-                    </div>
-                <div class="example-link">
-                        <a href="027-calculate-input-tokens/">Calculating multimodal input tokens</a>
-                    </div>
-                <div class="example-link">
-                        <a href="028-context-caching/">Context caching</a>
-                    </div>
-                <h3 style="margin-top: 25px; margin-bottom: 10px; color: #333; font-size: 1.3em;">Miscellaneous</h3>
-                <div class="example-link">
-                        <a href="029-rate-limits-retries/">Text generation with rate limit handling and retry</a>
-                    </div>
-                <div class="example-link">
-                        <a href="030-async-requests/">Concurrent requests and generation</a>
-                    </div>
-                <div class="example-link">
-                        <a href="031-embeddings/">Embeddings generation</a>
-                    </div>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python async_cat_generation.py</span></span>
+Cat Fact:
+ Cats can jump up to six times their height!</code></pre>
+                </div>
+            </div>
+            <hr>
+            <h4>Further Information</h4>
+            <ul style="font-size: 0.9em;">
+                <li><a href="https://ai.google.dev/gemini-api/docs/text-generation"
+                         target="_blank">Gemini docs link 1</a></li>
+            </ul>
+            <div class="navigation">
+                <p class="prev">
+                    <span>← Previous:</span> <a href="../029-rate-limits-retries/">Text generation with rate limit handling and retry</a>
+                </p>
+                <p class="next">
+                    <span>Next:</span> <a href="../031-embeddings/">Embeddings generation</a> →
+                </p>
             </div>
         </main>
         <footer>
