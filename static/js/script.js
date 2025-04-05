@@ -35,6 +35,9 @@ document.addEventListener('keydown', function(e) {
     }
     
     if (e.key === 'ArrowLeft') {
-        // We could implement previous page navigation in the future
+        const prevLink = document.querySelector('.prev a');
+        if (prevLink) {
+            window.location.href = prevLink.getAttribute('href');
+        }
     }
 }); 
