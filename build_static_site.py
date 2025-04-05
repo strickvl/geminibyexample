@@ -726,6 +726,19 @@ def copy_static_files(source_dir: Path, output_dir: Path) -> None:
         logger.warning("Static directory %s does not exist" % source_dir)
 
 
+def generate_llms_txt(examples: List[Dict[str, Any]], output_dir: Path) -> None:
+    """Generate llms.txt file with example titles and IDs."""
+    logger.info("Generating llms.txt")
+    
+    output_file = output_dir / "llms.txt"
+    with open(output_file, "w") as f:
+        f.write("# Gemini by Example - LLMs\n\n")
+        for example in sorted(examples, key=lambda e: e["order"]):
+            f.write(f"{example['id']}: {example['title']}\n")
+    
+    logger.info(f"Generated llms.txt at {output_file}")
+
+
 def generate_static_site() -> None:
     """Generate the complete static site."""
     data = load_examples_data()
@@ -746,6 +759,9 @@ def generate_static_site() -> None:
 
     # Copy static files
     copy_static_files(static_dir, output_dir)
+
+    # Generate llms.txt file
+    generate_llms_txt(examples, output_dir)
 
     # Generate index page
     generate_index_html(examples, sections, output_dir)
