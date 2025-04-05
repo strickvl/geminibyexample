@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Values in Python - Gemini by Example</title>
+    <title>Streaming Text Generation - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
     <style>
@@ -156,9 +156,9 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
                 <div>
                     <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
-                        <a href="../" style="text-decoration: none; color: #666;">Basic Examples: Images</a>
+                        <a href="../" style="text-decoration: none; color: #666;">Basic Examples: Text</a>
                     </div>
-                    <h1 style="margin: 0; margin-bottom: 10px;">Values in Python</h1>
+                    <h1 style="margin: 0; margin-bottom: 10px;">Streaming Text Generation</h1>
                 </div>
                 <div style="position: relative; margin-top: 10px;">
                     <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
@@ -171,90 +171,45 @@
                 </div>
             </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
-                This example demonstrates the different value types in Python.
+                This example demonstrates how to stream text when generating content using the Gemini API.
             </p>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Strings are sequences of Unicode characters.
-They can be defined with single or double quotes.</div>
+                    <div style='font-size: 0.9em; color: #666;'>Initialize the Gemini client with your API key</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>print(&quot;Hello, World&quot;)
-print(&quot;Hello with single quotes&quot;)</code></pre>
+                    <pre><code>client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Numbers in Python can be integers or floating-point.</div>
+                    <div style='font-size: 0.9em; color: #666;'>Call the generate_content_stream method to get a stream of responses</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>print(42)  # Integer
-print(3.14159)  # Float</code></pre>
+                    <pre><code>response = client.models.generate_content_stream(
+    model=&quot;gemini-2.0-flash&quot;, contents=[&quot;Explain how AI works&quot;]
+)</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Booleans are represented by the values True and False.</div>
+                    <div style='font-size: 0.9em; color: #666;'>Iterate over the stream and print each chunk of text as it arrives</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>print(True)
-print(False)</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>None is Python's null value.</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>print(None)</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Python has several built-in collections:
-Lists are ordered, mutable collections</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>my_list = [1, 2, 3, &quot;four&quot;, 5.0]
-print(my_list)</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Tuples are ordered, immutable collections</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>my_tuple = (1, 2, &quot;three&quot;)
-print(my_tuple)</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Dictionaries are key-value mappings</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>my_dict = {&quot;name&quot;: &quot;Python&quot;, &quot;version&quot;: 3.9}
-print(my_dict)</code></pre>
+                    <pre><code>for chunk in response:
+    print(chunk.text, end=&quot;&quot;)</code></pre>
                 </div>
             </div>
             <hr>
             <h2>Running the Example</h2>
             <div class="row">
                 <div class="docs">
-                    <p>Run the values.py example to see all the different Python value types</p>
+                    <p>First, install the Google Generative AI library</p>
                 </div>
                 <div class="code">
                     <div class="buttons">
@@ -262,22 +217,13 @@ print(my_dict)</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python values.py</span></span>
-Hello, World
-Hello with single quotes
-42
-3.14159
-True
-False
-None
-[1, 2, 3, &#x27;four&#x27;, 5.0]
-(1, 2, &#x27;three&#x27;)
-{&#x27;name&#x27;: &#x27;Python&#x27;, &#x27;version&#x27;: 3.9}</code></pre>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai</span></span>
+</code></pre>
                 </div>
             </div>
             <div class="row">
                 <div class="docs">
-                    <p>You can also run Python in interactive mode to experiment with values</p>
+                    <p>Then run the program with Python</p>
                 </div>
                 <div class="code">
                     <div class="buttons">
@@ -285,9 +231,8 @@ None
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python -c &quot;print(&#x27;Hello from Python!&#x27;); print(1 + 2)&quot;</span></span>
-Hello from Python!
-3</code></pre>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python streaming_example.py</span></span>
+AI, or Artificial Intelligence, encompasses a range of techniques enabling machines to mimic human intelligence.</code></pre>
                 </div>
             </div>
         </main>
