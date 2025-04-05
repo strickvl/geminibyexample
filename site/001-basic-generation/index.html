@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple generation - Gemini by Example</title>
+    <meta name="description" content="Learn the Gemini API through annotated examples">
+    <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+            margin-bottom: 20px;
+        }
+        .site-title {
+            text-decoration: none;
+            color: #375EAB;
+            font-weight: 500;
+            font-size: 20px;
+        }
+        main {
+            padding-bottom: 40px;
+        }
+        footer {
+            border-top: 1px solid #eee;
+            padding: 15px 0;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        h1 {
+            font-size: 36px;
+            font-weight: 500;
+            margin: 0 0 25px 0;
+            color: #333;
+        }
+        p {
+            margin: 20px 0;
+            color: #444;
+            line-height: 1.6;
+        }
+        a {
+            color: #375EAB;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .example-link {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+        .row {
+            display: flex;
+            width: 100%;
+            margin-bottom: 30px;
+            gap: 30px;
+        }
+        .docs {
+            flex: 1;
+            min-width: 0;
+            color: #444;
+            line-height: 1.6;
+        }
+        .code {
+            flex: 2;
+            min-width: 0;
+            position: relative;
+        }
+        pre {
+            margin: 0;
+            padding: 16px;
+            background-color: #f8f8f8;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+        }
+        .leading {
+            margin-bottom: 5px;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 20px 0;
+        }
+        .buttons {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            z-index: 10;
+        }
+        .copy {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            opacity: 0.6;
+            color: #666;
+            background-color: #f8f8f8;
+            border-radius: 3px;
+            padding: 3px;
+        }
+        .copy:hover {
+            opacity: 1;
+            color: #375EAB;
+        }
+        .tooltip {
+            position: absolute;
+            background: #333;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            top: -25px;
+            right: 0;
+        }
+        .command-prompt {
+            color: #888;
+        }
+        .command-text {
+            font-weight: bold;
+        }
+        .next {
+            margin-top: 30px;
+            font-weight: 500;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        @media (max-width: 768px) {
+            .row {
+                flex-direction: column;
+            }
+            .docs, .code {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="site-title">Gemini by Example</a>
+        </header>
+        <main>
+            <h1>Simple generation</h1>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Our first example demonstrates how to use the Gemini API
+to generate content with a simple prompt.</div>
+
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy code" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <pre><code>from google import genai</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Best practice: store your API key in an environment variable
+and load it from there.</div>
+
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy code" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <pre><code>client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)
+
+response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash&quot;, contents=&quot;Explain how AI works in a few words&quot;
+)
+print(response.text)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <h2>Running the Example</h2>
+            <div class="row">
+                <div class="docs">
+                    <p>First, install the Google Generative AI library</p>
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy command" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai</span></span>
+</code></pre>
+                </div>
+            </div>
+            <div class="row">
+                <div class="docs">
+                    <p>Then run the program with Python</p>
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy command" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python basic-generation.py</span></span>
+AI works by learning patterns from data, then using those patterns to make predictions or generate new content. It processes information through neural networks that mimic human brain connections, identifying features and relationships to perform tasks like recognition, prediction, and generation.</code></pre>
+                </div>
+            </div>
+            <p class="next">
+                Next example: <a href="../002-values/index.html">Values in Python</a>
+            </p>
+        </main>
+        <footer>
+            <p>Gemini by Example | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <a href="https://mlops.systems">Blog</a></p>
+        </footer>
+    </div>
+    <script>
+        // Function to copy code to clipboard
+        function copyCode(button) {
+            const codeBlock = button.closest('.code').querySelector('pre');
+            const code = codeBlock.textContent;
+            
+            // For older browsers, fallback to textarea method
+            if (!navigator.clipboard) {
+                const textArea = document.createElement('textarea');
+                textArea.value = code;
+                textArea.style.position = 'fixed';  // Avoid scrolling to bottom
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                
+                try {
+                    document.execCommand('copy');
+                    showTooltip(button, 'Copied!');
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                    showTooltip(button, 'Error!');
+                }
+                
+                document.body.removeChild(textArea);
+                return;
+            }
+            
+            // Use clipboard API if available
+            navigator.clipboard.writeText(code).then(() => {
+                showTooltip(button, 'Copied!');
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                showTooltip(button, 'Error!');
+            });
+        }
+        
+        // Helper to show tooltip
+        function showTooltip(button, message) {
+            // Remove any existing tooltips
+            const oldTooltip = button.parentElement.querySelector('.tooltip');
+            if (oldTooltip) {
+                oldTooltip.remove();
+            }
+            
+            // Create and append new tooltip
+            const tooltip = document.createElement('span');
+            tooltip.textContent = message;
+            tooltip.className = 'tooltip';
+            button.parentElement.appendChild(tooltip);
+            
+            // Remove tooltip after 1 second
+            setTimeout(() => tooltip.remove(), 1000);
+        }
+
+        // Enable keyboard navigation between examples
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
+                return;
+            }
+            
+            if (e.key === 'ArrowRight') {
+                const nextLink = document.querySelector('.next a');
+                if (nextLink) {
+                    window.location.href = nextLink.getAttribute('href');
+                }
+            }
+            
+            if (e.key === 'ArrowLeft') {
+                // We could implement previous page navigation in the future
+            }
+        });
+    </script>
+</body>
+</html>

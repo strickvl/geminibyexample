@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Values in Python - Gemini by Example</title>
+    <meta name="description" content="Learn the Gemini API through annotated examples">
+    <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+            line-height: 1.5;
+            color: #222;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        header {
+            border-bottom: 1px solid #eee;
+            padding: 15px 0;
+            margin-bottom: 20px;
+        }
+        .site-title {
+            text-decoration: none;
+            color: #375EAB;
+            font-weight: 500;
+            font-size: 20px;
+        }
+        main {
+            padding-bottom: 40px;
+        }
+        footer {
+            border-top: 1px solid #eee;
+            padding: 15px 0;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+        h1 {
+            font-size: 36px;
+            font-weight: 500;
+            margin: 0 0 25px 0;
+            color: #333;
+        }
+        p {
+            margin: 20px 0;
+            color: #444;
+            line-height: 1.6;
+        }
+        a {
+            color: #375EAB;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .example-link {
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+        .row {
+            display: flex;
+            width: 100%;
+            margin-bottom: 30px;
+            gap: 30px;
+        }
+        .docs {
+            flex: 1;
+            min-width: 0;
+            color: #444;
+            line-height: 1.6;
+        }
+        .code {
+            flex: 2;
+            min-width: 0;
+            position: relative;
+        }
+        pre {
+            margin: 0;
+            padding: 16px;
+            background-color: #f8f8f8;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
+        }
+        .leading {
+            margin-bottom: 5px;
+        }
+        hr {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 20px 0;
+        }
+        .buttons {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            z-index: 10;
+        }
+        .copy {
+            cursor: pointer;
+            width: 18px;
+            height: 18px;
+            opacity: 0.6;
+            color: #666;
+            background-color: #f8f8f8;
+            border-radius: 3px;
+            padding: 3px;
+        }
+        .copy:hover {
+            opacity: 1;
+            color: #375EAB;
+        }
+        .tooltip {
+            position: absolute;
+            background: #333;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            top: -25px;
+            right: 0;
+        }
+        .command-prompt {
+            color: #888;
+        }
+        .command-text {
+            font-weight: bold;
+        }
+        .next {
+            margin-top: 30px;
+            font-weight: 500;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        @media (max-width: 768px) {
+            .row {
+                flex-direction: column;
+            }
+            .docs, .code {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="../index.html" class="site-title">Gemini by Example</a>
+        </header>
+        <main>
+            <h1>Values in Python</h1>
+            <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
+                This example demonstrates the different value types in Python.
+            </p>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Strings are sequences of Unicode characters.
+They can be defined with single or double quotes.</div>
+
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy code" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <pre><code>print(&quot;Hello, World&quot;)
+print(&quot;Hello with single quotes&quot;)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Numbers in Python can be integers or floating-point.</div>
+
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy code" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <pre><code>print(42)  # Integer
+print(3.14159)  # Float</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Booleans are represented by the values True and False.</div>
+
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy code" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <pre><code>print(True)
+print(False)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>None is Python's null value.</div>
+
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy code" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <pre><code>print(None)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Python has several built-in collections:
+Lists are ordered, mutable collections</div>
+
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy code" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <pre><code>my_list = [1, 2, 3, &quot;four&quot;, 5.0]
+print(my_list)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Tuples are ordered, immutable collections</div>
+
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy code" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <pre><code>my_tuple = (1, 2, &quot;three&quot;)
+print(my_tuple)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Dictionaries are key-value mappings</div>
+
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy code" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <pre><code>my_dict = {&quot;name&quot;: &quot;Python&quot;, &quot;version&quot;: 3.9}
+print(my_dict)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <h2>Running the Example</h2>
+            <div class="row">
+                <div class="docs">
+                    <p>Run the values.py example to see all the different Python value types</p>
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy command" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python values.py</span></span>
+Hello, World
+Hello with single quotes
+42
+3.14159
+True
+False
+None
+[1, 2, 3, &#x27;four&#x27;, 5.0]
+(1, 2, &#x27;three&#x27;)
+{&#x27;name&#x27;: &#x27;Python&#x27;, &#x27;version&#x27;: 3.9}</code></pre>
+                </div>
+            </div>
+            <div class="row">
+                <div class="docs">
+                    <p>You can also run Python in interactive mode to experiment with values</p>
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy command" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python -c &quot;print(&#x27;Hello from Python!&#x27;); print(1 + 2)&quot;</span></span>
+Hello from Python!
+3</code></pre>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <p>Gemini by Example | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <a href="https://mlops.systems">Blog</a></p>
+        </footer>
+    </div>
+    <script>
+        // Function to copy code to clipboard
+        function copyCode(button) {
+            const codeBlock = button.closest('.code').querySelector('pre');
+            const code = codeBlock.textContent;
+            
+            // For older browsers, fallback to textarea method
+            if (!navigator.clipboard) {
+                const textArea = document.createElement('textarea');
+                textArea.value = code;
+                textArea.style.position = 'fixed';  // Avoid scrolling to bottom
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                
+                try {
+                    document.execCommand('copy');
+                    showTooltip(button, 'Copied!');
+                } catch (err) {
+                    console.error('Failed to copy text: ', err);
+                    showTooltip(button, 'Error!');
+                }
+                
+                document.body.removeChild(textArea);
+                return;
+            }
+            
+            // Use clipboard API if available
+            navigator.clipboard.writeText(code).then(() => {
+                showTooltip(button, 'Copied!');
+            }).catch(err => {
+                console.error('Failed to copy text: ', err);
+                showTooltip(button, 'Error!');
+            });
+        }
+        
+        // Helper to show tooltip
+        function showTooltip(button, message) {
+            // Remove any existing tooltips
+            const oldTooltip = button.parentElement.querySelector('.tooltip');
+            if (oldTooltip) {
+                oldTooltip.remove();
+            }
+            
+            // Create and append new tooltip
+            const tooltip = document.createElement('span');
+            tooltip.textContent = message;
+            tooltip.className = 'tooltip';
+            button.parentElement.appendChild(tooltip);
+            
+            // Remove tooltip after 1 second
+            setTimeout(() => tooltip.remove(), 1000);
+        }
+
+        // Enable keyboard navigation between examples
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey || e.altKey || e.shiftKey || e.metaKey) {
+                return;
+            }
+            
+            if (e.key === 'ArrowRight') {
+                const nextLink = document.querySelector('.next a');
+                if (nextLink) {
+                    window.location.href = nextLink.getAttribute('href');
+                }
+            }
+            
+            if (e.key === 'ArrowLeft') {
+                // We could implement previous page navigation in the future
+            }
+        });
+    </script>
+</body>
+</html>
