@@ -521,12 +521,12 @@ def generate_example_html(
 
         # Section and page title with "Copy All" button
         section_title = example.get("section_title", "")
-        
+
         # Header container with flexbox to position title and button
         f.write("""            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
                 <div>
 """)
-        
+
         # Title part
         if section_title:
             f.write(f"""                    <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
@@ -537,10 +537,10 @@ def generate_example_html(
         else:
             f.write(f"""                    <h1 style="margin: 0; margin-bottom: 10px;">{example["title"]}</h1>
 """)
-        
+
         f.write("""                </div>
 """)
-        
+
         # Button part (if we have Python code)
         if all_python_code:
             f.write("""                <div style="position: relative; margin-top: 10px;">
@@ -553,7 +553,7 @@ def generate_example_html(
                     <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
                 </div>
 """)
-        
+
         # Close header container
         f.write("""            </div>
 """)
@@ -748,12 +748,14 @@ def extract_shell_from_example(example: Dict[str, Any]) -> str:
     return shell.strip()
 
 
-def generate_llms_txt(examples: List[Dict[str, Any]], sections: List[Dict[str, Any]], output_dir: Path) -> None:
+def generate_llms_txt(
+    examples: List[Dict[str, Any]], sections: List[Dict[str, Any]], output_dir: Path
+) -> None:
     """Generate llms.txt file with organized headers and full example code."""
     logger.info("Generating llms.txt")
-    
+
     output_file = output_dir / "llms.txt"
-    
+
     # Group examples by section
     examples_by_section = {}
     for example in examples:
@@ -761,65 +763,71 @@ def generate_llms_txt(examples: List[Dict[str, Any]], sections: List[Dict[str, A
         if section_id not in examples_by_section:
             examples_by_section[section_id] = []
         examples_by_section[section_id].append(example)
-    
+
     with open(output_file, "w") as f:
         # Main heading and introduction
         f.write("# Gemini by Example\n\n")
-        f.write("This file contains all examples from the Gemini by Example site (geminibyexample.com).\n")
-        f.write("It's organized by sections, with each example's Python code and terminal commands included.\n\n")
-        
+        f.write(
+            "This file contains all examples from the Gemini by Example site (geminibyexample.com).\n"
+        )
+        f.write(
+            "It's organized by sections, with each example's Python code and terminal commands included.\n\n"
+        )
+
         # Table of contents
         f.write("## Table of Contents\n\n")
         for section in sorted(sections, key=lambda s: s["order"]):
             section_examples = examples_by_section.get(section["id"], [])
             if not section_examples:
                 continue
-                
+
             f.write(f"* {section['title']}\n")
             for example in sorted(section_examples, key=lambda e: e["order"]):
                 f.write(f"  * {example['title']}\n")
         f.write("\n")
-        
+
         # Each section with its examples
         for section in sorted(sections, key=lambda s: s["order"]):
             section_examples = examples_by_section.get(section["id"], [])
             if not section_examples:
                 continue
-                
+
             # Section heading
             f.write(f"## {section['title']}\n\n")
-            
+
             # Section description if available
             if section.get("description"):
                 f.write(f"{section['description']}\n\n")
-                
+
             # Each example in the section
             for example in sorted(section_examples, key=lambda e: e["order"]):
                 # Example heading
                 f.write(f"### {example['title']}\n\n")
-                
+
                 # Example description if available
                 if example.get("description"):
                     f.write(f"{example['description']}\n\n")
-                    
+
                 # Python code
                 python_code = extract_code_from_example(example)
                 if python_code:
                     f.write("```python\n")
                     f.write(python_code)
                     f.write("\n```\n\n")
-                
+
                 # Shell commands and output
                 shell_code = extract_shell_from_example(example)
                 if shell_code:
                     f.write("```shell\n")
                     f.write(shell_code)
                     f.write("\n```\n\n")
-                    
+
                 # Image references if any
                 if example.get("image_data"):
-                    f.write("*This example includes images which can be viewed on the website.*\n\n")
-    
+                    f.write(
+                        "*This example includes images which can be viewed on the website.*\n\n"
+                    )
+
     logger.info(f"Generated llms.txt at {output_file}")
 
 
