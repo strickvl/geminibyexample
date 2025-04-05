@@ -600,6 +600,205 @@
       ],
       "section_id": "002-basic-images",
       "section_title": "Images Basics"
+    },
+    {
+      "id": "005-image-generation",
+      "title": "Image generation (Gemini and Imagen)",
+      "description": "This example demonstrates generating images using both Gemini 2.0 Flash and Imagen 3 models, focusing on cat-related prompts.",
+      "order": 5,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import necessary libraries\n",
+          "display_code": "",
+          "annotation": "Import necessary libraries",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ],
+          "target_line_range": [
+            5,
+            9
+          ]
+        },
+        {
+          "code": "from google import genai\nfrom google.genai import types\nfrom PIL import Image\nfrom io import BytesIO\n\n",
+          "display_code": "from google import genai\nfrom google.genai import types\nfrom PIL import Image\nfrom io import BytesIO\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            9
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 10,
+          "line_range": [
+            10,
+            10
+          ],
+          "target_line_range": [
+            11,
+            12
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=\"YOUR_API_KEY\")\n\n",
+          "display_code": "client = genai.Client(api_key=\"YOUR_API_KEY\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 11,
+          "line_range": [
+            11,
+            12
+          ]
+        },
+        {
+          "code": "# We start by using Gemini 2.0 Flash for image generation.\n# Demonstrates generating an image and associated text using Gemini 2.0 Flash.\n",
+          "display_code": "",
+          "annotation": "We start by using Gemini 2.0 Flash for image generation.\nDemonstrates generating an image and associated text using Gemini 2.0 Flash.",
+          "is_comment": true,
+          "start_line": 13,
+          "line_range": [
+            13,
+            14
+          ],
+          "target_line_range": [
+            15,
+            25
+          ]
+        },
+        {
+          "code": "contents = (\n    \"Hi, can you create a 3D rendered image of a cat wearing a wizard hat, \"\n    \"casting a spell in a magical forest?\"\n)\n\nresponse = client.models.generate_content(\n    model=\"gemini-2.0-flash-exp-image-generation\",\n    contents=contents,\n    config=types.GenerateContentConfig(response_modalities=[\"Text\", \"Image\"]),\n)\n\n",
+          "display_code": "contents = (\n    \"Hi, can you create a 3D rendered image of a cat wearing a wizard hat, \"\n    \"casting a spell in a magical forest?\"\n)\n\nresponse = client.models.generate_content(\n    model=\"gemini-2.0-flash-exp-image-generation\",\n    contents=contents,\n    config=types.GenerateContentConfig(response_modalities=[\"Text\", \"Image\"]),\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 15,
+          "line_range": [
+            15,
+            25
+          ]
+        },
+        {
+          "code": "# Save the image to a file and display it\n",
+          "display_code": "",
+          "annotation": "Save the image to a file and display it",
+          "is_comment": true,
+          "start_line": 26,
+          "line_range": [
+            26,
+            26
+          ],
+          "target_line_range": [
+            27,
+            34
+          ]
+        },
+        {
+          "code": "for part in response.candidates[0].content.parts:\n    if part.text is not None:\n        print(part.text)\n    elif part.inline_data is not None:\n        image = Image.open(BytesIO(part.inline_data.data))\n        image.save(\"gemini-cat-wizard.png\")\n        image.show()\n\n",
+          "display_code": "for part in response.candidates[0].content.parts:\n    if part.text is not None:\n        print(part.text)\n    elif part.inline_data is not None:\n        image = Image.open(BytesIO(part.inline_data.data))\n        image.save(\"gemini-cat-wizard.png\")\n        image.show()\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 27,
+          "line_range": [
+            27,
+            34
+          ]
+        },
+        {
+          "code": "# Now we use Imagen 3 for image generation.\n# Demonstrates generating multiple high-quality images of cats using Imagen 3.\n# Imagen 3 is only available on the Paid Tier and always includes a SynthID watermark.\n",
+          "display_code": "",
+          "annotation": "Now we use Imagen 3 for image generation.\nDemonstrates generating multiple high-quality images of cats using Imagen 3.\nImagen 3 is only available on the Paid Tier and always includes a SynthID watermark.",
+          "is_comment": true,
+          "start_line": 35,
+          "line_range": [
+            35,
+            37
+          ],
+          "target_line_range": [
+            38,
+            43
+          ]
+        },
+        {
+          "code": "response = client.models.generate_images(\n    model=\"imagen-3.0-generate-002\",\n    prompt=\"A photorealistic image of a cat astronaut floating in space\",\n    config=types.GenerateImagesConfig(number_of_images=2),\n)\n\n",
+          "display_code": "response = client.models.generate_images(\n    model=\"imagen-3.0-generate-002\",\n    prompt=\"A photorealistic image of a cat astronaut floating in space\",\n    config=types.GenerateImagesConfig(number_of_images=2),\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 38,
+          "line_range": [
+            38,
+            43
+          ]
+        },
+        {
+          "code": "# Save the images to files and display them\n",
+          "display_code": "",
+          "annotation": "Save the images to files and display them",
+          "is_comment": true,
+          "start_line": 44,
+          "line_range": [
+            44,
+            44
+          ],
+          "target_line_range": [
+            45,
+            48
+          ]
+        },
+        {
+          "code": "for i, generated_image in enumerate(response.generated_images):\n    image = Image.open(BytesIO(generated_image.image.image_bytes))\n    image.save(f\"imagen-cat-astronaut-{i+1}.png\")\n    image.show()\n",
+          "display_code": "for i, generated_image in enumerate(response.generated_images):\n    image = Image.open(BytesIO(generated_image.image.image_bytes))\n    image.save(f\"imagen-cat-astronaut-{i+1}.png\")\n    image.show()\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 45,
+          "line_range": [
+            45,
+            48
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library",
+          "command": "pip install google-generative-ai Pillow",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python image-generation.py",
+          "output": "# Expected output (will vary based on the model):\n# (Text describing the cat wizard image from Gemini 2.0 Flash)\n# (Two image windows will open, displaying the generated cat astronaut images from Imagen 3)\n# Image saved as gemini-cat-wizard.png\n# (Two image windows will open, displaying the generated cat astronaut images from Imagen 3)"
+        }
+      ],
+      "image_data": [
+        {
+          "path": "examples/005-image-generation/cat-wizard.png",
+          "filename": "cat-wizard.png",
+          "caption": "Wizard"
+        }
+      ],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/image-generation"
+      ],
+      "section_id": "999-misc",
+      "section_title": "Miscellaneous Examples"
     }
   ],
   "sections": [
@@ -622,6 +821,12 @@
       "examples": [
         "004-image-q-a"
       ]
+    },
+    {
+      "id": "999-misc",
+      "title": "Miscellaneous Examples",
+      "description": "Additional examples that don't fit into other categories",
+      "order": 999
     }
   ]
 }

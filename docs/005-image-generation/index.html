@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gemini by Example</title>
+    <title>Image generation (Gemini and Imagen) - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
     <style>
@@ -150,43 +150,165 @@
 <body>
     <div class="container">
         <header>
-            <a href="./" class="site-title">Gemini by Example</a>
+            <a href="../" class="site-title">Gemini by Example</a>
         </header>
         <main>
-            <h1>Gemini by Example</h1>
-            <p style="margin: 20px 0; color: #444; line-height: 1.6;">
-                Gemini is Google's most capable AI model for generating text, code, images, and more. Please visit the <a href="https://ai.google.dev/gemini-api/docs" target="_blank">official documentation</a> to learn more.
-            </p>
-            <p style="margin: 20px 0; color: #444; line-height: 1.6;">
-                Gemini by Example is a hands-on introduction to Google's Gemini SDK and API using annotated code examples. Check out the <a href="001-basic-generation/">first example</a> 
-                or browse the full list of sections below.
-            </p>
-            <p style="margin: 20px 0; color: #444; line-height: 1.6;">
-                Examples here assume Python <code>&gt;=3.9</code> and
-                the latest version of the Gemini SDK/API (the <a href="https://pypi.org/project/google-genai/" target="_blank"><code>google-genai</code></a> package).
-                Try to upgrade to the latest versions if something isn't working.
-            </p>
-            <div style="margin-top: 30px;">
-                <h2 style="margin-top: 40px; margin-bottom: 15px; color: #333;">Text Basics</h2>
-                <div class="example-link">
-                        <a href="001-basic-generation/">Simple text generation</a>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                <div>
+                    <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
+                        <a href="../" style="text-decoration: none; color: #666;">Miscellaneous Examples</a>
                     </div>
-                <div class="example-link">
-                        <a href="002-streaming-text/">Streaming text</a>
-                    </div>
-                <div class="example-link">
-                        <a href="003-system-prompt/">System prompt</a>
-                    </div>
-                <h2 style="margin-top: 40px; margin-bottom: 15px; color: #333;">Images Basics</h2>
-                <div class="example-link">
-                        <a href="004-image-q-a/">Understanding images</a>
-                    </div>
-                <h2 style="margin-top: 40px; margin-bottom: 15px; color: #333;">Miscellaneous Examples</h2>
-                <p style="margin: 0 0 20px 0; color: #555;">Additional examples that don't fit into other categories</p>
-                <div class="example-link">
-                        <a href="005-image-generation/">Image generation (Gemini and Imagen)</a>
-                    </div>
+                    <h1 style="margin: 0; margin-bottom: 10px;">Image generation (Gemini and Imagen)</h1>
+                </div>
+                <div style="position: relative; margin-top: 10px;">
+                    <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                        Copy All Python
+                    </button>
+                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
+                </div>
             </div>
+            <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
+                This example demonstrates generating images using both Gemini 2.0 Flash and Imagen 3 models, focusing on cat-related prompts.
+            </p>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Import necessary libraries</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>from google import genai
+from google.genai import types
+from PIL import Image
+from io import BytesIO</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Initialize the Gemini client with your API key</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>We start by using Gemini 2.0 Flash for image generation.
+Demonstrates generating an image and associated text using Gemini 2.0 Flash.</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>contents = (
+    &quot;Hi, can you create a 3D rendered image of a cat wearing a wizard hat, &quot;
+    &quot;casting a spell in a magical forest?&quot;
+)
+
+response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash-exp-image-generation&quot;,
+    contents=contents,
+    config=types.GenerateContentConfig(response_modalities=[&quot;Text&quot;, &quot;Image&quot;]),
+)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Save the image to a file and display it</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>for part in response.candidates[0].content.parts:
+    if part.text is not None:
+        print(part.text)
+    elif part.inline_data is not None:
+        image = Image.open(BytesIO(part.inline_data.data))
+        image.save(&quot;gemini-cat-wizard.png&quot;)
+        image.show()</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Now we use Imagen 3 for image generation.
+Demonstrates generating multiple high-quality images of cats using Imagen 3.
+Imagen 3 is only available on the Paid Tier and always includes a SynthID watermark.</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>response = client.models.generate_images(
+    model=&quot;imagen-3.0-generate-002&quot;,
+    prompt=&quot;A photorealistic image of a cat astronaut floating in space&quot;,
+    config=types.GenerateImagesConfig(number_of_images=2),
+)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Save the images to files and display them</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>for i, generated_image in enumerate(response.generated_images):
+    image = Image.open(BytesIO(generated_image.image.image_bytes))
+    image.save(f&quot;imagen-cat-astronaut-{i+1}.png&quot;)
+    image.show()</code></pre>
+                </div>
+            </div>
+            <hr>
+            <h2>Running the Example</h2>
+            <div class="row">
+                <div class="docs">
+                    <p>First, install the Google Generative AI library</p>
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy command" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai Pillow</span></span>
+</code></pre>
+                </div>
+            </div>
+            <div class="row">
+                <div class="docs">
+                    <p>Then run the program with Python</p>
+                </div>
+                <div class="code">
+                    <div class="buttons">
+                        <svg class="copy" title="Copy command" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                    </div>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python image-generation.py</span></span>
+# Expected output (will vary based on the model):
+# (Text describing the cat wizard image from Gemini 2.0 Flash)
+# (Two image windows will open, displaying the generated cat astronaut images from Imagen 3)
+# Image saved as gemini-cat-wizard.png
+# (Two image windows will open, displaying the generated cat astronaut images from Imagen 3)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div style="margin: 30px 0; text-align: center;">
+                <figure>
+                    <img src="images/cat-wizard.png" alt="An illustration or output
+                    from the example code" style="max-width: 100%; border: 1px solid #eee;
+                    border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                    <figcaption style="margin-top: 10px; color: #666; font-style: italic;"></figcaption>
+                </figure>
+            </div>
+            <hr>
+            <h4>Further Information</h4>
+            <ul style="font-size: 0.9em;">
+                <li><a href="https://ai.google.dev/gemini-api/docs/image-generation"
+                         target="_blank">Gemini docs link 1</a></li>
+            </ul>
         </main>
         <footer>
             <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 05, 2025</span></p>
