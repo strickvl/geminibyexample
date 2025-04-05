@@ -707,12 +707,12 @@ def generate_example_html(
         documentation_links = example.get("documentation_links", [])
         if documentation_links:
             f.write("""            <hr>
-            <h3>For More Information</h3>
-            <p>See the original documentation:</p>
-            <ul>
+            <h4>Further Information</h4>
+            <ul style="font-size: 0.9em;">
 """)
-            for link in documentation_links:
-                f.write(f"""                <li><a href="{link}" target="_blank">{link}</a></li>
+            for i, link in enumerate(documentation_links, 1):
+                f.write(f"""                <li><a href="{link}"
+                         target="_blank">Gemini docs link {i}</a></li>
 """)
             f.write("""            </ul>
 """)
@@ -845,7 +845,7 @@ def generate_llms_txt(
                     f.write(
                         "*This example includes images which can be viewed on the website.*\n\n"
                     )
-                
+
                 # Documentation links if any
                 documentation_links = example.get("documentation_links", [])
                 if documentation_links:
