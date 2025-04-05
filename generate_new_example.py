@@ -160,7 +160,7 @@ You will output the following:
 
 - Python code formatted according to the guidelines below
 - Shell code/output formatted according to the guidelines below
-- Python requests code that replicates any curl examples found in the documentation, using the requests library (only if curl examples are present in the documentation)
+- Python requests code that replicates any curl examples found in the documentation, using the requests library (only if curl examples are present in the documentation). Note: This is stored in a separate file and is not used in the site build.
 - A boolean as to whether you think it needs an image to illustrate the output (i.e., if image generation or editing is involved)
 
 ### Python File Format:

@@ -213,8 +213,8 @@ def process_example_directory(example_dir: Path) -> Dict[str, Any]:
     example_id = example_dir.name
     order = int(example_id.split("-")[0])
 
-    # Find Python and shell files
-    python_files = list(example_dir.glob("*.py"))
+    # Find Python and shell files (excluding *_requests.py files)
+    python_files = [f for f in example_dir.glob("*.py") if not f.name.endswith("_requests.py")]
     shell_files = list(example_dir.glob("*.sh"))
     
     # Find image files (PNG, JPG, JPEG, GIF)
