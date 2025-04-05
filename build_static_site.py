@@ -158,8 +158,8 @@ def generate_html_head(
             text-decoration: underline;
         }
         .example-link {
-            margin: 8px 0;
-            line-height: 1.5;
+            margin: 4px 0;
+            line-height: 1.3;
         }
         .row {
             display: flex;
@@ -410,7 +410,7 @@ def generate_index_html(
                 the latest version of the Gemini SDK/API (the <a href="https://pypi.org/project/google-genai/" target="_blank"><code>google-genai</code></a> package).
                 Try to upgrade to the latest versions if something isn't working.
             </p>
-            <div style="margin-top: 30px;">
+            <div style="margin-top: 20px;">
 """)
 
         # If we have sections defined, group examples by section
@@ -430,12 +430,12 @@ def generate_index_html(
                     continue
 
                 # Section header
-                f.write(f"""                <h2 style="margin-top: 40px; margin-bottom: 15px; color: #333;">{section["title"]}</h2>
+                f.write(f"""                <h3 style="margin-top: 25px; margin-bottom: 10px; color: #333; font-size: 1.3em;">{section["title"]}</h3>
 """)
                 # Only include description paragraph if it's not empty
                 description = section.get("description", "")
                 if description:
-                    f.write(f"""                <p style="margin: 0 0 20px 0; color: #555;">{description}</p>
+                    f.write(f"""                <p style="margin: 0 0 10px 0; color: #555; font-size: 0.9em;">{description}</p>
 """)
 
                 # Example links for this section
