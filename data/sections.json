@@ -83,6 +83,21 @@
         "027-calculate-input-tokens",
         "028-context-caching"
       ]
+    },
+    {
+      "id": "008-misc",
+      "title": "Miscellaneous",
+      "description": "",
+      "order": 8,
+      "examples": [
+        "029-rate-limits-retries",
+        "030-async-requests",
+        "031-logprobs",
+        "032-citation-metadata",
+        "033-embeddings",
+        "034-safety-filters",
+        "035-study-with-learnlm"
+      ]
     }
   ]
 }

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Context caching - Gemini by Example</title>
+    <title>Text generation with rate limit handling and retry - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
     <style>
@@ -173,9 +173,9 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
                 <div>
                     <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
-                        <a href="../" style="text-decoration: none; color: #666;">Token counting & context windows</a>
+                        <a href="../" style="text-decoration: none; color: #666;">Miscellaneous</a>
                     </div>
-                    <h1 style="margin: 0; margin-bottom: 10px;">Context caching</h1>
+                    <h1 style="margin: 0; margin-bottom: 10px;">Text generation with rate limit handling and retry</h1>
                 </div>
                 <div style="position: relative; margin-top: 10px;">
                     <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
@@ -188,154 +188,87 @@
                 </div>
             </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
-                This example demonstrates how to use the Gemini API's context caching feature to
-efficiently query a large document multiple times without resending it with each request.
-This can reduce costs when repeatedly referencing the same content.
+                This example demonstrates generating text with the Gemini API, handling rate limiting errors, and using exponential backoff for retries.
             </p>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Initialize the Gemini client with your API key</div>
+                    <div style='font-size: 0.9em; color: #666;'>Configure the retry strategy</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Specify a versioned model that supports context caching
-Note: Must use explicit version suffix (-001) for caching</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>model_id = &quot;gemini-1.5-flash-001&quot;</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Load a large document (e.g., technical documentation).
-For this example, we assume the document is in markdown format.</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>response = requests.get(&quot;https://zenml.io/llms.txt&quot;)
-response.raise_for_status()  # Raise an exception for HTTP errors
-api_docs = response.text</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Create a cache with the document and system instructions</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>cache = client.caches.create(
-    model=model_id,
-    config=CreateCachedContentConfig(
-        display_name=&quot;ZenML LLMs.txt Documentation Cache&quot;,  # Used to identify the cache
-        system_instruction=(
-            &quot;You are a technical documentation expert. &quot;
-            &quot;Answer questions about the ZenML documentation provided. &quot;
-            &quot;Keep your answers concise and to the point.&quot;
-        ),
-        contents=[api_docs],
-        ttl=&quot;900s&quot;,  # Cache for 15 minutes
-    ),
-)</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Display cache information</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>print(f&quot;Cache created with name: {cache.name}&quot;)
-print(f&quot;Cached token count: {cache.usage_metadata.total_token_count}&quot;)
-print(f&quot;Cache expires at: {cache.expire_time}&quot;)</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Define multiple queries to demonstrate reuse of cached content</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>queries = [
-    &quot;What are the recommended use cases for ZenML&#x27;s pipeline orchestration?&quot;,
-    &quot;How does ZenML integrate with cloud providers?&quot;,
-]</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Run multiple queries using the same cached content</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>for query in queries:
-    print(f&quot;\nQuery: {query}&quot;)</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Generate response using the cached content</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>response = client.models.generate_content(
-        model=model_id,
-        contents=query,
-        config=GenerateContentConfig(cached_content=cache.name),
+                    <pre><code>def configure_retries(base_delay=1, max_delay=60, max_retries=5):
+    &quot;&quot;&quot;Configures exponential backoff retry strategy.&quot;&quot;&quot;
+    return genai.retry.RetryConfig(
+        initial_delay=base_delay,
+        max_delay=max_delay,
+        max_retries=max_retries,
+        retry_on_status_codes=[glm.Code.RESOURCE_EXHAUSTED.value],
     )</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Print token usage statistics to demonstrate savings</div>
+                    <div style='font-size: 0.9em; color: #666;'>Set the retry configuration</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>print(f&quot;Total tokens: {response.usage_metadata.total_token_count}&quot;)
-    print(f&quot;Cached tokens: {response.usage_metadata.cached_content_token_count}&quot;)
-    print(f&quot;Output tokens: {response.usage_metadata.candidates_token_count}&quot;)</code></pre>
+                    <pre><code>retry_config = configure_retries()</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Print the response (truncated for brevity)</div>
+                    <div style='font-size: 0.9em; color: #666;'>Initialize the Gemini client with your API key</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>print(f&quot;Response: {response.text}...&quot;)
-
-    time.sleep(1)  # Short delay between requests</code></pre>
+                    <pre><code>client = genai.Client(api_key=os.environ.get(&quot;GEMINI_API_KEY&quot;, &quot;YOUR_API_KEY&quot;), retry_config=retry_config)</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>When done with the cache, you can delete it to free up resources</div>
+                    <div style='font-size: 0.9em; color: #666;'>Select the model</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>client.caches.delete(name=cache.name)</code></pre>
+                    <pre><code>model = &#x27;gemini-2.0-flash&#x27;</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Construct the prompt</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>prompt = &quot;Tell me a funny story about a cat trying to catch a laser pointer.&quot;</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Attempt text generation with retry logic
+</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>try:
+    response = client.models.generate_content(
+        model=model,
+        contents=prompt
+    )
+    print(response.text)
+except genai.errors.APIError as e:
+    print(f&quot;An error occurred: {e}&quot;)</code></pre>
                 </div>
             </div>
             <hr>
             <h2>Running the Example</h2>
             <div class="row">
                 <div class="docs" style='font-size: 0.9em; color: #666;'>
-                    Install the Google Generative AI library
+                    First, install the Google Generative AI library
                 </div>
                 <div class="code">
                     <div class="buttons">
@@ -343,13 +276,13 @@ print(f&quot;Cache expires at: {cache.expire_time}&quot;)</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai</span></span>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai backoff</span></span>
 </code></pre>
                 </div>
             </div>
             <div class="row">
                 <div class="docs" style='font-size: 0.9em; color: #666;'>
-                    Run the Python script
+                    Then run the program with Python
                 </div>
                 <div class="code">
                     <div class="buttons">
@@ -357,50 +290,36 @@ print(f&quot;Cache expires at: {cache.expire_time}&quot;)</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python context-caching.py</span></span>
-Cache created with name: cachedContents/n8upgecthnz7
-Cached token count: 107203
-Cache expires at: 2025-04-05 20:21:48.818511+00:00
-Query: What are the recommended use cases for ZenML&#x27;s pipeline orchestration?
-Total tokens: 107387
-Cached tokens: 107203
-Output tokens: 168
-Response: ZenML&#x27;s pipeline orchestration is well-suited for a wide range of machine learning workflows, including:
-* **Data preprocessing:**  Ingesting, cleaning, transforming, and preparing data for model training.
-* **Model training:**  Training various types of machine learning models, including deep learning models.
-* **Model evaluation:**  Assessing model performance using different metrics and techniques.
-* **Model deployment:**  Deploying trained models to different environments for inference.
-* **Model monitoring:**  Monitoring the performance and health of deployed models in real-time.
-* **A/B testing:**  Experimenting with different model variations and comparing their performance.
-* **Hyperparameter tuning:**  Finding optimal hyperparameters for models.
-* **Feature engineering:**  Developing and evaluating new features for improving model performance. 
-...
-Query: How does ZenML integrate with cloud providers?
-Total tokens: 107326
-Cached tokens: 107203
-Output tokens: 113
-Response: ZenML integrates with cloud providers by offering stack components that are specific to each provider, such as:
-* **Artifact Stores:** S3 (AWS), GCS (GCP), Azure Blob Storage (Azure)
-* **Orchestrators:** Skypilot (AWS, GCP, Azure), Kubernetes (AWS, GCP, Azure)
-* **Container Registries:** ECR (AWS), GCR (GCP), ACR (Azure)
-These components allow you to run pipelines on cloud infrastructure, enabling you to scale and leverage the benefits of cloud computing. 
-...</code></pre>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python text_generation_with_retry.py</span></span>
+Bartholomew Buttersworth the Third, a cat of considerable fluff and even more considerable ego, considered himself a master predator. His domain, the living room, was usually ruled with a sleepy, regal disdain.
+Until the Red Dot appeared.
+It materialized silently on the beige carpet, an insolent crimson speck challenging his authority. Bartholomew&#x27;s eyes, previously half-closed slits of judgment, snapped wide open. His tail gave an involuntary *thwack* against the armchair.
+*Prey.*
+He crouched low, hindquarters wiggling with suppressed energy, a furry missile preparing for launch. The dot danced teasingly towards the sofa leg. Bartholomew *pounced!*
+He landed with an ungraceful *floof* exactly where the dot *had* been. It was now, infuriatingly, halfway up the wall.
+Bartholomew stared, blinked, and launched himself vertically. His claws scrabbled momentarily against the paint before gravity asserted its dominance. He slid down the wall with a soft *scritch-scratch-thump*.
+The dot, utterly unimpressed, zipped across the ceiling. Bartholomew tracked it, head tilting back so far he nearly somersaulted. He tried a running leap off the coffee table, misjudged the trajectory entirely, and ended up skidding under the armchair, emerging moments later covered in dust bunnies and indignation.
+The dot, meanwhile, had settled innocently on his own fluffy white paw.
+Bartholomew froze. Victory? He stared at the dot. The dot stared back (metaphorically speaking). Slowly, cautiously, he brought his nose down to sniff the intruder...
+*Click.*
+The dot vanished.
+Bartholomew looked at his paw. He looked around the room, eyes wide with betrayal. Where did it go? Was it *inside* his paw? He bit his paw gently, then shook his head, utterly bewildered.
+Finally, defeated and slightly dizzy, Bartholomew stalked over to his food bowl, pretending the entire embarrassing episode had never happened. The Red Dot, however, remained an unsolved mystery, a tiny, mocking ghost in his otherwise perfect predatory world.</code></pre>
                 </div>
             </div>
             <hr>
             <h4>Further Information</h4>
             <ul style="font-size: 0.9em;">
-                <li><a href="https://ai.google.dev/gemini-api/docs/caching?lang=python"
+                <li><a href="https://ai.google.dev/gemini-api/docs/text-generation"
                          target="_blank">Gemini docs link 1</a></li>
-                <li><a href="https://ai.google.dev/api/caching"
+                <li><a href="https://ai.google.dev/gemini-api/docs/troubleshooting?lang=python"
                          target="_blank">Gemini docs link 2</a></li>
+                <li><a href="https://ai.google.dev/gemini-api/docs/rate-limits?hl=en"
+                         target="_blank">Gemini docs link 3</a></li>
             </ul>
             <div class="navigation">
                 <p class="prev">
-                    <span>← Previous:</span> <a href="../027-calculate-input-tokens/">Calculating multimodal input tokens</a>
-                </p>
-                <p class="next">
-                    <span>Next:</span> <a href="../029-rate-limits-retries/">Text generation with rate limit handling and retry</a> →
+                    <span>← Previous:</span> <a href="../028-context-caching/">Context caching</a>
                 </p>
             </div>
         </main>

@@ -6252,6 +6252,201 @@
       ],
       "section_id": "007-tokens-context-windows",
       "section_title": "Token counting & context windows"
+    },
+    {
+      "id": "029-rate-limits-retries",
+      "title": "Text generation with rate limit handling and retry",
+      "description": "This example demonstrates generating text with the Gemini API, handling rate limiting errors, and using exponential backoff for retries.",
+      "order": 29,
+      "code_segments": [
+        {
+          "code": "\nimport google.generativeai as genai\nimport google.ai.generativelanguage as glm\nimport time\nimport os\n\n",
+          "display_code": "\nimport google.generativeai as genai\nimport google.ai.generativelanguage as glm\nimport time\nimport os\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            8
+          ]
+        },
+        {
+          "code": "# Configure the retry strategy\n",
+          "display_code": "",
+          "annotation": "Configure the retry strategy",
+          "is_comment": true,
+          "start_line": 9,
+          "line_range": [
+            9,
+            9
+          ],
+          "target_line_range": [
+            10,
+            18
+          ]
+        },
+        {
+          "code": "def configure_retries(base_delay=1, max_delay=60, max_retries=5):\n    \"\"\"Configures exponential backoff retry strategy.\"\"\"\n    return genai.retry.RetryConfig(\n        initial_delay=base_delay,\n        max_delay=max_delay,\n        max_retries=max_retries,\n        retry_on_status_codes=[glm.Code.RESOURCE_EXHAUSTED.value],\n    )\n\n",
+          "display_code": "def configure_retries(base_delay=1, max_delay=60, max_retries=5):\n    \"\"\"Configures exponential backoff retry strategy.\"\"\"\n    return genai.retry.RetryConfig(\n        initial_delay=base_delay,\n        max_delay=max_delay,\n        max_retries=max_retries,\n        retry_on_status_codes=[glm.Code.RESOURCE_EXHAUSTED.value],\n    )\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 10,
+          "line_range": [
+            10,
+            18
+          ]
+        },
+        {
+          "code": "# Set the retry configuration\n",
+          "display_code": "",
+          "annotation": "Set the retry configuration",
+          "is_comment": true,
+          "start_line": 19,
+          "line_range": [
+            19,
+            19
+          ],
+          "target_line_range": [
+            20,
+            21
+          ]
+        },
+        {
+          "code": "retry_config = configure_retries()\n\n",
+          "display_code": "retry_config = configure_retries()\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 20,
+          "line_range": [
+            20,
+            21
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 22,
+          "line_range": [
+            22,
+            22
+          ],
+          "target_line_range": [
+            23,
+            24
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.environ.get(\"GEMINI_API_KEY\", \"YOUR_API_KEY\"), retry_config=retry_config)\n\n",
+          "display_code": "client = genai.Client(api_key=os.environ.get(\"GEMINI_API_KEY\", \"YOUR_API_KEY\"), retry_config=retry_config)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 23,
+          "line_range": [
+            23,
+            24
+          ]
+        },
+        {
+          "code": "# Select the model\n",
+          "display_code": "",
+          "annotation": "Select the model",
+          "is_comment": true,
+          "start_line": 25,
+          "line_range": [
+            25,
+            25
+          ],
+          "target_line_range": [
+            26,
+            27
+          ]
+        },
+        {
+          "code": "model = 'gemini-2.0-flash'\n\n",
+          "display_code": "model = 'gemini-2.0-flash'\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 26,
+          "line_range": [
+            26,
+            27
+          ]
+        },
+        {
+          "code": "# Construct the prompt\n",
+          "display_code": "",
+          "annotation": "Construct the prompt",
+          "is_comment": true,
+          "start_line": 28,
+          "line_range": [
+            28,
+            28
+          ],
+          "target_line_range": [
+            29,
+            30
+          ]
+        },
+        {
+          "code": "prompt = \"Tell me a funny story about a cat trying to catch a laser pointer.\"\n\n",
+          "display_code": "prompt = \"Tell me a funny story about a cat trying to catch a laser pointer.\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 29,
+          "line_range": [
+            29,
+            30
+          ]
+        },
+        {
+          "code": "#\n# Attempt text generation with retry logic\n#\n",
+          "display_code": "",
+          "annotation": "Attempt text generation with retry logic\n",
+          "is_comment": true,
+          "start_line": 31,
+          "line_range": [
+            31,
+            33
+          ],
+          "target_line_range": [
+            34,
+            41
+          ]
+        },
+        {
+          "code": "try:\n    response = client.models.generate_content(\n        model=model,\n        contents=prompt\n    )\n    print(response.text)\nexcept genai.errors.APIError as e:\n    print(f\"An error occurred: {e}\")\n",
+          "display_code": "try:\n    response = client.models.generate_content(\n        model=model,\n        contents=prompt\n    )\n    print(response.text)\nexcept genai.errors.APIError as e:\n    print(f\"An error occurred: {e}\")\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 34,
+          "line_range": [
+            34,
+            41
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library",
+          "command": "pip install google-genai backoff",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python text_generation_with_retry.py",
+          "output": "Bartholomew Buttersworth the Third, a cat of considerable fluff and even more considerable ego, considered himself a master predator. His domain, the living room, was usually ruled with a sleepy, regal disdain.\nUntil the Red Dot appeared.\nIt materialized silently on the beige carpet, an insolent crimson speck challenging his authority. Bartholomew's eyes, previously half-closed slits of judgment, snapped wide open. His tail gave an involuntary *thwack* against the armchair.\n*Prey.*\nHe crouched low, hindquarters wiggling with suppressed energy, a furry missile preparing for launch. The dot danced teasingly towards the sofa leg. Bartholomew *pounced!*\nHe landed with an ungraceful *floof* exactly where the dot *had* been. It was now, infuriatingly, halfway up the wall.\nBartholomew stared, blinked, and launched himself vertically. His claws scrabbled momentarily against the paint before gravity asserted its dominance. He slid down the wall with a soft *scritch-scratch-thump*.\nThe dot, utterly unimpressed, zipped across the ceiling. Bartholomew tracked it, head tilting back so far he nearly somersaulted. He tried a running leap off the coffee table, misjudged the trajectory entirely, and ended up skidding under the armchair, emerging moments later covered in dust bunnies and indignation.\nThe dot, meanwhile, had settled innocently on his own fluffy white paw.\nBartholomew froze. Victory? He stared at the dot. The dot stared back (metaphorically speaking). Slowly, cautiously, he brought his nose down to sniff the intruder...\n*Click.*\nThe dot vanished.\nBartholomew looked at his paw. He looked around the room, eyes wide with betrayal. Where did it go? Was it *inside* his paw? He bit his paw gently, then shook his head, utterly bewildered.\nFinally, defeated and slightly dizzy, Bartholomew stalked over to his food bowl, pretending the entire embarrassing episode had never happened. The Red Dot, however, remained an unsolved mystery, a tiny, mocking ghost in his otherwise perfect predatory world."
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/text-generation",
+        "https://ai.google.dev/gemini-api/docs/troubleshooting?lang=python",
+        "https://ai.google.dev/gemini-api/docs/rate-limits?hl=en"
+      ],
+      "section_id": "008-misc",
+      "section_title": "Miscellaneous"
     }
   ],
   "sections": [
@@ -6337,6 +6532,21 @@
         "026-token-counting",
         "027-calculate-input-tokens",
         "028-context-caching"
+      ]
+    },
+    {
+      "id": "008-misc",
+      "title": "Miscellaneous",
+      "description": "",
+      "order": 8,
+      "examples": [
+        "029-rate-limits-retries",
+        "030-async-requests",
+        "031-logprobs",
+        "032-citation-metadata",
+        "033-embeddings",
+        "034-safety-filters",
+        "035-study-with-learnlm"
       ]
     }
   ]
