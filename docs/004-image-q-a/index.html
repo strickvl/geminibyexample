@@ -306,10 +306,10 @@ Response from URL Image:
                 </div>
             </div>
             <hr>
-            <h3>For More Information</h3>
-            <p>See the original documentation:</p>
-            <ul>
-                <li><a href="https://ai.google.dev/gemini-api/docs/vision?lang=python" target="_blank">https://ai.google.dev/gemini-api/docs/vision?lang=python</a></li>
+            <h4>Further Information</h4>
+            <ul style="font-size: 0.9em;">
+                <li><a href="https://ai.google.dev/gemini-api/docs/vision?lang=python"
+                         target="_blank">Gemini docs link 1</a></li>
             </ul>
         </main>
         <footer>
@@ -414,7 +414,10 @@ Response from URL Image:
             }
             
             if (e.key === 'ArrowLeft') {
-                // We could implement previous page navigation in the future
+                const prevLink = document.querySelector('.prev a');
+                if (prevLink) {
+                    window.location.href = prevLink.getAttribute('href');
+                }
             }
         });
     </script>

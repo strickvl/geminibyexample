@@ -247,10 +247,10 @@ AI, or Artificial Intelligence, is a broad field of computer science focused on 
                 </div>
             </div>
             <hr>
-            <h3>For More Information</h3>
-            <p>See the original documentation:</p>
-            <ul>
-                <li><a href="https://ai.google.dev/gemini-api/docs/text-generation" target="_blank">https://ai.google.dev/gemini-api/docs/text-generation</a></li>
+            <h4>Further Information</h4>
+            <ul style="font-size: 0.9em;">
+                <li><a href="https://ai.google.dev/gemini-api/docs/text-generation"
+                         target="_blank">Gemini docs link 1</a></li>
             </ul>
             <p class="next">
                 Next example: <a href="../003-system-prompt/">System prompt</a>
@@ -358,7 +358,10 @@ AI, or Artificial Intelligence, is a broad field of computer science focused on 
             }
             
             if (e.key === 'ArrowLeft') {
-                // We could implement previous page navigation in the future
+                const prevLink = document.querySelector('.prev a');
+                if (prevLink) {
+                    window.location.href = prevLink.getAttribute('href');
+                }
             }
         });
     </script>
