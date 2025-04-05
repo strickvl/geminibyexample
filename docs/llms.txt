@@ -1211,7 +1211,7 @@ language = (
 ```
 
 ```shell
-$ pip install google-generative-ai
+$ pip install google-generative-ai rich
 $ python code-execution.py
 Okay, I can help you find the sum of the first 50 prime numbers. Here's how I'll approach this:                                       
  1 Generate a list of the first 50 prime numbers. I'll need an efficient way to identify prime numbers. I can use the Sieve of        

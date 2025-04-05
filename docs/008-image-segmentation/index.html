@@ -132,11 +132,27 @@
         .command-text {
             font-weight: bold;
         }
-        .next {
+        .navigation {
             margin-top: 30px;
-            font-weight: 500;
             padding-top: 15px;
             border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .prev, .next {
+            margin: 5px 0;
+            font-weight: 500;
+        }
+        .prev {
+            margin-right: auto;
+        }
+        .next {
+            margin-left: auto;
+        }
+        .prev span, .next span {
+            color: #666;
+            font-weight: normal;
         }
         @media (max-width: 768px) {
             .row {
@@ -429,9 +445,14 @@ result.save(merged_filename)</code></pre>
                 <li><a href="https://ai.google.dev/gemini-api/docs/vision?lang=python#image_segmentation"
                          target="_blank">Gemini docs link 1</a></li>
             </ul>
-            <p class="next">
-                Next example: <a href="../009-audio-q-a/">Audio question answering</a>
-            </p>
+            <div class="navigation">
+                <p class="prev">
+                    <span>← Previous:</span> <a href="../007-bounding-boxes/">Bounding boxes</a>
+                </p>
+                <p class="next">
+                    <span>Next:</span> <a href="../009-audio-q-a/">Audio question answering</a> →
+                </p>
+            </div>
         </main>
         <footer>
             <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>

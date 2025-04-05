@@ -132,11 +132,27 @@
         .command-text {
             font-weight: bold;
         }
-        .next {
+        .navigation {
             margin-top: 30px;
-            font-weight: 500;
             padding-top: 15px;
             border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .prev, .next {
+            margin: 5px 0;
+            font-weight: 500;
+        }
+        .prev {
+            margin-right: auto;
+        }
+        .next {
+            margin-left: auto;
+        }
+        .prev span, .next span {
+            color: #666;
+            font-weight: normal;
         }
         @media (max-width: 768px) {
             .row {
@@ -279,7 +295,7 @@ for part in response.candidates[0].content.parts:
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai</span></span>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai rich</span></span>
 </code></pre>
                 </div>
             </div>
@@ -356,6 +372,11 @@ The sum of the first 50 prime numbers is 5117.
                 <li><a href="https://ai.google.dev/gemini-api/docs/code-execution?lang=rest"
                          target="_blank">Gemini docs link 2</a></li>
             </ul>
+            <div class="navigation">
+                <p class="prev">
+                    <span>← Previous:</span> <a href="../021-tool-use-function-calling/">Function calling & tool use</a>
+                </p>
+            </div>
         </main>
         <footer>
             <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>

@@ -4914,7 +4914,7 @@
       "shell_segments": [
         {
           "explanation": "First, install the Google Generative AI library",
-          "command": "pip install google-generative-ai",
+          "command": "pip install google-generative-ai rich",
           "output": ""
         },
         {
@@ -5007,9 +5007,8 @@
       "examples": [
         "021-tool-use-function-calling",
         "022-code-execution",
-        "023-chat-with-data",
-        "024-mcp-model-context-protocol",
-        "025-grounded-responses"
+        "023-mcp-model-context-protocol",
+        "024-grounded-responses"
       ]
     }
   ]

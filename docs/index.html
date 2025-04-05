@@ -132,11 +132,27 @@
         .command-text {
             font-weight: bold;
         }
-        .next {
+        .navigation {
             margin-top: 30px;
-            font-weight: 500;
             padding-top: 15px;
             border-top: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .prev, .next {
+            margin: 5px 0;
+            font-weight: 500;
+        }
+        .prev {
+            margin-right: auto;
+        }
+        .next {
+            margin-left: auto;
+        }
+        .prev span, .next span {
+            color: #666;
+            font-weight: normal;
         }
         @media (max-width: 768px) {
             .row {
