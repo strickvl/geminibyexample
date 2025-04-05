@@ -233,6 +233,12 @@ For the requests_code, ONLY include this if you find actual curl examples in the
             requests_file = example_dir / f"{example_name}_requests.py"
             requests_file.write_text(result.requests_code)
 
+        # Save documentation URLs to a text file
+        if urls:
+            docs_file = example_dir / f"{example_name}_links.txt"
+            docs_file.write_text("\n".join(urls))
+            rprint(f"[blue]Saved documentation links to {docs_file}[/blue]")
+
         rprint(
             f"\n[bold green]Successfully created example in {example_dir}[/bold green]"
         )

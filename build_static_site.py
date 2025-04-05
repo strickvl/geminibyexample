@@ -700,6 +700,20 @@ def generate_example_html(
             </div>
 """)
 
+        # Documentation links section if available
+        documentation_links = example.get("documentation_links", [])
+        if documentation_links:
+            f.write("""            <hr>
+            <h3>For More Information</h3>
+            <p>See the original documentation:</p>
+            <ul>
+""")
+            for link in documentation_links:
+                f.write(f"""                <li><a href="{link}" target="_blank">{link}</a></li>
+""")
+            f.write("""            </ul>
+""")
+
         # Next example link
         if next_example:
             f.write(f"""            <p class="next">
@@ -828,6 +842,14 @@ def generate_llms_txt(
                     f.write(
                         "*This example includes images which can be viewed on the website.*\n\n"
                     )
+                
+                # Documentation links if any
+                documentation_links = example.get("documentation_links", [])
+                if documentation_links:
+                    f.write("For more information, see the original documentation:\n")
+                    for link in documentation_links:
+                        f.write(f"- {link}\n")
+                    f.write("\n")
 
     logger.info(f"Generated llms.txt at {output_file}")
 

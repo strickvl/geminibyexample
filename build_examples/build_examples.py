@@ -223,6 +223,15 @@ def process_example_directory(example_dir: Path) -> Dict[str, Any]:
     
     # Sort image files by name for consistent order
     image_files.sort(key=lambda p: p.name)
+    
+    # Find documentation links file
+    example_name = example_id.split("-", 1)[1]
+    links_file = example_dir / f"{example_name}_links.txt"
+    documentation_links = []
+    if links_file.exists():
+        with open(links_file, "r") as f:
+            documentation_links = [line.strip() for line in f.readlines() if line.strip()]
+        logger.info(f"Found {len(documentation_links)} documentation links for {example_id}")
 
     if not python_files:
         logger.warning(f"No Python files found in {example_dir}")
@@ -262,7 +271,8 @@ def process_example_directory(example_dir: Path) -> Dict[str, Any]:
         "order": order,
         "code_segments": code_segments,
         "shell_segments": shell_segments,
-        "image_data": image_data
+        "image_data": image_data,
+        "documentation_links": documentation_links
     }
 
     return example_data
