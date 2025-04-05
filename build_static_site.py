@@ -12,6 +12,7 @@ import os
 import shutil
 from pathlib import Path
 from html import escape
+from typing import List, Dict, Any, Optional
 
 # Configure logging
 logging.basicConfig(
@@ -24,7 +25,7 @@ SITE_TITLE = "Gemini by Example"
 SITE_DESCRIPTION = "Learn the Gemini API through annotated examples"
 
 
-def load_examples():
+def load_examples() -> List[Dict[str, Any]]:
     """Load examples from the JSON file."""
     try:
         data_file = Path(__file__).parent / "data" / "examples.json"
@@ -40,7 +41,7 @@ def load_examples():
         return []
 
 
-def find_next_example(examples, current_order):
+def find_next_example(examples: List[Dict[str, Any]], current_order: int) -> Optional[Dict[str, Any]]:
     """Find the next example based on order."""
     for example in examples:
         if example["order"] > current_order:
@@ -48,7 +49,7 @@ def find_next_example(examples, current_order):
     return None
 
 
-def generate_html_head(title, include_main_css=True, base_url="."):
+def generate_html_head(title: str, include_main_css: bool = True, base_url: str = ".") -> str:
     """Generate HTML head section.
 
     Args:
@@ -218,7 +219,7 @@ def generate_html_head(title, include_main_css=True, base_url="."):
     return head
 
 
-def generate_html_footer():
+def generate_html_footer() -> str:
     """Generate HTML footer section."""
     return """        </main>
         <footer>
@@ -302,7 +303,7 @@ def generate_html_footer():
 """
 
 
-def generate_index_html(examples, output_dir):
+def generate_index_html(examples: List[Dict[str, Any]], output_dir: Path) -> None:
     """Generate index.html page."""
     logger.info("Generating index page with %d examples" % len(examples))
 
@@ -340,7 +341,7 @@ def generate_index_html(examples, output_dir):
     logger.info("Generated index page at %s" % output_file)
 
 
-def generate_example_html(example, examples, output_dir):
+def generate_example_html(example: Dict[str, Any], examples: List[Dict[str, Any]], output_dir: Path) -> None:
     """Generate an individual example page."""
     logger.info(
         "Generating page for example: %s - %s" % (example["id"], example["title"])
@@ -501,7 +502,7 @@ def generate_example_html(example, examples, output_dir):
     logger.info("Generated example page at %s" % output_file)
 
 
-def copy_static_files(source_dir, output_dir):
+def copy_static_files(source_dir: Path, output_dir: Path) -> None:
     """Copy static files to the output directory."""
     target_dir = output_dir / "static"
 
@@ -516,7 +517,7 @@ def copy_static_files(source_dir, output_dir):
         logger.warning("Static directory %s does not exist" % source_dir)
 
 
-def generate_static_site():
+def generate_static_site() -> None:
     """Generate the complete static site."""
     examples = load_examples()
     if not examples:

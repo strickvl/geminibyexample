@@ -1,7 +1,8 @@
 from fasthtml.common import *
+from typing import Any
 
 
-def layout(title, content):
+def layout(title: str, content: Any) -> Titled:
     """
     Main layout template for Gemini by Example.
 
