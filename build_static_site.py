@@ -262,7 +262,7 @@ def generate_html_footer() -> str:
     """Generate HTML footer section with current date."""
     from datetime import datetime
 
-    current_date = datetime.now().strftime("%B %d, %Y")
+    current_date = datetime.now().strftime("%B %-d, %Y")
 
     return (
         """        </main>
