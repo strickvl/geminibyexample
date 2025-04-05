@@ -89,6 +89,9 @@
           "caption": "Generation"
         }
       ],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/text-generation"
+      ],
       "section_id": "001-basic-text",
       "section_title": "Text Basics"
     },
@@ -227,6 +230,9 @@
         }
       ],
       "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/text-generation"
+      ],
       "section_id": "001-basic-text",
       "section_title": "Text Basics"
     },
@@ -365,6 +371,9 @@
         }
       ],
       "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/text-generation#system-instructions"
+      ],
       "section_id": "001-basic-text",
       "section_title": "Text Basics"
     },
@@ -586,6 +595,9 @@
         }
       ],
       "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/vision?lang=python"
+      ],
       "section_id": "002-basic-images",
       "section_title": "Images Basics"
     }

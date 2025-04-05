@@ -34,6 +34,9 @@ AI works by learning patterns from data, then using those patterns to make predi
 
 *This example includes images which can be viewed on the website.*
 
+For more information, see the original documentation:
+- https://ai.google.dev/gemini-api/docs/text-generation
+
 ### Streaming text
 
 This example demonstrates how to use the Gemini API to generate text content and stream the output.
@@ -54,6 +57,9 @@ $ pip install google-generative-ai
 $ python streaming-generation.py
 AI, or Artificial Intelligence, is a broad field of computer science focused on creating machines capable of performing tasks that typically require human intelligence. It involves developing algorithms and models that enable computers to learn from data, reason, solve problems, understand natural language, perceive their environment, and make decisions.
 ```
+
+For more information, see the original documentation:
+- https://ai.google.dev/gemini-api/docs/text-generation
 
 ### System prompt
 
@@ -77,6 +83,9 @@ $ pip install google-generative-ai
 $ python system_instructions.py
 Ahoy there, matey! What be on yer mind?
 ```
+
+For more information, see the original documentation:
+- https://ai.google.dev/gemini-api/docs/text-generation#system-instructions
 
 ## Images Basics
 
@@ -117,4 +126,7 @@ $ python gemini-cat.py
 Response from URL Image:
  This looks like a British Shorthair cat.
 ```
+
+For more information, see the original documentation:
+- https://ai.google.dev/gemini-api/docs/vision?lang=python
 
