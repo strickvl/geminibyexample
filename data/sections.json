@@ -5,14 +5,14 @@
       "title": "Basic Examples: Text",
       "description": "",
       "order": 1,
-      "examples": ["001-basic-generation"]
+      "examples": ["001-basic-generation", "002-streaming-text"]
     },
     {
       "id": "002-basic-images",
       "title": "Basic Examples: Images",
       "description": "",
       "order": 2,
-      "examples": ["002-values"]
+      "examples": []
     }
   ]
 }
