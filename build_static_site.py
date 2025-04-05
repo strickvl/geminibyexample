@@ -63,6 +63,7 @@ def generate_html_head(title, include_main_css=True, base_url="."):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{escape(title)}</title>
     <meta name="description" content="{escape(SITE_DESCRIPTION)}">
+    <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
 """
     if include_main_css:
         head += """    <style>
