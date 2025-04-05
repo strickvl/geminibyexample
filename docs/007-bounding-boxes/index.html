@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit an image - Gemini by Example</title>
+    <title>Bounding boxes - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
     <style>
@@ -158,7 +158,7 @@
                     <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
                         <a href="../" style="text-decoration: none; color: #666;">Images Basics</a>
                     </div>
-                    <h1 style="margin: 0; margin-bottom: 10px;">Edit an image</h1>
+                    <h1 style="margin: 0; margin-bottom: 10px;">Bounding boxes</h1>
                 </div>
                 <div style="position: relative; margin-top: 10px;">
                     <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
@@ -171,7 +171,7 @@
                 </div>
             </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
-                This example demonstrates how to edit an existing image of a cat to add a hat using the Gemini API.
+                This example demonstrates how to use the Gemini API to detect an object (a cat) in an image and retrieve its bounding box coordinates.
             </p>
             <div class="row">
                 <div class="docs">
@@ -180,21 +180,32 @@
                 </div>
                 <div class="code">
                     <pre><code>from google import genai
-from google.genai import types
-from PIL import Image
 import requests
-from io import BytesIO
-import os</code></pre>
+from PIL import Image
+from io import BytesIO</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Set your Gemini API key</div>
+                    <div style='font-size: 0.9em; color: #666;'>Initialize the Gemini client with your API key</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
+                    <pre><code>client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)</code></pre>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="docs">
+                    <div style='font-size: 0.9em; color: #666;'>Specify the prompt, asking for a bounding box around the cat</div>
+
+                </div>
+                <div class="code">
+                    <pre><code>prompt = (
+    &quot;Return a bounding box for the cat in this image &quot;
+    &quot;in [ymin, xmin, ymax, xmax] format.&quot;
+)</code></pre>
                 </div>
             </div>
             <hr>
@@ -212,59 +223,50 @@ cat_image = Image.open(BytesIO(response.content))</code></pre>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Prepare a prompt.</div>
+                    <div style='font-size: 0.9em; color: #666;'>Call the Gemini API to generate content with the image and prompt</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>text_prompt = &quot;Please add a stylish top hat to this cat.&quot;</code></pre>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Generate content with the Gemini API</div>
-
-                </div>
-                <div class="code">
-                    <pre><code>model = &quot;gemini-2.0-flash-exp-image-generation&quot;
-response = client.models.generate_content(
-    model=model,
-    contents=[text_prompt, cat_image],
-    config=types.GenerateContentConfig(response_modalities=[&quot;Text&quot;, &quot;Image&quot;]),
+                    <pre><code>response = client.models.generate_content(
+    model=&quot;gemini-1.5-pro&quot;, contents=[cat_image, prompt]
 )</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Process the response. Retry if you get a 500 error.</div>
+                    <div style='font-size: 0.9em; color: #666;'>Print the response text, which will contain the bounding box coordinates</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>for part in response.candidates[0].content.parts:
-    if part.text is not None:
-        print(part.text)
-    elif part.inline_data is not None:
-        print(f&quot;Received {part.inline_data.mime_type} data&quot;)</code></pre>
+                    <pre><code>print(response.text)</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>The data is provided as raw bytes, not base64-encoded</div>
+                    <div style='font-size: 0.9em; color: #666;'>Normalize Coordinates
+The model returns bounding box coordinates in the format [y_min, x_min, y_max, x_max].
+To convert these normalized coordinates to the pixel coordinates of your original image, follow these steps:
+1. Divide each output coordinate by 1000.
+2. Multiply the x-coordinates by the original image width.
+3. Multiply the y-coordinates by the original image height.
+
+Example Calculation (assuming the model returns [200, 300, 700, 800] and the image is 1000x800):</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>image = Image.open(BytesIO(part.inline_data.data))
-        image.save(&quot;cat_with_hat.png&quot;)
-        print(&quot;\nImage saved as cat_with_hat.png&quot;)</code></pre>
+                    <pre><code>y_min = (200 / 1000) * 800  # 160
+x_min = (300 / 1000) * 1000  # 300
+y_max = (700 / 1000) * 800  # 560
+x_max = (800 / 1000) * 1000  # 800</code></pre>
                 </div>
             </div>
             <hr>
             <h2>Running the Example</h2>
             <div class="row">
                 <div class="docs">
-                    <p>First, install the Google Generative AI library</p>
+                    <p>First, install the Google Generative AI library, requests, and Pillow</p>
                 </div>
                 <div class="code">
                     <div class="buttons">
@@ -286,28 +288,16 @@ response = client.models.generate_content(
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python edit_cat.py</span></span>
-</code></pre>
+                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python object-detection.py</span></span>
+[0.1, 0.2, 0.7, 0.8]</code></pre>
                 </div>
-            </div>
-            <hr>
-            <div style="margin: 30px 0; text-align: center;">
-                <figure>
-                    <img src="images/cat_with_hat.png" alt="An illustration or output
-                    from the example code" style="max-width: 100%; border: 1px solid #eee;
-                    border-radius: 4px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <figcaption style="margin-top: 10px; color: #666; font-style: italic;"></figcaption>
-                </figure>
             </div>
             <hr>
             <h4>Further Information</h4>
             <ul style="font-size: 0.9em;">
-                <li><a href="https://ai.google.dev/gemini-api/docs/image-generation#gemini-image-editing"
+                <li><a href="https://ai.google.dev/gemini-api/docs/vision?lang=python#bbox"
                          target="_blank">Gemini docs link 1</a></li>
             </ul>
-            <p class="next">
-                Next example: <a href="../007-bounding-boxes/">Bounding boxes</a>
-            </p>
         </main>
         <footer>
             <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 05, 2025</span></p>

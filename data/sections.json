@@ -12,7 +12,7 @@
       "title": "Images Basics",
       "description": "",
       "order": 2,
-      "examples": ["004-image-q-a", "005-image-generation"]
+      "examples": ["004-image-q-a", "005-image-generation", "006-editing-images", "007-bounding-boxes"]
     }
   ]
 }

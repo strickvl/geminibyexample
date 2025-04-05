@@ -12,8 +12,8 @@ It's organized by sections, with each example's Python code and terminal command
 * Images Basics
   * Understanding images
   * Image generation (Gemini and Imagen)
-* Miscellaneous Examples
   * Edit an image
+  * Bounding boxes
 
 ## Text Basics
 
@@ -186,10 +186,6 @@ $ python image-generation.py
 For more information, see the original documentation:
 - https://ai.google.dev/gemini-api/docs/image-generation
 
-## Miscellaneous Examples
-
-Additional examples that don't fit into other categories
-
 ### Edit an image
 
 This example demonstrates how to edit an existing image of a cat to add a hat using the Gemini API.
@@ -231,4 +227,40 @@ $ python edit_cat.py
 
 For more information, see the original documentation:
 - https://ai.google.dev/gemini-api/docs/image-generation#gemini-image-editing
+
+### Bounding boxes
+
+This example demonstrates how to use the Gemini API to detect an object (a cat) in an image and retrieve its bounding box coordinates.
+
+```python
+from google import genai
+import requests
+from PIL import Image
+from io import BytesIO
+client = genai.Client(api_key="YOUR_API_KEY")
+prompt = (
+    "Return a bounding box for the cat in this image "
+    "in [ymin, xmin, ymax, xmax] format."
+)
+image_url = "https://cataas.com/cat"
+response = requests.get(image_url)
+cat_image = Image.open(BytesIO(response.content))
+response = client.models.generate_content(
+    model="gemini-1.5-pro", contents=[cat_image, prompt]
+)
+print(response.text)
+y_min = (200 / 1000) * 800  # 160
+x_min = (300 / 1000) * 1000  # 300
+y_max = (700 / 1000) * 800  # 560
+x_max = (800 / 1000) * 1000  # 800
+```
+
+```shell
+$ pip install google-generative-ai Pillow requests
+$ python object-detection.py
+[0.1, 0.2, 0.7, 0.8]
+```
+
+For more information, see the original documentation:
+- https://ai.google.dev/gemini-api/docs/vision?lang=python#bbox
 

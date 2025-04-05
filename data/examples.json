@@ -1022,8 +1022,227 @@
       "documentation_links": [
         "https://ai.google.dev/gemini-api/docs/image-generation#gemini-image-editing"
       ],
-      "section_id": "999-misc",
-      "section_title": "Miscellaneous Examples"
+      "section_id": "002-basic-images",
+      "section_title": "Images Basics"
+    },
+    {
+      "id": "007-bounding-boxes",
+      "title": "Bounding boxes",
+      "description": "This example demonstrates how to use the Gemini API to detect an object (a cat) in an image and retrieve its bounding box coordinates.",
+      "order": 7,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import necessary libraries. Make sure Pillow is installed!\n",
+          "display_code": "",
+          "annotation": "Import necessary libraries. Make sure Pillow is installed!",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ],
+          "target_line_range": [
+            5,
+            9
+          ]
+        },
+        {
+          "code": "from google import genai\nimport requests\nfrom PIL import Image\nfrom io import BytesIO\n\n",
+          "display_code": "from google import genai\nimport requests\nfrom PIL import Image\nfrom io import BytesIO\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            9
+          ]
+        },
+        {
+          "code": "# Initialize the Gemini client with your API key\n",
+          "display_code": "",
+          "annotation": "Initialize the Gemini client with your API key",
+          "is_comment": true,
+          "start_line": 10,
+          "line_range": [
+            10,
+            10
+          ],
+          "target_line_range": [
+            11,
+            12
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=\"YOUR_API_KEY\")\n\n",
+          "display_code": "client = genai.Client(api_key=\"YOUR_API_KEY\")\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 11,
+          "line_range": [
+            11,
+            12
+          ]
+        },
+        {
+          "code": "# Specify the prompt, asking for a bounding box around the cat\n",
+          "display_code": "",
+          "annotation": "Specify the prompt, asking for a bounding box around the cat",
+          "is_comment": true,
+          "start_line": 13,
+          "line_range": [
+            13,
+            13
+          ],
+          "target_line_range": [
+            14,
+            18
+          ]
+        },
+        {
+          "code": "prompt = (\n    \"Return a bounding box for the cat in this image \"\n    \"in [ymin, xmin, ymax, xmax] format.\"\n)\n\n",
+          "display_code": "prompt = (\n    \"Return a bounding box for the cat in this image \"\n    \"in [ymin, xmin, ymax, xmax] format.\"\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 14,
+          "line_range": [
+            14,
+            18
+          ]
+        },
+        {
+          "code": "# Download the cat image from cataas.com\n",
+          "display_code": "",
+          "annotation": "Download the cat image from cataas.com",
+          "is_comment": true,
+          "start_line": 19,
+          "line_range": [
+            19,
+            19
+          ],
+          "target_line_range": [
+            20,
+            23
+          ]
+        },
+        {
+          "code": "image_url = \"https://cataas.com/cat\"\nresponse = requests.get(image_url)\ncat_image = Image.open(BytesIO(response.content))\n\n",
+          "display_code": "image_url = \"https://cataas.com/cat\"\nresponse = requests.get(image_url)\ncat_image = Image.open(BytesIO(response.content))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 20,
+          "line_range": [
+            20,
+            23
+          ]
+        },
+        {
+          "code": "# Call the Gemini API to generate content with the image and prompt\n",
+          "display_code": "",
+          "annotation": "Call the Gemini API to generate content with the image and prompt",
+          "is_comment": true,
+          "start_line": 24,
+          "line_range": [
+            24,
+            24
+          ],
+          "target_line_range": [
+            25,
+            28
+          ]
+        },
+        {
+          "code": "response = client.models.generate_content(\n    model=\"gemini-1.5-pro\", contents=[cat_image, prompt]\n)\n\n",
+          "display_code": "response = client.models.generate_content(\n    model=\"gemini-1.5-pro\", contents=[cat_image, prompt]\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 25,
+          "line_range": [
+            25,
+            28
+          ]
+        },
+        {
+          "code": "# Print the response text, which will contain the bounding box coordinates\n",
+          "display_code": "",
+          "annotation": "Print the response text, which will contain the bounding box coordinates",
+          "is_comment": true,
+          "start_line": 29,
+          "line_range": [
+            29,
+            29
+          ],
+          "target_line_range": [
+            30,
+            31
+          ]
+        },
+        {
+          "code": "print(response.text)\n\n",
+          "display_code": "print(response.text)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 30,
+          "line_range": [
+            30,
+            31
+          ]
+        },
+        {
+          "code": "#\n# Normalize Coordinates\n# The model returns bounding box coordinates in the format [y_min, x_min, y_max, x_max].\n# To convert these normalized coordinates to the pixel coordinates of your original image, follow these steps:\n# 1. Divide each output coordinate by 1000.\n# 2. Multiply the x-coordinates by the original image width.\n# 3. Multiply the y-coordinates by the original image height.\n#\n# Example Calculation (assuming the model returns [200, 300, 700, 800] and the image is 1000x800):\n",
+          "display_code": "",
+          "annotation": "Normalize Coordinates\nThe model returns bounding box coordinates in the format [y_min, x_min, y_max, x_max].\nTo convert these normalized coordinates to the pixel coordinates of your original image, follow these steps:\n1. Divide each output coordinate by 1000.\n2. Multiply the x-coordinates by the original image width.\n3. Multiply the y-coordinates by the original image height.\n\nExample Calculation (assuming the model returns [200, 300, 700, 800] and the image is 1000x800):",
+          "is_comment": true,
+          "start_line": 32,
+          "line_range": [
+            32,
+            40
+          ],
+          "target_line_range": [
+            41,
+            44
+          ]
+        },
+        {
+          "code": "y_min = (200 / 1000) * 800  # 160\nx_min = (300 / 1000) * 1000  # 300\ny_max = (700 / 1000) * 800  # 560\nx_max = (800 / 1000) * 1000  # 800\n",
+          "display_code": "y_min = (200 / 1000) * 800  # 160\nx_min = (300 / 1000) * 1000  # 300\ny_max = (700 / 1000) * 800  # 560\nx_max = (800 / 1000) * 1000  # 800\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 41,
+          "line_range": [
+            41,
+            44
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library, requests, and Pillow",
+          "command": "pip install google-generative-ai Pillow requests",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python object-detection.py",
+          "output": "[0.1, 0.2, 0.7, 0.8]"
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/vision?lang=python#bbox"
+      ],
+      "section_id": "002-basic-images",
+      "section_title": "Images Basics"
     }
   ],
   "sections": [
@@ -1045,14 +1264,10 @@
       "order": 2,
       "examples": [
         "004-image-q-a",
-        "005-image-generation"
+        "005-image-generation",
+        "006-editing-images",
+        "007-bounding-boxes"
       ]
-    },
-    {
-      "id": "999-misc",
-      "title": "Miscellaneous Examples",
-      "description": "Additional examples that don't fit into other categories",
-      "order": 999
     }
   ]
 }
