@@ -108,7 +108,9 @@ def find_prev_example(
             e for e in examples if e.get("section_id") == current_section_id
         ]
         prev_example = None
-        for example in sorted(same_section_examples, key=lambda e: e["order"], reverse=True):
+        for example in sorted(
+            same_section_examples, key=lambda e: e["order"], reverse=True
+        ):
             if example["order"] < current_order:
                 return example
 
@@ -450,7 +452,7 @@ def generate_index_html(
         f.write(generate_html_head(SITE_TITLE, base_url="."))
 
         # Page content
-        f.write(f"""            <h1>{SITE_TITLE}</h1>
+        f.write(f"""
             <p style="margin: 20px 0; color: #444; line-height: 1.6;">
                 Gemini is Google's most capable AI model for generating text, code, images, and more. Please visit the <a href="https://ai.google.dev/gemini-api/docs" target="_blank">official documentation</a> to learn more.
             </p>
@@ -778,21 +780,21 @@ def generate_example_html(
         # Navigation links
         f.write("""            <div class="navigation">
 """)
-        
+
         # Previous example link
         if prev_example:
             f.write(f"""                <p class="prev">
                     <span>← Previous:</span> <a href="../{prev_example["id"]}/">{prev_example["title"]}</a>
                 </p>
 """)
-            
+
         # Next example link
         if next_example:
             f.write(f"""                <p class="next">
                     <span>Next:</span> <a href="../{next_example["id"]}/">{next_example["title"]}</a> →
                 </p>
 """)
-            
+
         f.write("""            </div>
 """)
 
