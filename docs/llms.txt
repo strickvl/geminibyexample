@@ -12,6 +12,8 @@ It's organized by sections, with each example's Python code and terminal command
 * Images Basics
   * Understanding images
   * Image generation (Gemini and Imagen)
+* Miscellaneous Examples
+  * Edit an image
 
 ## Text Basics
 
@@ -183,4 +185,50 @@ $ python image-generation.py
 
 For more information, see the original documentation:
 - https://ai.google.dev/gemini-api/docs/image-generation
+
+## Miscellaneous Examples
+
+Additional examples that don't fit into other categories
+
+### Edit an image
+
+This example demonstrates how to edit an existing image of a cat to add a hat using the Gemini API.
+
+```python
+from google import genai
+from google.genai import types
+from PIL import Image
+import requests
+from io import BytesIO
+import os
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+image_url = "https://cataas.com/cat"
+response = requests.get(image_url)
+cat_image = Image.open(BytesIO(response.content))
+text_prompt = "Please add a stylish top hat to this cat."
+model = "gemini-2.0-flash-exp-image-generation"
+response = client.models.generate_content(
+    model=model,
+    contents=[text_prompt, cat_image],
+    config=types.GenerateContentConfig(response_modalities=["Text", "Image"]),
+)
+for part in response.candidates[0].content.parts:
+    if part.text is not None:
+        print(part.text)
+    elif part.inline_data is not None:
+        print(f"Received {part.inline_data.mime_type} data")
+image = Image.open(BytesIO(part.inline_data.data))
+        image.save("cat_with_hat.png")
+        print("\nImage saved as cat_with_hat.png")
+```
+
+```shell
+$ pip install google-generative-ai Pillow requests
+$ python edit_cat.py
+```
+
+*This example includes images which can be viewed on the website.*
+
+For more information, see the original documentation:
+- https://ai.google.dev/gemini-api/docs/image-generation#gemini-image-editing
 

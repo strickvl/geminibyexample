@@ -799,6 +799,231 @@
       ],
       "section_id": "002-basic-images",
       "section_title": "Images Basics"
+    },
+    {
+      "id": "006-editing-images",
+      "title": "Edit an image",
+      "description": "This example demonstrates how to edit an existing image of a cat to add a hat using the Gemini API.",
+      "order": 6,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 3,
+          "line_range": [
+            3,
+            3
+          ]
+        },
+        {
+          "code": "# Import necessary libraries. Make sure Pillow is installed!\n",
+          "display_code": "",
+          "annotation": "Import necessary libraries. Make sure Pillow is installed!",
+          "is_comment": true,
+          "start_line": 4,
+          "line_range": [
+            4,
+            4
+          ],
+          "target_line_range": [
+            5,
+            11
+          ]
+        },
+        {
+          "code": "from google import genai\nfrom google.genai import types\nfrom PIL import Image\nimport requests\nfrom io import BytesIO\nimport os\n\n",
+          "display_code": "from google import genai\nfrom google.genai import types\nfrom PIL import Image\nimport requests\nfrom io import BytesIO\nimport os\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 5,
+          "line_range": [
+            5,
+            11
+          ]
+        },
+        {
+          "code": "# Set your Gemini API key\n",
+          "display_code": "",
+          "annotation": "Set your Gemini API key",
+          "is_comment": true,
+          "start_line": 12,
+          "line_range": [
+            12,
+            12
+          ],
+          "target_line_range": [
+            13,
+            14
+          ]
+        },
+        {
+          "code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "display_code": "client = genai.Client(api_key=os.getenv(\"GEMINI_API_KEY\"))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 13,
+          "line_range": [
+            13,
+            14
+          ]
+        },
+        {
+          "code": "# Download the cat image from cataas.com\n",
+          "display_code": "",
+          "annotation": "Download the cat image from cataas.com",
+          "is_comment": true,
+          "start_line": 15,
+          "line_range": [
+            15,
+            15
+          ],
+          "target_line_range": [
+            16,
+            19
+          ]
+        },
+        {
+          "code": "image_url = \"https://cataas.com/cat\"\nresponse = requests.get(image_url)\ncat_image = Image.open(BytesIO(response.content))\n\n",
+          "display_code": "image_url = \"https://cataas.com/cat\"\nresponse = requests.get(image_url)\ncat_image = Image.open(BytesIO(response.content))\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 16,
+          "line_range": [
+            16,
+            19
+          ]
+        },
+        {
+          "code": "# Prepare a prompt.\n",
+          "display_code": "",
+          "annotation": "Prepare a prompt.",
+          "is_comment": true,
+          "start_line": 20,
+          "line_range": [
+            20,
+            20
+          ],
+          "target_line_range": [
+            21,
+            22
+          ]
+        },
+        {
+          "code": "text_prompt = \"Please add a stylish top hat to this cat.\"\n\n",
+          "display_code": "text_prompt = \"Please add a stylish top hat to this cat.\"\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 21,
+          "line_range": [
+            21,
+            22
+          ]
+        },
+        {
+          "code": "# Generate content with the Gemini API\n",
+          "display_code": "",
+          "annotation": "Generate content with the Gemini API",
+          "is_comment": true,
+          "start_line": 23,
+          "line_range": [
+            23,
+            23
+          ],
+          "target_line_range": [
+            24,
+            30
+          ]
+        },
+        {
+          "code": "model = \"gemini-2.0-flash-exp-image-generation\"\nresponse = client.models.generate_content(\n    model=model,\n    contents=[text_prompt, cat_image],\n    config=types.GenerateContentConfig(response_modalities=[\"Text\", \"Image\"]),\n)\n\n",
+          "display_code": "model = \"gemini-2.0-flash-exp-image-generation\"\nresponse = client.models.generate_content(\n    model=model,\n    contents=[text_prompt, cat_image],\n    config=types.GenerateContentConfig(response_modalities=[\"Text\", \"Image\"]),\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 24,
+          "line_range": [
+            24,
+            30
+          ]
+        },
+        {
+          "code": "# Process the response. Retry if you get a 500 error.\n",
+          "display_code": "",
+          "annotation": "Process the response. Retry if you get a 500 error.",
+          "is_comment": true,
+          "start_line": 31,
+          "line_range": [
+            31,
+            31
+          ],
+          "target_line_range": [
+            32,
+            36
+          ]
+        },
+        {
+          "code": "for part in response.candidates[0].content.parts:\n    if part.text is not None:\n        print(part.text)\n    elif part.inline_data is not None:\n        print(f\"Received {part.inline_data.mime_type} data\")\n",
+          "display_code": "for part in response.candidates[0].content.parts:\n    if part.text is not None:\n        print(part.text)\n    elif part.inline_data is not None:\n        print(f\"Received {part.inline_data.mime_type} data\")\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 32,
+          "line_range": [
+            32,
+            36
+          ]
+        },
+        {
+          "code": "        # The data is provided as raw bytes, not base64-encoded\n",
+          "display_code": "",
+          "annotation": "The data is provided as raw bytes, not base64-encoded",
+          "is_comment": true,
+          "start_line": 37,
+          "line_range": [
+            37,
+            37
+          ],
+          "target_line_range": [
+            38,
+            40
+          ]
+        },
+        {
+          "code": "        image = Image.open(BytesIO(part.inline_data.data))\n        image.save(\"cat_with_hat.png\")\n        print(\"\\nImage saved as cat_with_hat.png\")\n",
+          "display_code": "        image = Image.open(BytesIO(part.inline_data.data))\n        image.save(\"cat_with_hat.png\")\n        print(\"\\nImage saved as cat_with_hat.png\")\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 38,
+          "line_range": [
+            38,
+            40
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the Google Generative AI library",
+          "command": "pip install google-generative-ai Pillow requests",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python edit_cat.py",
+          "output": ""
+        }
+      ],
+      "image_data": [
+        {
+          "path": "examples/006-editing-images/cat_with_hat.png",
+          "filename": "cat_with_hat.png",
+          "caption": "cat_with_hat"
+        }
+      ],
+      "documentation_links": [
+        "https://ai.google.dev/gemini-api/docs/image-generation#gemini-image-editing"
+      ],
+      "section_id": "999-misc",
+      "section_title": "Miscellaneous Examples"
     }
   ],
   "sections": [
@@ -822,6 +1047,12 @@
         "004-image-q-a",
         "005-image-generation"
       ]
+    },
+    {
+      "id": "999-misc",
+      "title": "Miscellaneous Examples",
+      "description": "Additional examples that don't fit into other categories",
+      "order": 999
     }
   ]
 }
