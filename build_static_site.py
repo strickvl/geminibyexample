@@ -275,11 +275,27 @@ def generate_html_footer() -> str:
         function copyCode(button) {
             const codeBlock = button.closest('.code').querySelector('pre');
             const code = codeBlock.textContent;
-            
+            copyToClipboard(code, button);
+        }
+        
+        // Function to copy all Python code
+        document.addEventListener('DOMContentLoaded', function() {
+            const copyAllButton = document.getElementById('copy-all-python');
+            if (copyAllButton) {
+                copyAllButton.addEventListener('click', function() {
+                    const allCodeElement = document.getElementById('all-python-code');
+                    const code = allCodeElement.textContent;
+                    copyToClipboard(code, copyAllButton);
+                });
+            }
+        });
+        
+        // Shared function to copy text and show tooltip
+        function copyToClipboard(text, element) {
             // For older browsers, fallback to textarea method
             if (!navigator.clipboard) {
                 const textArea = document.createElement('textarea');
-                textArea.value = code;
+                textArea.value = text;
                 textArea.style.position = 'fixed';  // Avoid scrolling to bottom
                 document.body.appendChild(textArea);
                 textArea.focus();
@@ -287,10 +303,10 @@ def generate_html_footer() -> str:
                 
                 try {
                     document.execCommand('copy');
-                    showTooltip(button, 'Copied!');
+                    showTooltip(element, 'Copied!');
                 } catch (err) {
                     console.error('Failed to copy text: ', err);
-                    showTooltip(button, 'Error!');
+                    showTooltip(element, 'Error!');
                 }
                 
                 document.body.removeChild(textArea);
@@ -298,30 +314,44 @@ def generate_html_footer() -> str:
             }
             
             // Use clipboard API if available
-            navigator.clipboard.writeText(code).then(() => {
-                showTooltip(button, 'Copied!');
+            navigator.clipboard.writeText(text).then(() => {
+                showTooltip(element, 'Copied!');
             }).catch(err => {
                 console.error('Failed to copy text: ', err);
-                showTooltip(button, 'Error!');
+                showTooltip(element, 'Error!');
             });
         }
         
         // Helper to show tooltip
-        function showTooltip(button, message) {
-            // Remove any existing tooltips
-            const oldTooltip = button.parentElement.querySelector('.tooltip');
-            if (oldTooltip) {
-                oldTooltip.remove();
+        function showTooltip(element, message) {
+            // Check if there's already a tooltip
+            let tooltip = element.parentElement.querySelector('.tooltip');
+            if (tooltip) {
+                tooltip.textContent = message;
+            } else {
+                // Create and append new tooltip
+                tooltip = document.createElement('span');
+                tooltip.textContent = message;
+                tooltip.className = 'tooltip';
+                tooltip.style.position = 'absolute';
+                tooltip.style.background = '#333';
+                tooltip.style.color = 'white';
+                tooltip.style.padding = '2px 8px';
+                tooltip.style.borderRadius = '4px';
+                tooltip.style.fontSize = '12px';
+                tooltip.style.top = '-25px';
+                tooltip.style.right = '0';
+                
+                // Make sure the parent has position relative for tooltip positioning
+                if (getComputedStyle(element.parentElement).position === 'static') {
+                    element.parentElement.style.position = 'relative';
+                }
+                
+                element.parentElement.appendChild(tooltip);
             }
             
-            // Create and append new tooltip
-            const tooltip = document.createElement('span');
-            tooltip.textContent = message;
-            tooltip.className = 'tooltip';
-            button.parentElement.appendChild(tooltip);
-            
-            // Remove tooltip after 1 second
-            setTimeout(() => tooltip.remove(), 1000);
+            // Remove tooltip after 1.5 seconds
+            setTimeout(() => tooltip.remove(), 1500);
         }
 
         // Enable keyboard navigation between examples
@@ -482,16 +512,50 @@ def generate_example_html(
     with open(output_file, "w") as f:
         f.write(generate_html_head(f"{example['title']} - {SITE_TITLE}", base_url=".."))
 
-        # Section and page title
+        # Collect all Python code for the "Copy All" button first
+        all_python_code = ""
+        for segment in example["code_segments"]:
+            code_text = segment.get("display_code", "").strip()
+            if code_text:
+                all_python_code += code_text + "\n"
+
+        # Section and page title with "Copy All" button
         section_title = example.get("section_title", "")
+        
+        # Header container with flexbox to position title and button
+        f.write("""            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                <div>
+""")
+        
+        # Title part
         if section_title:
-            f.write(f"""            <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
-                <a href="../" style="text-decoration: none; color: #666;">{section_title}</a>
-            </div>
-            <h1>{example["title"]}</h1>
+            f.write(f"""                    <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
+                        <a href="../" style="text-decoration: none; color: #666;">{section_title}</a>
+                    </div>
+                    <h1 style="margin: 0; margin-bottom: 10px;">{example["title"]}</h1>
 """)
         else:
-            f.write(f"""            <h1>{example["title"]}</h1>
+            f.write(f"""                    <h1 style="margin: 0; margin-bottom: 10px;">{example["title"]}</h1>
+""")
+        
+        f.write("""                </div>
+""")
+        
+        # Button part (if we have Python code)
+        if all_python_code:
+            f.write("""                <div style="position: relative; margin-top: 10px;">
+                    <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                        Copy All Python
+                    </button>
+                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
+                </div>
+""")
+        
+        # Close header container
+        f.write("""            </div>
 """)
 
         # Description if available
@@ -567,14 +631,9 @@ def generate_example_html(
                 </div>
 """)
 
-                # Right column (code)
+                # Right column (code) - without individual copy buttons
                 if code_text:
                     f.write(f"""                <div class="code">
-                    <div class="buttons">
-                        <svg class="copy" title="Copy code" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
-                        </svg>
-                    </div>
                     <pre><code>{escape(code_text)}</code></pre>
                 </div>
 """)

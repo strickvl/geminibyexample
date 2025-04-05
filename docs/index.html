@@ -186,11 +186,27 @@
         function copyCode(button) {
             const codeBlock = button.closest('.code').querySelector('pre');
             const code = codeBlock.textContent;
-            
+            copyToClipboard(code, button);
+        }
+        
+        // Function to copy all Python code
+        document.addEventListener('DOMContentLoaded', function() {
+            const copyAllButton = document.getElementById('copy-all-python');
+            if (copyAllButton) {
+                copyAllButton.addEventListener('click', function() {
+                    const allCodeElement = document.getElementById('all-python-code');
+                    const code = allCodeElement.textContent;
+                    copyToClipboard(code, copyAllButton);
+                });
+            }
+        });
+        
+        // Shared function to copy text and show tooltip
+        function copyToClipboard(text, element) {
             // For older browsers, fallback to textarea method
             if (!navigator.clipboard) {
                 const textArea = document.createElement('textarea');
-                textArea.value = code;
+                textArea.value = text;
                 textArea.style.position = 'fixed';  // Avoid scrolling to bottom
                 document.body.appendChild(textArea);
                 textArea.focus();
@@ -198,10 +214,10 @@
                 
                 try {
                     document.execCommand('copy');
-                    showTooltip(button, 'Copied!');
+                    showTooltip(element, 'Copied!');
                 } catch (err) {
                     console.error('Failed to copy text: ', err);
-                    showTooltip(button, 'Error!');
+                    showTooltip(element, 'Error!');
                 }
                 
                 document.body.removeChild(textArea);
@@ -209,30 +225,44 @@
             }
             
             // Use clipboard API if available
-            navigator.clipboard.writeText(code).then(() => {
-                showTooltip(button, 'Copied!');
+            navigator.clipboard.writeText(text).then(() => {
+                showTooltip(element, 'Copied!');
             }).catch(err => {
                 console.error('Failed to copy text: ', err);
-                showTooltip(button, 'Error!');
+                showTooltip(element, 'Error!');
             });
         }
         
         // Helper to show tooltip
-        function showTooltip(button, message) {
-            // Remove any existing tooltips
-            const oldTooltip = button.parentElement.querySelector('.tooltip');
-            if (oldTooltip) {
-                oldTooltip.remove();
+        function showTooltip(element, message) {
+            // Check if there's already a tooltip
+            let tooltip = element.parentElement.querySelector('.tooltip');
+            if (tooltip) {
+                tooltip.textContent = message;
+            } else {
+                // Create and append new tooltip
+                tooltip = document.createElement('span');
+                tooltip.textContent = message;
+                tooltip.className = 'tooltip';
+                tooltip.style.position = 'absolute';
+                tooltip.style.background = '#333';
+                tooltip.style.color = 'white';
+                tooltip.style.padding = '2px 8px';
+                tooltip.style.borderRadius = '4px';
+                tooltip.style.fontSize = '12px';
+                tooltip.style.top = '-25px';
+                tooltip.style.right = '0';
+                
+                // Make sure the parent has position relative for tooltip positioning
+                if (getComputedStyle(element.parentElement).position === 'static') {
+                    element.parentElement.style.position = 'relative';
+                }
+                
+                element.parentElement.appendChild(tooltip);
             }
             
-            // Create and append new tooltip
-            const tooltip = document.createElement('span');
-            tooltip.textContent = message;
-            tooltip.className = 'tooltip';
-            button.parentElement.appendChild(tooltip);
-            
-            // Remove tooltip after 1 second
-            setTimeout(() => tooltip.remove(), 1000);
+            // Remove tooltip after 1.5 seconds
+            setTimeout(() => tooltip.remove(), 1500);
         }
 
         // Enable keyboard navigation between examples

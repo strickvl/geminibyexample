@@ -153,10 +153,23 @@
             <a href="../" class="site-title">Gemini by Example</a>
         </header>
         <main>
-            <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
-                <a href="../" style="text-decoration: none; color: #666;">Basic Examples: Images</a>
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+                <div>
+                    <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
+                        <a href="../" style="text-decoration: none; color: #666;">Basic Examples: Images</a>
+                    </div>
+                    <h1 style="margin: 0; margin-bottom: 10px;">Values in Python</h1>
+                </div>
+                <div style="position: relative; margin-top: 10px;">
+                    <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
+                        </svg>
+                        Copy All Python
+                    </button>
+                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
+                </div>
             </div>
-            <h1>Values in Python</h1>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates the different value types in Python.
             </p>
@@ -167,11 +180,6 @@ They can be defined with single or double quotes.</div>
 
                 </div>
                 <div class="code">
-                    <div class="buttons">
-                        <svg class="copy" title="Copy code" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
-                        </svg>
-                    </div>
                     <pre><code>print(&quot;Hello, World&quot;)
 print(&quot;Hello with single quotes&quot;)</code></pre>
                 </div>
@@ -183,11 +191,6 @@ print(&quot;Hello with single quotes&quot;)</code></pre>
 
                 </div>
                 <div class="code">
-                    <div class="buttons">
-                        <svg class="copy" title="Copy code" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
-                        </svg>
-                    </div>
                     <pre><code>print(42)  # Integer
 print(3.14159)  # Float</code></pre>
                 </div>
@@ -199,11 +202,6 @@ print(3.14159)  # Float</code></pre>
 
                 </div>
                 <div class="code">
-                    <div class="buttons">
-                        <svg class="copy" title="Copy code" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
-                        </svg>
-                    </div>
                     <pre><code>print(True)
 print(False)</code></pre>
                 </div>
@@ -215,11 +213,6 @@ print(False)</code></pre>
 
                 </div>
                 <div class="code">
-                    <div class="buttons">
-                        <svg class="copy" title="Copy code" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
-                        </svg>
-                    </div>
                     <pre><code>print(None)</code></pre>
                 </div>
             </div>
@@ -231,11 +224,6 @@ Lists are ordered, mutable collections</div>
 
                 </div>
                 <div class="code">
-                    <div class="buttons">
-                        <svg class="copy" title="Copy code" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
-                        </svg>
-                    </div>
                     <pre><code>my_list = [1, 2, 3, &quot;four&quot;, 5.0]
 print(my_list)</code></pre>
                 </div>
@@ -247,11 +235,6 @@ print(my_list)</code></pre>
 
                 </div>
                 <div class="code">
-                    <div class="buttons">
-                        <svg class="copy" title="Copy code" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
-                        </svg>
-                    </div>
                     <pre><code>my_tuple = (1, 2, &quot;three&quot;)
 print(my_tuple)</code></pre>
                 </div>
@@ -263,11 +246,6 @@ print(my_tuple)</code></pre>
 
                 </div>
                 <div class="code">
-                    <div class="buttons">
-                        <svg class="copy" title="Copy code" onclick="copyCode(this)" width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
-                        </svg>
-                    </div>
                     <pre><code>my_dict = {&quot;name&quot;: &quot;Python&quot;, &quot;version&quot;: 3.9}
 print(my_dict)</code></pre>
                 </div>
@@ -322,11 +300,27 @@ Hello from Python!
         function copyCode(button) {
             const codeBlock = button.closest('.code').querySelector('pre');
             const code = codeBlock.textContent;
-            
+            copyToClipboard(code, button);
+        }
+        
+        // Function to copy all Python code
+        document.addEventListener('DOMContentLoaded', function() {
+            const copyAllButton = document.getElementById('copy-all-python');
+            if (copyAllButton) {
+                copyAllButton.addEventListener('click', function() {
+                    const allCodeElement = document.getElementById('all-python-code');
+                    const code = allCodeElement.textContent;
+                    copyToClipboard(code, copyAllButton);
+                });
+            }
+        });
+        
+        // Shared function to copy text and show tooltip
+        function copyToClipboard(text, element) {
             // For older browsers, fallback to textarea method
             if (!navigator.clipboard) {
                 const textArea = document.createElement('textarea');
-                textArea.value = code;
+                textArea.value = text;
                 textArea.style.position = 'fixed';  // Avoid scrolling to bottom
                 document.body.appendChild(textArea);
                 textArea.focus();
@@ -334,10 +328,10 @@ Hello from Python!
                 
                 try {
                     document.execCommand('copy');
-                    showTooltip(button, 'Copied!');
+                    showTooltip(element, 'Copied!');
                 } catch (err) {
                     console.error('Failed to copy text: ', err);
-                    showTooltip(button, 'Error!');
+                    showTooltip(element, 'Error!');
                 }
                 
                 document.body.removeChild(textArea);
@@ -345,30 +339,44 @@ Hello from Python!
             }
             
             // Use clipboard API if available
-            navigator.clipboard.writeText(code).then(() => {
-                showTooltip(button, 'Copied!');
+            navigator.clipboard.writeText(text).then(() => {
+                showTooltip(element, 'Copied!');
             }).catch(err => {
                 console.error('Failed to copy text: ', err);
-                showTooltip(button, 'Error!');
+                showTooltip(element, 'Error!');
             });
         }
         
         // Helper to show tooltip
-        function showTooltip(button, message) {
-            // Remove any existing tooltips
-            const oldTooltip = button.parentElement.querySelector('.tooltip');
-            if (oldTooltip) {
-                oldTooltip.remove();
+        function showTooltip(element, message) {
+            // Check if there's already a tooltip
+            let tooltip = element.parentElement.querySelector('.tooltip');
+            if (tooltip) {
+                tooltip.textContent = message;
+            } else {
+                // Create and append new tooltip
+                tooltip = document.createElement('span');
+                tooltip.textContent = message;
+                tooltip.className = 'tooltip';
+                tooltip.style.position = 'absolute';
+                tooltip.style.background = '#333';
+                tooltip.style.color = 'white';
+                tooltip.style.padding = '2px 8px';
+                tooltip.style.borderRadius = '4px';
+                tooltip.style.fontSize = '12px';
+                tooltip.style.top = '-25px';
+                tooltip.style.right = '0';
+                
+                // Make sure the parent has position relative for tooltip positioning
+                if (getComputedStyle(element.parentElement).position === 'static') {
+                    element.parentElement.style.position = 'relative';
+                }
+                
+                element.parentElement.appendChild(tooltip);
             }
             
-            // Create and append new tooltip
-            const tooltip = document.createElement('span');
-            tooltip.textContent = message;
-            tooltip.className = 'tooltip';
-            button.parentElement.appendChild(tooltip);
-            
-            // Remove tooltip after 1 second
-            setTimeout(() => tooltip.remove(), 1000);
+            // Remove tooltip after 1.5 seconds
+            setTimeout(() => tooltip.remove(), 1500);
         }
 
         // Enable keyboard navigation between examples
