@@ -619,9 +619,9 @@
           ]
         },
         {
-          "code": "# Import necessary libraries\n",
+          "code": "# Import necessary libraries. Make sure Pillow is installed!\n",
           "display_code": "",
-          "annotation": "Import necessary libraries",
+          "annotation": "Import necessary libraries. Make sure Pillow is installed!",
           "is_comment": true,
           "start_line": 4,
           "line_range": [

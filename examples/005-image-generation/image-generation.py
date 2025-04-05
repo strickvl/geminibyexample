@@ -1,7 +1,7 @@
 # Image generation (Gemini and Imagen)
 # This example demonstrates generating images using both Gemini 2.0 Flash and Imagen 3 models, focusing on cat-related prompts.
 
-# Import necessary libraries
+# Import necessary libraries. Make sure Pillow is installed!
 from google import genai
 from google.genai import types
 from PIL import Image
