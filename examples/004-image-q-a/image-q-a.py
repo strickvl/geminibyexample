@@ -12,7 +12,7 @@ client = genai.Client(api_key="YOUR_API_KEY")
 
 # We'll start by using an image URL.
 # Load an image of a cat from a URL
-image_url = "https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+image_url = "https://cataas.com/cat"
 image_response = requests.get(image_url)
 image_content = image_response.content
 

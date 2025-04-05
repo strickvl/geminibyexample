@@ -453,8 +453,8 @@
           ]
         },
         {
-          "code": "image_url = \"https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1\"\nimage_response = requests.get(image_url)\nimage_content = image_response.content\n\n",
-          "display_code": "image_url = \"https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1\"\nimage_response = requests.get(image_url)\nimage_content = image_response.content\n\n",
+          "code": "image_url = \"https://cataas.com/cat\"\nimage_response = requests.get(image_url)\nimage_content = image_response.content\n\n",
+          "display_code": "image_url = \"https://cataas.com/cat\"\nimage_response = requests.get(image_url)\nimage_content = image_response.content\n\n",
           "annotation": "",
           "is_comment": false,
           "start_line": 15,
@@ -576,7 +576,7 @@
         },
         {
           "explanation": "Download an example cat image (replace with your own if needed)",
-          "command": "wget https://images.pexels.com/photos/45201/kitty-cat-kitten-pet-45201.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1 -O cat.jpg",
+          "command": "wget https://cataas.com/cat -O cat.jpg",
           "output": ""
         },
         {
