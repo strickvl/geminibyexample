@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text generation with rate limit handling and retry - Gemini by Example</title>
+    <title>Rate limits and retries - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
     <style>
@@ -175,7 +175,7 @@
                     <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
                         <a href="../" style="text-decoration: none; color: #666;">Miscellaneous</a>
                     </div>
-                    <h1 style="margin: 0; margin-bottom: 10px;">Text generation with rate limit handling and retry</h1>
+                    <h1 style="margin: 0; margin-bottom: 10px;">Rate limits and retries</h1>
                 </div>
                 <div style="position: relative; margin-top: 10px;">
                     <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
@@ -223,7 +223,9 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=os.environ.get(&quot;GEMINI_API_KEY&quot;, &quot;YOUR_API_KEY&quot;), retry_config=retry_config)</code></pre>
+                    <pre><code>client = genai.Client(
+    api_key=os.environ.get(&quot;GEMINI_API_KEY&quot;, &quot;YOUR_API_KEY&quot;), retry_config=retry_config
+)</code></pre>
                 </div>
             </div>
             <hr>
@@ -233,7 +235,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>model = &#x27;gemini-2.0-flash&#x27;</code></pre>
+                    <pre><code>model = &quot;gemini-2.0-flash&quot;</code></pre>
                 </div>
             </div>
             <hr>
@@ -255,10 +257,7 @@
                 </div>
                 <div class="code">
                     <pre><code>try:
-    response = client.models.generate_content(
-        model=model,
-        contents=prompt
-    )
+    response = client.models.generate_content(model=model, contents=prompt)
     print(response.text)
 except genai.errors.APIError as e:
     print(f&quot;An error occurred: {e}&quot;)</code></pre>

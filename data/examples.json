@@ -6255,19 +6255,19 @@
     },
     {
       "id": "029-rate-limits-retries",
-      "title": "Text generation with rate limit handling and retry",
+      "title": "Rate limits and retries",
       "description": "This example demonstrates generating text with the Gemini API, handling rate limiting errors, and using exponential backoff for retries.",
       "order": 29,
       "code_segments": [
         {
-          "code": "\nimport google.generativeai as genai\nimport google.ai.generativelanguage as glm\nimport time\nimport os\n\n",
-          "display_code": "\nimport google.generativeai as genai\nimport google.ai.generativelanguage as glm\nimport time\nimport os\n\n",
+          "code": "\nimport google.generativeai as genai\nimport google.ai.generativelanguage as glm\nimport time\nimport os\n\n\n",
+          "display_code": "\nimport google.generativeai as genai\nimport google.ai.generativelanguage as glm\nimport time\nimport os\n\n\n",
           "annotation": "",
           "is_comment": false,
           "start_line": 3,
           "line_range": [
             3,
-            8
+            9
           ]
         },
         {
@@ -6275,25 +6275,25 @@
           "display_code": "",
           "annotation": "Configure the retry strategy",
           "is_comment": true,
-          "start_line": 9,
-          "line_range": [
-            9,
-            9
-          ],
-          "target_line_range": [
-            10,
-            18
-          ]
-        },
-        {
-          "code": "def configure_retries(base_delay=1, max_delay=60, max_retries=5):\n    \"\"\"Configures exponential backoff retry strategy.\"\"\"\n    return genai.retry.RetryConfig(\n        initial_delay=base_delay,\n        max_delay=max_delay,\n        max_retries=max_retries,\n        retry_on_status_codes=[glm.Code.RESOURCE_EXHAUSTED.value],\n    )\n\n",
-          "display_code": "def configure_retries(base_delay=1, max_delay=60, max_retries=5):\n    \"\"\"Configures exponential backoff retry strategy.\"\"\"\n    return genai.retry.RetryConfig(\n        initial_delay=base_delay,\n        max_delay=max_delay,\n        max_retries=max_retries,\n        retry_on_status_codes=[glm.Code.RESOURCE_EXHAUSTED.value],\n    )\n\n",
-          "annotation": "",
-          "is_comment": false,
           "start_line": 10,
           "line_range": [
             10,
-            18
+            10
+          ],
+          "target_line_range": [
+            11,
+            20
+          ]
+        },
+        {
+          "code": "def configure_retries(base_delay=1, max_delay=60, max_retries=5):\n    \"\"\"Configures exponential backoff retry strategy.\"\"\"\n    return genai.retry.RetryConfig(\n        initial_delay=base_delay,\n        max_delay=max_delay,\n        max_retries=max_retries,\n        retry_on_status_codes=[glm.Code.RESOURCE_EXHAUSTED.value],\n    )\n\n\n",
+          "display_code": "def configure_retries(base_delay=1, max_delay=60, max_retries=5):\n    \"\"\"Configures exponential backoff retry strategy.\"\"\"\n    return genai.retry.RetryConfig(\n        initial_delay=base_delay,\n        max_delay=max_delay,\n        max_retries=max_retries,\n        retry_on_status_codes=[glm.Code.RESOURCE_EXHAUSTED.value],\n    )\n\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 11,
+          "line_range": [
+            11,
+            20
           ]
         },
         {
@@ -6301,14 +6301,14 @@
           "display_code": "",
           "annotation": "Set the retry configuration",
           "is_comment": true,
-          "start_line": 19,
+          "start_line": 21,
           "line_range": [
-            19,
-            19
+            21,
+            21
           ],
           "target_line_range": [
-            20,
-            21
+            22,
+            23
           ]
         },
         {
@@ -6316,10 +6316,10 @@
           "display_code": "retry_config = configure_retries()\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 20,
+          "start_line": 22,
           "line_range": [
-            20,
-            21
+            22,
+            23
           ]
         },
         {
@@ -6327,25 +6327,25 @@
           "display_code": "",
           "annotation": "Initialize the Gemini client with your API key",
           "is_comment": true,
-          "start_line": 22,
+          "start_line": 24,
           "line_range": [
-            22,
-            22
+            24,
+            24
           ],
           "target_line_range": [
-            23,
-            24
+            25,
+            28
           ]
         },
         {
-          "code": "client = genai.Client(api_key=os.environ.get(\"GEMINI_API_KEY\", \"YOUR_API_KEY\"), retry_config=retry_config)\n\n",
-          "display_code": "client = genai.Client(api_key=os.environ.get(\"GEMINI_API_KEY\", \"YOUR_API_KEY\"), retry_config=retry_config)\n\n",
+          "code": "client = genai.Client(\n    api_key=os.environ.get(\"GEMINI_API_KEY\", \"YOUR_API_KEY\"), retry_config=retry_config\n)\n\n",
+          "display_code": "client = genai.Client(\n    api_key=os.environ.get(\"GEMINI_API_KEY\", \"YOUR_API_KEY\"), retry_config=retry_config\n)\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 23,
+          "start_line": 25,
           "line_range": [
-            23,
-            24
+            25,
+            28
           ]
         },
         {
@@ -6353,25 +6353,25 @@
           "display_code": "",
           "annotation": "Select the model",
           "is_comment": true,
-          "start_line": 25,
+          "start_line": 29,
           "line_range": [
-            25,
-            25
+            29,
+            29
           ],
           "target_line_range": [
-            26,
-            27
+            30,
+            31
           ]
         },
         {
-          "code": "model = 'gemini-2.0-flash'\n\n",
-          "display_code": "model = 'gemini-2.0-flash'\n\n",
+          "code": "model = \"gemini-2.0-flash\"\n\n",
+          "display_code": "model = \"gemini-2.0-flash\"\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 26,
+          "start_line": 30,
           "line_range": [
-            26,
-            27
+            30,
+            31
           ]
         },
         {
@@ -6379,14 +6379,14 @@
           "display_code": "",
           "annotation": "Construct the prompt",
           "is_comment": true,
-          "start_line": 28,
+          "start_line": 32,
           "line_range": [
-            28,
-            28
+            32,
+            32
           ],
           "target_line_range": [
-            29,
-            30
+            33,
+            34
           ]
         },
         {
@@ -6394,10 +6394,10 @@
           "display_code": "prompt = \"Tell me a funny story about a cat trying to catch a laser pointer.\"\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 29,
+          "start_line": 33,
           "line_range": [
-            29,
-            30
+            33,
+            34
           ]
         },
         {
@@ -6405,25 +6405,25 @@
           "display_code": "",
           "annotation": "Attempt text generation with retry logic\n",
           "is_comment": true,
-          "start_line": 31,
+          "start_line": 35,
           "line_range": [
-            31,
-            33
+            35,
+            37
           ],
           "target_line_range": [
-            34,
-            41
+            38,
+            42
           ]
         },
         {
-          "code": "try:\n    response = client.models.generate_content(\n        model=model,\n        contents=prompt\n    )\n    print(response.text)\nexcept genai.errors.APIError as e:\n    print(f\"An error occurred: {e}\")\n",
-          "display_code": "try:\n    response = client.models.generate_content(\n        model=model,\n        contents=prompt\n    )\n    print(response.text)\nexcept genai.errors.APIError as e:\n    print(f\"An error occurred: {e}\")\n",
+          "code": "try:\n    response = client.models.generate_content(model=model, contents=prompt)\n    print(response.text)\nexcept genai.errors.APIError as e:\n    print(f\"An error occurred: {e}\")\n",
+          "display_code": "try:\n    response = client.models.generate_content(model=model, contents=prompt)\n    print(response.text)\nexcept genai.errors.APIError as e:\n    print(f\"An error occurred: {e}\")\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 34,
+          "start_line": 38,
           "line_range": [
-            34,
-            41
+            38,
+            42
           ]
         }
       ],
