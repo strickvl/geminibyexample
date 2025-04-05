@@ -3548,7 +3548,7 @@
     },
     {
       "id": "018-structured-data-extraction",
-      "title": "Extract structured data from a PDF invoice",
+      "title": "Extract structured data from a PDF",
       "description": "This example demonstrates how to extract structured data from a PDF invoice using the Gemini API and Pydantic.",
       "order": 18,
       "code_segments": [
@@ -3564,9 +3564,9 @@
           ]
         },
         {
-          "code": "# Import necessary libraries\n",
+          "code": "# Import necessary libraries. You'll need Pydantic for this one.\n",
           "display_code": "",
-          "annotation": "Import necessary libraries",
+          "annotation": "Import necessary libraries. You'll need Pydantic for this one.",
           "is_comment": true,
           "start_line": 4,
           "line_range": [
@@ -3575,18 +3575,18 @@
           ],
           "target_line_range": [
             5,
-            11
+            14
           ]
         },
         {
-          "code": "import os\nimport requests\nimport json\nfrom pydantic import BaseModel\nfrom typing import List\nfrom google import genai\n\n",
-          "display_code": "import os\nimport requests\nimport json\nfrom pydantic import BaseModel\nfrom typing import List\nfrom google import genai\n\n",
+          "code": "import os\nimport requests\nimport json\nimport re\nfrom pydantic import BaseModel, Field\nfrom typing import List, Union\nfrom google import genai\nfrom google.genai import types\n\n\n",
+          "display_code": "import os\nimport requests\nimport json\nimport re\nfrom pydantic import BaseModel, Field\nfrom typing import List, Union\nfrom google import genai\nfrom google.genai import types\n\n\n",
           "annotation": "",
           "is_comment": false,
           "start_line": 5,
           "line_range": [
             5,
-            11
+            14
           ]
         },
         {
@@ -3594,40 +3594,40 @@
           "display_code": "",
           "annotation": "Define Pydantic models for structured data",
           "is_comment": true,
-          "start_line": 12,
+          "start_line": 15,
           "line_range": [
-            12,
-            12
+            15,
+            15
           ],
           "target_line_range": [
-            13,
-            27
+            16,
+            31
           ]
         },
         {
-          "code": "class Item(BaseModel):\n    name: str\n    price_per_kg: float\n    quantity_kg: float\n\n\nclass InvoiceContents(BaseModel):\n    sender: str\n    recipient: str\n    address: str\n    full_total: float\n    subtotal: float\n    GST: float\n    items: List[Item]\n\n",
-          "display_code": "class Item(BaseModel):\n    name: str\n    price_per_kg: float\n    quantity_kg: float\n\n\nclass InvoiceContents(BaseModel):\n    sender: str\n    recipient: str\n    address: str\n    full_total: float\n    subtotal: float\n    GST: float\n    items: List[Item]\n\n",
+          "code": "class Item(BaseModel):\n    name: str\n    price_per_kg: Union[float, str] = Field(..., alias=\"price/kg\")\n    quantity_kg: Union[float, int] = Field(..., alias=\"quantity (kg)\")\n\n\nclass InvoiceContents(BaseModel):\n    sender: str\n    recipient: str\n    address: str\n    full_total: Union[float, str]\n    subtotal: Union[float, str]\n    gst_value: Union[float, str] = Field(..., alias=\"GST\")\n    items: List[Item]\n\n\n",
+          "display_code": "class Item(BaseModel):\n    name: str\n    price_per_kg: Union[float, str] = Field(..., alias=\"price/kg\")\n    quantity_kg: Union[float, int] = Field(..., alias=\"quantity (kg)\")\n\n\nclass InvoiceContents(BaseModel):\n    sender: str\n    recipient: str\n    address: str\n    full_total: Union[float, str]\n    subtotal: Union[float, str]\n    gst_value: Union[float, str] = Field(..., alias=\"GST\")\n    items: List[Item]\n\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 13,
+          "start_line": 16,
           "line_range": [
-            13,
-            27
+            16,
+            31
           ]
         },
         {
-          "code": "# Load the PDF invoice from a URL\n# For PDFs larger than 20MB, use the Files API for uploading\n",
+          "code": "# Load the PDF invoice inline from a URL.\n# For PDFs larger than 20MB, you'll need to use the Files API for uploading\n",
           "display_code": "",
-          "annotation": "Load the PDF invoice from a URL\nFor PDFs larger than 20MB, use the Files API for uploading",
+          "annotation": "Load the PDF invoice inline from a URL.\nFor PDFs larger than 20MB, you'll need to use the Files API for uploading",
           "is_comment": true,
-          "start_line": 28,
+          "start_line": 32,
           "line_range": [
-            28,
-            29
+            32,
+            33
           ],
           "target_line_range": [
-            30,
-            34
+            34,
+            38
           ]
         },
         {
@@ -3635,10 +3635,10 @@
           "display_code": "pdf_url = \"https://www.princexml.com/samples/invoice/invoicesample.pdf\"\nresponse = requests.get(pdf_url)\nresponse.raise_for_status()  # Ensure the download was successful\npdf_data = response.content\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 30,
+          "start_line": 34,
           "line_range": [
-            30,
-            34
+            34,
+            38
           ]
         },
         {
@@ -3646,14 +3646,14 @@
           "display_code": "",
           "annotation": "Initialize the Gemini client with your API key",
           "is_comment": true,
-          "start_line": 35,
+          "start_line": 39,
           "line_range": [
-            35,
-            35
+            39,
+            39
           ],
           "target_line_range": [
-            36,
-            37
+            40,
+            41
           ]
         },
         {
@@ -3661,62 +3661,36 @@
           "display_code": "client = genai.Client(api_key=os.environ.get(\"GEMINI_API_KEY\", \"YOUR_API_KEY\"))\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 36,
+          "start_line": 40,
           "line_range": [
-            36,
-            37
-          ]
-        },
-        {
-          "code": "# Configure the model for structured output\n",
-          "display_code": "",
-          "annotation": "Configure the model for structured output",
-          "is_comment": true,
-          "start_line": 38,
-          "line_range": [
-            38,
-            38
-          ],
-          "target_line_range": [
-            39,
-            40
-          ]
-        },
-        {
-          "code": "model = 'gemini-2.5-pro-preview-03-25'\n\n",
-          "display_code": "model = 'gemini-2.5-pro-preview-03-25'\n\n",
-          "annotation": "",
-          "is_comment": false,
-          "start_line": 39,
-          "line_range": [
-            39,
-            40
-          ]
-        },
-        {
-          "code": "# Construct the prompt with instructions and schema information\n",
-          "display_code": "",
-          "annotation": "Construct the prompt with instructions and schema information",
-          "is_comment": true,
-          "start_line": 41,
-          "line_range": [
-            41,
+            40,
             41
-          ],
-          "target_line_range": [
-            42,
-            43
           ]
         },
         {
-          "code": "prompt_text = f\"\"\"Extract the following information from the invoice: sender, recipient, address, full_total, subtotal, GST, and a list of items (name, price/kg, quantity (kg)).\"\n\n",
-          "display_code": "prompt_text = f\"\"\"Extract the following information from the invoice: sender, recipient, address, full_total, subtotal, GST, and a list of items (name, price/kg, quantity (kg)).\"\n\n",
-          "annotation": "",
-          "is_comment": false,
+          "code": "# Configure the model for structured output.\n# Specify the prompt text.\n",
+          "display_code": "",
+          "annotation": "Configure the model for structured output.\nSpecify the prompt text.",
+          "is_comment": true,
           "start_line": 42,
           "line_range": [
             42,
             43
+          ],
+          "target_line_range": [
+            44,
+            50
+          ]
+        },
+        {
+          "code": "model = \"gemini-2.5-pro-preview-03-25\"\nprompt_text = (\n    \"Extract the following information from the invoice: \"\n    \"sender, recipient, address, full_total, subtotal, GST, \"\n    \"and a list of items (name, price/kg, quantity (kg)).\"\n)\n\n",
+          "display_code": "model = \"gemini-2.5-pro-preview-03-25\"\nprompt_text = (\n    \"Extract the following information from the invoice: \"\n    \"sender, recipient, address, full_total, subtotal, GST, \"\n    \"and a list of items (name, price/kg, quantity (kg)).\"\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 44,
+          "line_range": [
+            44,
+            50
           ]
         },
         {
@@ -3724,51 +3698,77 @@
           "display_code": "",
           "annotation": "Call the Gemini API to extract structured data from the PDF",
           "is_comment": true,
-          "start_line": 44,
-          "line_range": [
-            44,
-            44
-          ],
-          "target_line_range": [
-            45,
-            50
-          ]
-        },
-        {
-          "code": "response = client.generate_content(\n    model=model,\n    contents=[pdf_data, prompt_text],\n    generation_config=genai.GenerationConfig(temperature=0.0),\n)\n\n",
-          "display_code": "response = client.generate_content(\n    model=model,\n    contents=[pdf_data, prompt_text],\n    generation_config=genai.GenerationConfig(temperature=0.0),\n)\n\n",
-          "annotation": "",
-          "is_comment": false,
-          "start_line": 45,
-          "line_range": [
-            45,
-            50
-          ]
-        },
-        {
-          "code": "# Parse the JSON response into the Pydantic model\n# Assuming the model returns a JSON string representation of the InvoiceContents\n",
-          "display_code": "",
-          "annotation": "Parse the JSON response into the Pydantic model\nAssuming the model returns a JSON string representation of the InvoiceContents",
-          "is_comment": true,
           "start_line": 51,
           "line_range": [
             51,
-            52
+            51
           ],
           "target_line_range": [
-            53,
-            55
+            52,
+            60
           ]
         },
         {
-          "code": "invoice_data = json.loads(response.text)\ninvoice = InvoiceContents(**invoice_data)\n\n",
-          "display_code": "invoice_data = json.loads(response.text)\ninvoice = InvoiceContents(**invoice_data)\n\n",
+          "code": "response = client.models.generate_content(\n    model=model,\n    contents=[\n        types.Part.from_bytes(data=pdf_data, mime_type=\"application/pdf\"),\n        prompt_text,\n    ],\n    config=genai.types.GenerateContentConfig(temperature=0.0),\n)\n\n",
+          "display_code": "response = client.models.generate_content(\n    model=model,\n    contents=[\n        types.Part.from_bytes(data=pdf_data, mime_type=\"application/pdf\"),\n        prompt_text,\n    ],\n    config=genai.types.GenerateContentConfig(temperature=0.0),\n)\n\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 53,
+          "start_line": 52,
           "line_range": [
-            53,
-            55
+            52,
+            60
+          ]
+        },
+        {
+          "code": "# Extract JSON from response text which might be formatted as a markdown code block.\n# Check if the response is a markdown code block and extract the JSON content.\n",
+          "display_code": "",
+          "annotation": "Extract JSON from response text which might be formatted as a markdown code block.\nCheck if the response is a markdown code block and extract the JSON content.",
+          "is_comment": true,
+          "start_line": 61,
+          "line_range": [
+            61,
+            62
+          ],
+          "target_line_range": [
+            63,
+            69
+          ]
+        },
+        {
+          "code": "response_text = response.text\njson_match = re.search(r\"```(?:json)?\\n(.*?)```\", response_text, re.DOTALL)\nif json_match:\n    json_str = json_match.group(1).strip()\nelse:\n    json_str = response_text.strip()\n\n",
+          "display_code": "response_text = response.text\njson_match = re.search(r\"```(?:json)?\\n(.*?)```\", response_text, re.DOTALL)\nif json_match:\n    json_str = json_match.group(1).strip()\nelse:\n    json_str = response_text.strip()\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 63,
+          "line_range": [
+            63,
+            69
+          ]
+        },
+        {
+          "code": "# Parse the JSON response into the Pydantic model\n",
+          "display_code": "",
+          "annotation": "Parse the JSON response into the Pydantic model",
+          "is_comment": true,
+          "start_line": 70,
+          "line_range": [
+            70,
+            70
+          ],
+          "target_line_range": [
+            71,
+            73
+          ]
+        },
+        {
+          "code": "invoice_data = json.loads(json_str)\ninvoice = InvoiceContents(**invoice_data)\n\n",
+          "display_code": "invoice_data = json.loads(json_str)\ninvoice = InvoiceContents(**invoice_data)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 71,
+          "line_range": [
+            71,
+            73
           ]
         },
         {
@@ -3776,14 +3776,14 @@
           "display_code": "",
           "annotation": "Print the extracted data as a JSON string",
           "is_comment": true,
-          "start_line": 56,
+          "start_line": 74,
           "line_range": [
-            56,
-            56
+            74,
+            74
           ],
           "target_line_range": [
-            57,
-            57
+            75,
+            75
           ]
         },
         {
@@ -3791,10 +3791,10 @@
           "display_code": "print(invoice.model_dump_json(indent=2))\n",
           "annotation": "",
           "is_comment": false,
-          "start_line": 57,
+          "start_line": 75,
           "line_range": [
-            57,
-            57
+            75,
+            75
           ]
         }
       ],

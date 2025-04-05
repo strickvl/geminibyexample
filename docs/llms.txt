@@ -27,7 +27,7 @@ It's organized by sections, with each example's Python code and terminal command
 * PDFs and other data types
   * PDF and CSV data analysis and summarization
   * Translate documents
-  * Extract structured data from a PDF invoice
+  * Extract structured data from a PDF
 
 ## Text basics
 
@@ -709,7 +709,7 @@ For more information, see the original documentation:
 - https://ai.google.dev/gemini-api/docs/document-processing?lang=python
 - https://ai.google.dev/gemini-api/docs/document-processing?lang=rest
 
-### Extract structured data from a PDF invoice
+### Extract structured data from a PDF
 
 This example demonstrates how to extract structured data from a PDF invoice using the Gemini API and Pydantic.
 
@@ -717,36 +717,51 @@ This example demonstrates how to extract structured data from a PDF invoice usin
 import os
 import requests
 import json
-from pydantic import BaseModel
-from typing import List
+import re
+from pydantic import BaseModel, Field
+from typing import List, Union
 from google import genai
+from google.genai import types
 class Item(BaseModel):
     name: str
-    price_per_kg: float
-    quantity_kg: float
+    price_per_kg: Union[float, str] = Field(..., alias="price/kg")
+    quantity_kg: Union[float, int] = Field(..., alias="quantity (kg)")
 
 
 class InvoiceContents(BaseModel):
     sender: str
     recipient: str
     address: str
-    full_total: float
-    subtotal: float
-    GST: float
+    full_total: Union[float, str]
+    subtotal: Union[float, str]
+    gst_value: Union[float, str] = Field(..., alias="GST")
     items: List[Item]
 pdf_url = "https://www.princexml.com/samples/invoice/invoicesample.pdf"
 response = requests.get(pdf_url)
 response.raise_for_status()  # Ensure the download was successful
 pdf_data = response.content
 client = genai.Client(api_key=os.environ.get("GEMINI_API_KEY", "YOUR_API_KEY"))
-model = 'gemini-2.5-pro-preview-03-25'
-prompt_text = f"""Extract the following information from the invoice: sender, recipient, address, full_total, subtotal, GST, and a list of items (name, price/kg, quantity (kg))."
-response = client.generate_content(
-    model=model,
-    contents=[pdf_data, prompt_text],
-    generation_config=genai.GenerationConfig(temperature=0.0),
+model = "gemini-2.5-pro-preview-03-25"
+prompt_text = (
+    "Extract the following information from the invoice: "
+    "sender, recipient, address, full_total, subtotal, GST, "
+    "and a list of items (name, price/kg, quantity (kg))."
 )
-invoice_data = json.loads(response.text)
+response = client.models.generate_content(
+    model=model,
+    contents=[
+        types.Part.from_bytes(data=pdf_data, mime_type="application/pdf"),
+        prompt_text,
+    ],
+    config=genai.types.GenerateContentConfig(temperature=0.0),
+)
+response_text = response.text
+json_match = re.search(r"```(?:json)?\n(.*?)```", response_text, re.DOTALL)
+if json_match:
+    json_str = json_match.group(1).strip()
+else:
+    json_str = response_text.strip()
+invoice_data = json.loads(json_str)
 invoice = InvoiceContents(**invoice_data)
 print(invoice.model_dump_json(indent=2))
 ```
