@@ -23,13 +23,16 @@ geminibyexample/
 │   ├── 001-basic-generation/
 │   │   ├── basic-generation.py  # Python code with comments
 │   │   ├── basic-generation.sh  # Shell commands and output
-│   │   └── 01-image.png         # Optional example image
-│   ├── 002-values/
+│   │   └── basic-generation.png # Optional example image
+│   ├── 002-streaming-text/
 │   └── ...
 ├── build_examples/     # Scripts to build data files
 │   └── build_examples.py
 ├── build_static_site.py # Generate static HTML site
 ├── docs/               # Generated static site (GitHub Pages)
+│   ├── llms.txt        # Simplified documentation with links
+│   ├── llms-ctx.txt    # Comprehensive documentation with code
+│   └── ...
 ├── templates/          # Site templates
 └── static/             # Static assets
 ```
@@ -53,6 +56,8 @@ open docs/index.html
 - **Annotated Code**: Line-by-line explanations paired with code
 - **Visual Examples**: Support for images to illustrate concepts
 - **Shell Commands**: Example commands with expected output
+- **AI-Ready Documentation**: Generated files (`llms.txt` and `llms-ctx.txt`) that can be used as context in AI coding tools
+- **Keyboard Navigation**: Use arrow keys to move between examples
 
 ## Working with Examples
 
@@ -87,6 +92,11 @@ This will:
 1. Process all examples and create `data/examples.json`
 2. Generate the static site in the `docs/` directory
 3. Copy all assets and images
+4. Generate two documentation files:
+   - `llms.txt`: A simplified summary with links to examples
+   - `llms-ctx.txt`: Comprehensive documentation with full code examples
+
+These text files are useful for context injection into AI tools like Cursor, Claude, or Gemini, allowing developers to ask questions about the Gemini API with these examples as context.
 
 ## Contributing
 
