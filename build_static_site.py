@@ -141,7 +141,15 @@ def generate_html_head(
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{escape(title)}</title>
     <meta name="description" content="{escape(SITE_DESCRIPTION)}">
-    <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="geminibyexample.com"
+    src="https://plausible.io/js/script.js"></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css'>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {{
+            hljs.highlightAll();
+        }});
+    </script>
 """
     if include_main_css:
         head += """    <style>
@@ -698,7 +706,7 @@ def generate_example_html(
                 # Right column (code) - without individual copy buttons
                 if code_text:
                     f.write(f"""                <div class="code">
-                    <pre><code>{escape(code_text)}</code></pre>
+                    <pre><code class="language-python">{escape(code_text)}</code></pre>
                 </div>
 """)
 
