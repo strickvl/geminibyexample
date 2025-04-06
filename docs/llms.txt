@@ -63,6 +63,7 @@ Note: A more comprehensive version of this file / documentation is available at 
 - [Concurrent requests and generation](https://geminibyexample.com/030-async-requests/): This example demonstrates how to generate text using concurrent.futures to make parallel requests to the Gemini API, with a focus on cat-related prompts..
 - [Embeddings generation](https://geminibyexample.com/031-embeddings/): This example demonstrates generating text embeddings for cat-related terms using the Gemini API..
 - [Safety settings and filters](https://geminibyexample.com/032-safety-filters/): This example demonstrates how to adjust safety settings to block content based on the probability of unsafe content..
+- [LiteLLM](https://geminibyexample.com/033-litellm/): This example demonstrates how to use the LiteLLM library to make calls to the Gemini API.
 
 ## Resources
 

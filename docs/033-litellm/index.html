@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video question answering - Gemini by Example</title>
+    <title>LiteLLM - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
     <script defer data-domain="geminibyexample.com"
     src="https://plausible.io/js/script.js"></script>
@@ -188,9 +188,9 @@
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
                 <div>
                     <div style="margin-bottom: 10px; color: #666; font-size: 0.9em;">
-                        <a href="../" style="text-decoration: none; color: #666;">Video</a>
+                        <a href="../" style="text-decoration: none; color: #666;">Miscellaneous</a>
                     </div>
-                    <h1 style="margin: 0; margin-bottom: 10px;">Video question answering</h1>
+                    <h1 style="margin: 0; margin-bottom: 10px;">LiteLLM</h1>
                 </div>
                 <div style="position: relative; margin-top: 10px;">
                     <button id="copy-all-python" style="background-color: #f1f8ff; border: 1px solid #c8e1ff; border-radius: 6px; padding: 6px 12px; font-size: 14px; color: #0366d6; cursor: pointer; display: flex; align-items: center; gap: 6px;">
@@ -203,78 +203,82 @@
                 </div>
             </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
-                This example demonstrates how to ask questions about a video using the Gemini API.
-Note: For videos larger than 20MB, you must use the File API for uploading.
+                This example demonstrates how to use the LiteLLM library to make calls to the
+Gemini API.
+It shows a simple text generation call and then shows structured output using
+a Pydantic model.
             </p>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Import the Gemini API</div>
+                    <div style='font-size: 0.9em; color: #666;'>Import the necessary libraries. Make sure that LiteLLM and Pydantic are installed.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code class="language-python">from google import genai
-from google.genai import types
-import os
-import requests</code></pre>
+                    <pre><code class="language-python">from litellm import completion
+from pydantic import BaseModel
+import json</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Initialize the Gemini client with your API key</div>
+                    <div style='font-size: 0.9em; color: #666;'>With this first example, we'll make a simple text generation call.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code class="language-python">client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
-
-video_url = &quot;https://download.samplelib.com/mp4/sample-5s.mp4&quot;</code></pre>
+                    <pre><code class="language-python">response = completion(
+    model=&quot;gemini/gemini-2.0-flash-lite&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello what is your name?&quot;}],
+)
+print(response.choices[0].message.content)</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Download the video file.
-Read the video file as bytes for inline upload.</div>
+                    <div style='font-size: 0.9em; color: #666;'>Now let's define a slightly more involved example that defines a Pydantic
+model and uses it to specify the response format.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code class="language-python">response = requests.get(video_url)
-video_bytes = response.content</code></pre>
+                    <pre><code class="language-python">class Response(BaseModel):
+    response: str
+    good_response: bool</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Create a Gemini request with the video and a question</div>
+                    <div style='font-size: 0.9em; color: #666;'>We'll use the same prompt as before, but this time we'll specify that the
+response should be a JSON object that matches the Response model.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code class="language-python">response = client.models.generate_content(
-    model=&quot;gemini-2.0-flash&quot;,
-    contents=types.Content(
-        parts=[
-            types.Part(text=&quot;Describe the tone and genre of this video.&quot;),
-            types.Part(inline_data=types.Blob(data=video_bytes, mime_type=&quot;video/mp4&quot;)),
-        ]
-    ),
+                    <pre><code class="language-python">response = completion(
+    model=&quot;gemini/gemini-2.0-flash-lite&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello what is your name?&quot;}],
+    response_format={
+        &quot;type&quot;: &quot;json_object&quot;,
+        &quot;response_schema&quot;: Response.model_json_schema(),
+    },
 )</code></pre>
                 </div>
             </div>
             <hr>
             <div class="row">
                 <div class="docs">
-                    <div style='font-size: 0.9em; color: #666;'>Print the model's response</div>
+                    <div style='font-size: 0.9em; color: #666;'>The response is a JSON object that matches the Response model.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code class="language-python">print(response.text)</code></pre>
+                    <pre><code class="language-python">print(json.loads(response.choices[0].message.content))</code></pre>
                 </div>
             </div>
             <hr>
             <h2>Running the Example</h2>
             <div class="row">
                 <div class="docs" style='font-size: 0.9em; color: #666;'>
-                    First, install the Google Generative AI library
+                    First, install the LiteLLM and Pydantic libraries
                 </div>
                 <div class="code">
                     <div class="buttons">
@@ -282,7 +286,7 @@ video_bytes = response.content</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">pip install litellm pydantic</span></span>
 </code></pre>
                 </div>
             </div>
@@ -296,24 +300,20 @@ video_bytes = response.content</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">python video_question_answering.py</span></span>
-Certainly! Here&#x27;s a description of the tone and genre of the video clip:
-**Genre:**  Travel or scenery/ambient video
-**Tone:** Relaxed, peaceful, and observational. The video presents a serene view of a park next to a busy street. The presence of nature with the sounds of the city creates a tranquil atmosphere.</code></pre>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">python litellm.py</span></span>
+I am a large language model, trained by Google. I don&#x27;t have a name in the traditional sense. You can just call me by what I am!
+{&#x27;good_response&#x27;: False, &#x27;response&#x27;: &quot;I am a large language model, I don&#x27;t have a name.&quot;}</code></pre>
                 </div>
             </div>
             <hr>
             <h4>Further Information</h4>
             <ul style="font-size: 0.9em;">
-                <li><a href="https://ai.google.dev/gemini-api/docs/vision?lang=python#prompting-video"
+                <li><a href="https://litellm.vercel.app/docs/providers/gemini"
                          target="_blank">Gemini docs link 1</a></li>
             </ul>
             <div class="navigation">
                 <p class="prev">
-                    <span>← Previous:</span> <a href="../011-audio-summarization/">Audio summarization</a>
-                </p>
-                <p class="next">
-                    <span>Next:</span> <a href="../013-video-summarization/">Video summarization</a> →
+                    <span>← Previous:</span> <a href="../032-safety-filters/">Safety settings and filters</a>
                 </p>
             </div>
         </main>

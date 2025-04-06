@@ -1,0 +1,1 @@
+https://litellm.vercel.app/docs/providers/gemini

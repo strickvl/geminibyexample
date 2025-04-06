@@ -7053,6 +7053,173 @@
       ],
       "section_id": "008-misc",
       "section_title": "Miscellaneous"
+    },
+    {
+      "id": "033-litellm",
+      "title": "LiteLLM",
+      "description": "This example demonstrates how to use the LiteLLM library to make calls to the\nGemini API.\nIt shows a simple text generation call and then shows structured output using\na Pydantic model.",
+      "order": 33,
+      "code_segments": [
+        {
+          "code": "\n",
+          "display_code": "\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 6,
+          "line_range": [
+            6,
+            6
+          ]
+        },
+        {
+          "code": "# Import the necessary libraries. Make sure that LiteLLM and Pydantic are installed.\n",
+          "display_code": "",
+          "annotation": "Import the necessary libraries. Make sure that LiteLLM and Pydantic are installed.",
+          "is_comment": true,
+          "start_line": 7,
+          "line_range": [
+            7,
+            7
+          ],
+          "target_line_range": [
+            8,
+            11
+          ]
+        },
+        {
+          "code": "from litellm import completion\nfrom pydantic import BaseModel\nimport json\n\n",
+          "display_code": "from litellm import completion\nfrom pydantic import BaseModel\nimport json\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 8,
+          "line_range": [
+            8,
+            11
+          ]
+        },
+        {
+          "code": "# With this first example, we'll make a simple text generation call.\n",
+          "display_code": "",
+          "annotation": "With this first example, we'll make a simple text generation call.",
+          "is_comment": true,
+          "start_line": 12,
+          "line_range": [
+            12,
+            12
+          ],
+          "target_line_range": [
+            13,
+            19
+          ]
+        },
+        {
+          "code": "response = completion(\n    model=\"gemini/gemini-2.0-flash-lite\",\n    messages=[{\"role\": \"user\", \"content\": \"Hello what is your name?\"}],\n)\nprint(response.choices[0].message.content)\n\n\n",
+          "display_code": "response = completion(\n    model=\"gemini/gemini-2.0-flash-lite\",\n    messages=[{\"role\": \"user\", \"content\": \"Hello what is your name?\"}],\n)\nprint(response.choices[0].message.content)\n\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 13,
+          "line_range": [
+            13,
+            19
+          ]
+        },
+        {
+          "code": "# Now let's define a slightly more involved example that defines a Pydantic\n# model and uses it to specify the response format.\n",
+          "display_code": "",
+          "annotation": "Now let's define a slightly more involved example that defines a Pydantic\nmodel and uses it to specify the response format.",
+          "is_comment": true,
+          "start_line": 20,
+          "line_range": [
+            20,
+            21
+          ],
+          "target_line_range": [
+            22,
+            26
+          ]
+        },
+        {
+          "code": "class Response(BaseModel):\n    response: str\n    good_response: bool\n\n\n",
+          "display_code": "class Response(BaseModel):\n    response: str\n    good_response: bool\n\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 22,
+          "line_range": [
+            22,
+            26
+          ]
+        },
+        {
+          "code": "# We'll use the same prompt as before, but this time we'll specify that the\n# response should be a JSON object that matches the Response model.\n",
+          "display_code": "",
+          "annotation": "We'll use the same prompt as before, but this time we'll specify that the\nresponse should be a JSON object that matches the Response model.",
+          "is_comment": true,
+          "start_line": 27,
+          "line_range": [
+            27,
+            28
+          ],
+          "target_line_range": [
+            29,
+            37
+          ]
+        },
+        {
+          "code": "response = completion(\n    model=\"gemini/gemini-2.0-flash-lite\",\n    messages=[{\"role\": \"user\", \"content\": \"Hello what is your name?\"}],\n    response_format={\n        \"type\": \"json_object\",\n        \"response_schema\": Response.model_json_schema(),\n    },\n)\n\n",
+          "display_code": "response = completion(\n    model=\"gemini/gemini-2.0-flash-lite\",\n    messages=[{\"role\": \"user\", \"content\": \"Hello what is your name?\"}],\n    response_format={\n        \"type\": \"json_object\",\n        \"response_schema\": Response.model_json_schema(),\n    },\n)\n\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 29,
+          "line_range": [
+            29,
+            37
+          ]
+        },
+        {
+          "code": "# The response is a JSON object that matches the Response model.\n",
+          "display_code": "",
+          "annotation": "The response is a JSON object that matches the Response model.",
+          "is_comment": true,
+          "start_line": 38,
+          "line_range": [
+            38,
+            38
+          ],
+          "target_line_range": [
+            39,
+            39
+          ]
+        },
+        {
+          "code": "print(json.loads(response.choices[0].message.content))\n",
+          "display_code": "print(json.loads(response.choices[0].message.content))\n",
+          "annotation": "",
+          "is_comment": false,
+          "start_line": 39,
+          "line_range": [
+            39,
+            39
+          ]
+        }
+      ],
+      "shell_segments": [
+        {
+          "explanation": "First, install the LiteLLM and Pydantic libraries",
+          "command": "pip install litellm pydantic",
+          "output": ""
+        },
+        {
+          "explanation": "Then run the program with Python",
+          "command": "python litellm.py",
+          "output": "I am a large language model, trained by Google. I don't have a name in the traditional sense. You can just call me by what I am!\n{'good_response': False, 'response': \"I am a large language model, I don't have a name.\"}"
+        }
+      ],
+      "image_data": [],
+      "documentation_links": [
+        "https://litellm.vercel.app/docs/providers/gemini"
+      ],
+      "section_id": "008-misc",
+      "section_title": "Miscellaneous"
     }
   ],
   "sections": [
@@ -7149,7 +7316,8 @@
         "029-rate-limits-retries",
         "030-async-requests",
         "031-embeddings",
-        "032-safety-filters"
+        "032-safety-filters",
+        "033-litellm"
       ]
     }
   ]

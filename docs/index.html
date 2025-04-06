@@ -96,6 +96,13 @@
             overflow-x: auto;
             font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
         }
+        /* Prevent double styling from highlight.js */
+        pre code.hljs, pre code {
+            background-color: transparent;
+            padding: 0;
+            margin: 0;
+            border: none;
+        }
         .leading {
             margin-bottom: 5px;
         }
@@ -298,6 +305,9 @@
                     </div>
                 <div class="example-link">
                         <a href="032-safety-filters/">Safety settings and filters</a>
+                    </div>
+                <div class="example-link">
+                        <a href="033-litellm/">LiteLLM</a>
                     </div>
             </div>
         </main>
