@@ -38,7 +38,7 @@
             padding: 0;
         }
         .container {
-            max-width: 900px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 20px;
         }
@@ -89,26 +89,27 @@
             display: flex;
             width: 100%;
             margin-bottom: 30px;
-            gap: 30px;
+            gap: 40px;
         }
         .docs {
-            flex: 1;
+            flex: 0.75;
             min-width: 0;
             color: #444;
             line-height: 1.6;
             font-size: 1em;
         }
         .code {
-            flex: 2;
+            flex: 2.25;
             min-width: 0;
             position: relative;
         }
         pre {
             margin: 0;
-            padding: 16px;
+            padding: 20px;
             background-color: #f8f8f8;
             border-radius: 5px;
             overflow-x: auto;
+            line-height: 1.5;
         }
         /* Prevent double styling from highlight.js */
         pre code.hljs, pre code {
@@ -183,7 +184,7 @@
             color: #666;
             font-weight: normal;
         }
-        @media (max-width: 768px) {
+        @media (max-width: 900px) {
             .row {
                 flex-direction: column;
             }
