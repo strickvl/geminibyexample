@@ -234,6 +234,13 @@ def generate_html_head(
             overflow-x: auto;
             font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
         }
+        /* Prevent double styling from highlight.js */
+        pre code.hljs, pre code {
+            background-color: transparent;
+            padding: 0;
+            margin: 0;
+            border: none;
+        }
         .leading {
             margin-bottom: 5px;
         }
