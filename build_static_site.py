@@ -145,6 +145,21 @@ def generate_html_head(
     src="https://plausible.io/js/script.js"></script>
     <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css'>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js'></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/firacode@6.2.0/distr/fira_code.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
+        
+        code, pre code, .hljs {{
+            font-family: 'Fira Code', 'JetBrains Mono', monospace;
+            font-feature-settings: "liga" 1;
+        }}
+        
+        @supports (font-variation-settings: normal) {{
+            code, pre code, .hljs {{
+                font-family: 'Fira Code VF', 'JetBrains Mono', monospace;
+            }}
+        }}
+    </style>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {{
             hljs.highlightAll();
@@ -232,7 +247,6 @@ def generate_html_head(
             background-color: #f8f8f8;
             border-radius: 5px;
             overflow-x: auto;
-            font-family: 'Menlo', 'Monaco', 'Consolas', monospace;
         }
         /* Prevent double styling from highlight.js */
         pre code.hljs, pre code {
