@@ -848,13 +848,13 @@ def extract_shell_from_example(example: Dict[str, Any]) -> str:
     return shell.strip()
 
 
-def generate_llms_txt(
+def generate_llms_ctx_txt(
     examples: List[Dict[str, Any]], sections: List[Dict[str, Any]], output_dir: Path
 ) -> None:
-    """Generate llms.txt file with organized headers and full example code."""
-    logger.info("Generating llms.txt")
+    """Generate llms-ctx.txt file with organized headers and full example code."""
+    logger.info("Generating llms-ctx.txt")
 
-    output_file = output_dir / "llms.txt"
+    output_file = output_dir / "llms-ctx.txt"
 
     # Group examples by section
     examples_by_section = {}
@@ -936,7 +936,90 @@ def generate_llms_txt(
                         f.write(f"- {link}\n")
                     f.write("\n")
 
-    logger.info(f"Generated llms.txt at {output_file}")
+    logger.info(f"Generated llms-ctx.txt at {output_file}")
+
+
+def generate_llms_txt(
+    examples: List[Dict[str, Any]], sections: List[Dict[str, Any]], output_dir: Path
+) -> None:
+    """Generate llms.txt file with simplified content and links to examples."""
+    logger.info("Generating simplified llms.txt")
+
+    output_file = output_dir / "llms.txt"
+
+    # Group examples by section
+    examples_by_section = {}
+    for example in examples:
+        section_id = example.get("section_id", "999-misc")
+        if section_id not in examples_by_section:
+            examples_by_section[section_id] = []
+        examples_by_section[section_id].append(example)
+
+    with open(output_file, "w") as f:
+        # Main heading and introduction
+        f.write("# Gemini by Example\n\n")
+        f.write(
+            "> Gemini is Google's most capable AI model for generating text, code, images, and more. "
+            "Please visit the [official documentation](https://ai.google.dev/gemini-api/docs) to learn more.\n\n"
+        )
+        f.write(
+            "Gemini by Example is a hands-on introduction to Google's Gemini SDK and API using annotated code examples. "
+            "This site takes inspiration from [gobyexample.com](https://gobyexample.com), from which I learned many "
+            "things about the Go programming language.\n\n"
+        )
+        f.write(
+            "Examples here assume Python `>=3.9` and "
+            "the latest version of the Gemini SDK/API (the [`google-genai`](https://pypi.org/project/google-genai/) package). "
+            "Try to upgrade to the latest versions if something isn't working.\n\n"
+        )
+        f.write(
+            "Note: A more comprehensive version of this file / documentation is available at "
+            "[https://geminibyexample.com/llms-ctx.txt](https://geminibyexample.com/llms-ctx.txt), "
+            "which contains the full text of all examples including code samples and terminal output. "
+            "You could paste that into Cursor or Gemini or another IDE or AI model to then ask "
+            "questions and get it to generate code with the Gemini examples as its context.\n\n"
+        )
+
+        # Each section with its examples
+        for section in sorted(sections, key=lambda s: s["order"]):
+            section_examples = examples_by_section.get(section["id"], [])
+            if not section_examples:
+                continue
+
+            # Section heading
+            f.write(f"## {section['title']}\n\n")
+
+            # Each example in the section as a bullet point
+            for example in sorted(section_examples, key=lambda e: e["order"]):
+                f.write(
+                    f"- [{example['title']}](https://geminibyexample.com/{example['id']}/)"
+                )
+                if example.get("description"):
+                    # Clean description - replace newlines with spaces and get first sentence
+                    clean_desc = (
+                        example["description"].replace("\n", " ").replace("\r", " ")
+                    )
+                    while (
+                        "  " in clean_desc
+                    ):  # Remove double spaces that might result from newline replacement
+                        clean_desc = clean_desc.replace("  ", " ")
+                    desc = clean_desc.split(". ")[0] + "."
+                    f.write(f": {desc}")
+                f.write("\n")
+            f.write("\n")
+            
+        # Add footer information
+        from datetime import datetime
+        current_date = datetime.now().strftime("%B %-d, %Y")
+        
+        f.write("## Resources\n\n")
+        f.write("- [Official Gemini Documentation](https://ai.google.dev/gemini-api/docs)\n")
+        f.write("- [Source Code](https://github.com/strickvl/geminibyexample)\n")
+        f.write("- [Author's Blog](https://mlops.systems)\n")
+        f.write("- [Author's LinkedIn](https://linkedin.com/in/strickvl)\n\n")
+        f.write(f"Last updated: {current_date}\n")
+
+    logger.info(f"Generated simplified llms.txt at {output_file}")
 
 
 def clean_docs_directory(output_dir: Path) -> None:
@@ -968,11 +1051,16 @@ def clean_docs_directory(output_dir: Path) -> None:
         index_file.unlink()
         logger.info("Removed %s" % index_file)
 
-    # Remove llms.txt
+    # Remove llms.txt and llms-ctx.txt
     llms_file = output_dir / "llms.txt"
     if llms_file.exists():
         llms_file.unlink()
         logger.info("Removed %s" % llms_file)
+
+    llms_ctx_file = output_dir / "llms-ctx.txt"
+    if llms_ctx_file.exists():
+        llms_ctx_file.unlink()
+        logger.info("Removed %s" % llms_ctx_file)
 
     # Remove all example directories (folders that match the pattern \d{3}-*)
     for item in output_dir.iterdir():
@@ -1007,7 +1095,10 @@ def generate_static_site() -> None:
     # Copy static files
     copy_static_files(static_dir, output_dir)
 
-    # Generate llms.txt file
+    # Generate llms-ctx.txt file (original format with full examples)
+    generate_llms_ctx_txt(examples, sections, output_dir)
+
+    # Generate llms.txt file (simplified format with links)
     generate_llms_txt(examples, sections, output_dir)
 
     # Generate index page
