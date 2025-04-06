@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Code execution - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
-    <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="geminibyexample.com"
+    src="https://plausible.io/js/script.js"></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css'>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+    </script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
@@ -197,7 +205,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>from google import genai
+                    <pre><code class="language-python">from google import genai
 from google.genai import types
 import os
 from rich.console import Console
@@ -213,7 +221,7 @@ from rich.panel import Panel</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>console = Console()
+                    <pre><code class="language-python">console = Console()
 client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
                 </div>
             </div>
@@ -228,7 +236,7 @@ You can't install your own libraries.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>response = client.models.generate_content(
+                    <pre><code class="language-python">response = client.models.generate_content(
     model=&quot;gemini-2.0-flash&quot;,
     contents=&quot;What is the sum of the first 50 prime numbers? &quot;
     &quot;Generate and run code for the calculation, and make sure you get all 50.&quot;,
@@ -253,7 +261,7 @@ for part in response.candidates[0].content.parts:
 
                 </div>
                 <div class="code">
-                    <pre><code>language = (
+                    <pre><code class="language-python">language = (
             &quot;python&quot;
             if &quot;def &quot; in code or &quot;import &quot; in code or &quot;print(&quot; in code
             else &quot;text&quot;
@@ -295,7 +303,7 @@ for part in response.candidates[0].content.parts:
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai rich</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai rich</span></span>
 </code></pre>
                 </div>
             </div>
@@ -309,7 +317,7 @@ for part in response.candidates[0].content.parts:
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python code-execution.py</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">python code-execution.py</span></span>
 Okay, I can help you find the sum of the first 50 prime numbers. Here&#x27;s how I&#x27;ll approach this:                                       
  1 Generate a list of the first 50 prime numbers. I&#x27;ll need an efficient way to identify prime numbers. I can use the Sieve of        
    Eratosthenes method or a simpler trial division approach.                                                                          
@@ -382,7 +390,7 @@ The sum of the first 50 prime numbers is 5117.
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
         </footer>
     </div>
     <script>

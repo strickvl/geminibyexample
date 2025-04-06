@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image generation (Gemini and Imagen) - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
-    <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="geminibyexample.com"
+    src="https://plausible.io/js/script.js"></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css'>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+    </script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
@@ -196,7 +204,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>from google import genai
+                    <pre><code class="language-python">from google import genai
 from google.genai import types
 from PIL import Image
 from io import BytesIO</code></pre>
@@ -209,7 +217,7 @@ from io import BytesIO</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)</code></pre>
+                    <pre><code class="language-python">client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)</code></pre>
                 </div>
             </div>
             <hr>
@@ -220,7 +228,7 @@ Demonstrates generating an image and associated text using Gemini 2.0 Flash.</di
 
                 </div>
                 <div class="code">
-                    <pre><code>contents = (
+                    <pre><code class="language-python">contents = (
     &quot;Hi, can you create a 3D rendered image of a cat wearing a wizard hat, &quot;
     &quot;casting a spell in a magical forest?&quot;
 )
@@ -239,7 +247,7 @@ response = client.models.generate_content(
 
                 </div>
                 <div class="code">
-                    <pre><code>for part in response.candidates[0].content.parts:
+                    <pre><code class="language-python">for part in response.candidates[0].content.parts:
     if part.text is not None:
         print(part.text)
     elif part.inline_data is not None:
@@ -257,7 +265,7 @@ Imagen 3 is only available on the Paid Tier and always includes a SynthID waterm
 
                 </div>
                 <div class="code">
-                    <pre><code>response = client.models.generate_images(
+                    <pre><code class="language-python">response = client.models.generate_images(
     model=&quot;imagen-3.0-generate-002&quot;,
     prompt=&quot;A photorealistic image of a cat astronaut floating in space&quot;,
     config=types.GenerateImagesConfig(number_of_images=2),
@@ -271,7 +279,7 @@ Imagen 3 is only available on the Paid Tier and always includes a SynthID waterm
 
                 </div>
                 <div class="code">
-                    <pre><code>for i, generated_image in enumerate(response.generated_images):
+                    <pre><code class="language-python">for i, generated_image in enumerate(response.generated_images):
     image = Image.open(BytesIO(generated_image.image.image_bytes))
     image.save(f&quot;imagen-cat-astronaut-{i+1}.png&quot;)
     image.show()</code></pre>
@@ -289,7 +297,7 @@ Imagen 3 is only available on the Paid Tier and always includes a SynthID waterm
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai Pillow</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai Pillow</span></span>
 </code></pre>
                 </div>
             </div>
@@ -303,7 +311,7 @@ Imagen 3 is only available on the Paid Tier and always includes a SynthID waterm
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python image-generation.py</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">python image-generation.py</span></span>
 # Expected output (will vary based on the model):
 # (Text describing the cat wizard image from Gemini 2.0 Flash)
 # (Two image windows will open, displaying the generated cat astronaut images from Imagen 3)
@@ -336,7 +344,7 @@ Imagen 3 is only available on the Paid Tier and always includes a SynthID waterm
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
         </footer>
     </div>
     <script>

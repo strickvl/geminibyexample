@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Model Context Protocol - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
-    <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="geminibyexample.com"
+    src="https://plausible.io/js/script.js"></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css'>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+    </script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
@@ -196,7 +204,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>import asyncio
+                    <pre><code class="language-python">import asyncio
 import os
 from datetime import datetime
 from google import genai
@@ -212,7 +220,7 @@ from mcp.client.stdio import stdio_client</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
+                    <pre><code class="language-python">client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
                 </div>
             </div>
             <hr>
@@ -222,7 +230,7 @@ from mcp.client.stdio import stdio_client</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>server_params = StdioServerParameters(
+                    <pre><code class="language-python">server_params = StdioServerParameters(
     command=&quot;npx&quot;,  # Executable for the MCP server
     args=[
         &quot;-y&quot;,
@@ -239,7 +247,7 @@ from mcp.client.stdio import stdio_client</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>PROMPT = f&quot;What is the weather in Delft in {datetime.now().strftime(&#x27;%Y-%m-%d&#x27;)}?&quot;</code></pre>
+                    <pre><code class="language-python">PROMPT = f&quot;What is the weather in Delft in {datetime.now().strftime(&#x27;%Y-%m-%d&#x27;)}?&quot;</code></pre>
                 </div>
             </div>
             <hr>
@@ -251,7 +259,7 @@ We retrieve tools from the MCP session and convert them to Gemini Tool objects</
 
                 </div>
                 <div class="code">
-                    <pre><code>async def run():
+                    <pre><code class="language-python">async def run():
     async with stdio_client(server_params) as (read, write):
         async with ClientSession(read, write) as session:
             await session.initialize()
@@ -304,7 +312,7 @@ We retrieve tools from the MCP session and convert them to Gemini Tool objects</
 
                 </div>
                 <div class="code">
-                    <pre><code>asyncio.run(run())</code></pre>
+                    <pre><code class="language-python">asyncio.run(run())</code></pre>
                 </div>
             </div>
             <hr>
@@ -319,7 +327,7 @@ We retrieve tools from the MCP session and convert them to Gemini Tool objects</
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai mcp</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai mcp</span></span>
 </code></pre>
                 </div>
             </div>
@@ -333,7 +341,7 @@ We retrieve tools from the MCP session and convert them to Gemini Tool objects</
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python mcp_example.py</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">python mcp_example.py</span></span>
 Function call: id=None args={&#x27;date&#x27;: &#x27;2025-04-05&#x27;, &#x27;location&#x27;: &#x27;Delft&#x27;} name=&#x27;get_weather_forecast&#x27;
 Tool Result: {&quot;2025-04-05T00:00&quot;:11.4,&quot;2025-04-05T01:00&quot;:10.3,&quot;2025-04-05T02:00&quot;:9.8,&quot;2025-04-05T03:00&quot;:9.1,&quot;2025-04-05T04:00&quot;:8,&quot;2025-04-05T05:00&quot;:8,&quot;2025-04-05T06:00&quot;:8.3,&quot;2025-04-05T07:00&quot;:9.1,&quot;2025-04-05T08:00&quot;:11.1,&quot;2025-04-05T09:00&quot;:12.8,&quot;2025-04-05T10:00&quot;:14.3,&quot;2025-04-05T11:00&quot;:15.6,&quot;2025-04-05T12:00&quot;:16,&quot;2025-04-05T13:00&quot;:16.4,&quot;2025-04-05T14:00&quot;:17,&quot;2025-04-05T15:00&quot;:16.6,&quot;2025-04-05T16:00&quot;:16.1,&quot;2025-04-05T17:00&quot;:15,&quot;2025-04-05T18:00&quot;:13.5,&quot;2025-04-05T19:00&quot;:11.9,&quot;2025-04-05T20:00&quot;:11.1,&quot;2025-04-05T21:00&quot;:10.7,&quot;2025-04-05T22:00&quot;:10.1,&quot;2025-04-05T23:00&quot;:9.3}</code></pre>
                 </div>
@@ -354,7 +362,7 @@ Tool Result: {&quot;2025-04-05T00:00&quot;:11.4,&quot;2025-04-05T01:00&quot;:10.
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
         </footer>
     </div>
     <script>

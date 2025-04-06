@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Safety settings and filters - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
-    <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="geminibyexample.com"
+    src="https://plausible.io/js/script.js"></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css'>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+    </script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
@@ -196,7 +204,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>from google import genai
+                    <pre><code class="language-python">from google import genai
 from google.genai import types
 import os</code></pre>
                 </div>
@@ -208,7 +216,7 @@ import os</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
+                    <pre><code class="language-python">client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
                 </div>
             </div>
             <hr>
@@ -223,7 +231,7 @@ models only support these specific harm categories.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>safety_settings = [
+                    <pre><code class="language-python">safety_settings = [
     {
         &quot;category&quot;: types.HarmCategory.HARM_CATEGORY_HATE_SPEECH,
         &quot;threshold&quot;: types.HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
@@ -242,7 +250,7 @@ models only support these specific harm categories.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>generation_config = types.GenerateContentConfig(safety_settings=safety_settings)</code></pre>
+                    <pre><code class="language-python">generation_config = types.GenerateContentConfig(safety_settings=safety_settings)</code></pre>
                 </div>
             </div>
             <hr>
@@ -252,7 +260,7 @@ models only support these specific harm categories.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>response = client.models.generate_content(
+                    <pre><code class="language-python">response = client.models.generate_content(
     model=&quot;gemini-2.0-flash-lite&quot;,
     contents=&quot;Write something that could be interpreted as offensive.&quot;,
     config=generation_config,
@@ -269,7 +277,7 @@ I hope you get the idea, though, about how to use this.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>if (
+                    <pre><code class="language-python">if (
     hasattr(response, &quot;prompt_feedback&quot;)
     and response.prompt_feedback
     and hasattr(response.prompt_feedback, &quot;block_reason&quot;)
@@ -291,7 +299,7 @@ else:
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai</span></span>
 </code></pre>
                 </div>
             </div>
@@ -305,7 +313,7 @@ else:
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python safety-settings.py</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">python safety-settings.py</span></span>
 I am programmed to be a harmless AI assistant. I am unable to provide responses that are offensive or discriminatory.</code></pre>
                 </div>
             </div>
@@ -322,7 +330,7 @@ I am programmed to be a harmless AI assistant. I am unable to provide responses 
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
         </footer>
     </div>
     <script>

@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Context caching - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
-    <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="geminibyexample.com"
+    src="https://plausible.io/js/script.js"></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css'>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+    </script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
@@ -198,7 +206,7 @@ This can reduce costs when repeatedly referencing the same content.
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
+                    <pre><code class="language-python">client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
                 </div>
             </div>
             <hr>
@@ -209,7 +217,7 @@ Note: Must use explicit version suffix (-001) for caching</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>model_id = &quot;gemini-1.5-flash-001&quot;</code></pre>
+                    <pre><code class="language-python">model_id = &quot;gemini-1.5-flash-001&quot;</code></pre>
                 </div>
             </div>
             <hr>
@@ -220,7 +228,7 @@ For this example, we assume the document is in markdown format.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>response = requests.get(&quot;https://zenml.io/llms.txt&quot;)
+                    <pre><code class="language-python">response = requests.get(&quot;https://zenml.io/llms.txt&quot;)
 response.raise_for_status()  # Raise an exception for HTTP errors
 api_docs = response.text</code></pre>
                 </div>
@@ -232,7 +240,7 @@ api_docs = response.text</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>cache = client.caches.create(
+                    <pre><code class="language-python">cache = client.caches.create(
     model=model_id,
     config=CreateCachedContentConfig(
         display_name=&quot;ZenML LLMs.txt Documentation Cache&quot;,  # Used to identify the cache
@@ -254,7 +262,7 @@ api_docs = response.text</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>print(f&quot;Cache created with name: {cache.name}&quot;)
+                    <pre><code class="language-python">print(f&quot;Cache created with name: {cache.name}&quot;)
 print(f&quot;Cached token count: {cache.usage_metadata.total_token_count}&quot;)
 print(f&quot;Cache expires at: {cache.expire_time}&quot;)</code></pre>
                 </div>
@@ -266,7 +274,7 @@ print(f&quot;Cache expires at: {cache.expire_time}&quot;)</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>queries = [
+                    <pre><code class="language-python">queries = [
     &quot;What are the recommended use cases for ZenML&#x27;s pipeline orchestration?&quot;,
     &quot;How does ZenML integrate with cloud providers?&quot;,
 ]</code></pre>
@@ -279,7 +287,7 @@ print(f&quot;Cache expires at: {cache.expire_time}&quot;)</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>for query in queries:
+                    <pre><code class="language-python">for query in queries:
     print(f&quot;\nQuery: {query}&quot;)</code></pre>
                 </div>
             </div>
@@ -290,7 +298,7 @@ print(f&quot;Cache expires at: {cache.expire_time}&quot;)</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>response = client.models.generate_content(
+                    <pre><code class="language-python">response = client.models.generate_content(
         model=model_id,
         contents=query,
         config=GenerateContentConfig(cached_content=cache.name),
@@ -304,7 +312,7 @@ print(f&quot;Cache expires at: {cache.expire_time}&quot;)</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>print(f&quot;Total tokens: {response.usage_metadata.total_token_count}&quot;)
+                    <pre><code class="language-python">print(f&quot;Total tokens: {response.usage_metadata.total_token_count}&quot;)
     print(f&quot;Cached tokens: {response.usage_metadata.cached_content_token_count}&quot;)
     print(f&quot;Output tokens: {response.usage_metadata.candidates_token_count}&quot;)</code></pre>
                 </div>
@@ -316,7 +324,7 @@ print(f&quot;Cache expires at: {cache.expire_time}&quot;)</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>print(f&quot;Response: {response.text}...&quot;)
+                    <pre><code class="language-python">print(f&quot;Response: {response.text}...&quot;)
 
     time.sleep(1)  # Short delay between requests</code></pre>
                 </div>
@@ -328,7 +336,7 @@ print(f&quot;Cache expires at: {cache.expire_time}&quot;)</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>client.caches.delete(name=cache.name)</code></pre>
+                    <pre><code class="language-python">client.caches.delete(name=cache.name)</code></pre>
                 </div>
             </div>
             <hr>
@@ -343,7 +351,7 @@ print(f&quot;Cache expires at: {cache.expire_time}&quot;)</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai</span></span>
 </code></pre>
                 </div>
             </div>
@@ -357,7 +365,7 @@ print(f&quot;Cache expires at: {cache.expire_time}&quot;)</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python context-caching.py</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">python context-caching.py</span></span>
 Cache created with name: cachedContents/n8upgecthnz7
 Cached token count: 107203
 Cache expires at: 2025-04-05 20:21:48.818511+00:00
@@ -405,7 +413,7 @@ These components allow you to run pipelines on cloud infrastructure, enabling yo
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
         </footer>
     </div>
     <script>

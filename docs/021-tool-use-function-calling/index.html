@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Function calling &amp; tool use - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
-    <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="geminibyexample.com"
+    src="https://plausible.io/js/script.js"></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css'>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+    </script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
@@ -196,7 +204,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>import os
+                    <pre><code class="language-python">import os
 from datetime import datetime
 from google import genai
 from google.genai import types</code></pre>
@@ -210,7 +218,7 @@ In a real application, this would call a weather API service like OpenWeatherMap
 
                 </div>
                 <div class="code">
-                    <pre><code>def get_current_temperature(location: str) -&gt; dict:
+                    <pre><code class="language-python">def get_current_temperature(location: str) -&gt; dict:
     &quot;&quot;&quot;Gets the current temperature for a given location.
 
     Note: This is a simplified mock implementation. In a real application,
@@ -240,7 +248,7 @@ For this example, we're using hard-coded busy slots.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>def check_appointment_availability(date: str, time: str) -&gt; dict:
+                    <pre><code class="language-python">def check_appointment_availability(date: str, time: str) -&gt; dict:
     &quot;&quot;&quot;Checks if there&#x27;s availability for an appointment at the given date and time.&quot;&quot;&quot;
     busy_slots = [
         {&quot;date&quot;: &quot;2024-07-04&quot;, &quot;times&quot;: [&quot;14:00&quot;, &quot;15:00&quot;, &quot;16:00&quot;]},
@@ -284,7 +292,7 @@ For this example, we're using hard-coded busy slots.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>print(&quot;\n--- Example 1: Basic Function Calling ---\n&quot;)</code></pre>
+                    <pre><code class="language-python">print(&quot;\n--- Example 1: Basic Function Calling ---\n&quot;)</code></pre>
                 </div>
             </div>
             <hr>
@@ -294,7 +302,7 @@ For this example, we're using hard-coded busy slots.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>weather_function = {
+                    <pre><code class="language-python">weather_function = {
     &quot;name&quot;: &quot;get_current_temperature&quot;,
     &quot;description&quot;: &quot;Gets the current temperature for a given location.&quot;,
     &quot;parameters&quot;: {
@@ -317,7 +325,7 @@ For this example, we're using hard-coded busy slots.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+                    <pre><code class="language-python">client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
 tools = types.Tool(function_declarations=[weather_function])
 config = types.GenerateContentConfig(tools=[tools])</code></pre>
                 </div>
@@ -329,7 +337,7 @@ config = types.GenerateContentConfig(tools=[tools])</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>response = client.models.generate_content(
+                    <pre><code class="language-python">response = client.models.generate_content(
     model=&quot;gemini-2.0-flash-lite&quot;,
     contents=&quot;What&#x27;s the temperature in London?&quot;,
     config=config,
@@ -344,7 +352,7 @@ Assumes Gemini will always respond with a function call.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>function_call = response.candidates[0].content.parts[0].function_call
+                    <pre><code class="language-python">function_call = response.candidates[0].content.parts[0].function_call
 print(f&quot;Function to call: {function_call.name}&quot;)
 print(f&quot;Arguments: {function_call.args}&quot;)</code></pre>
                 </div>
@@ -356,7 +364,7 @@ print(f&quot;Arguments: {function_call.args}&quot;)</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>result = get_current_temperature(**function_call.args)
+                    <pre><code class="language-python">result = get_current_temperature(**function_call.args)
 print(f&quot;Function result: {result}&quot;)</code></pre>
                 </div>
             </div>
@@ -367,7 +375,7 @@ print(f&quot;Function result: {result}&quot;)</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>response = client.models.generate_content(
+                    <pre><code class="language-python">response = client.models.generate_content(
     model=&quot;gemini-2.0-flash&quot;,
     contents=[
         {
@@ -392,7 +400,7 @@ print(f&quot;Model&#x27;s final response: {response.text}&quot;)</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>print(&quot;\n--- Example 2: Parallel Function Calling (Weather and Appointments) ---\n&quot;)</code></pre>
+                    <pre><code class="language-python">print(&quot;\n--- Example 2: Parallel Function Calling (Weather and Appointments) ---\n&quot;)</code></pre>
                 </div>
             </div>
             <hr>
@@ -402,7 +410,7 @@ print(f&quot;Model&#x27;s final response: {response.text}&quot;)</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>weather_function = {
+                    <pre><code class="language-python">weather_function = {
     &quot;name&quot;: &quot;get_current_temperature&quot;,
     &quot;description&quot;: &quot;Gets the current temperature for a given location.&quot;,
     &quot;parameters&quot;: {
@@ -425,7 +433,7 @@ print(f&quot;Model&#x27;s final response: {response.text}&quot;)</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>appointment_function = {
+                    <pre><code class="language-python">appointment_function = {
     &quot;name&quot;: &quot;check_appointment_availability&quot;,
     &quot;description&quot;: &quot;Checks if there&#x27;s availability for an appointment at the given date and time.&quot;,
     &quot;parameters&quot;: {
@@ -452,7 +460,7 @@ print(f&quot;Model&#x27;s final response: {response.text}&quot;)</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+                    <pre><code class="language-python">client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
 tools = [types.Tool(function_declarations=[weather_function, appointment_function])]</code></pre>
                 </div>
             </div>
@@ -463,7 +471,7 @@ tools = [types.Tool(function_declarations=[weather_function, appointment_functio
 
                 </div>
                 <div class="code">
-                    <pre><code>config = {
+                    <pre><code class="language-python">config = {
     &quot;tools&quot;: tools,
     &quot;temperature&quot;: 0.1,
 }</code></pre>
@@ -476,7 +484,7 @@ tools = [types.Tool(function_declarations=[weather_function, appointment_functio
 
                 </div>
                 <div class="code">
-                    <pre><code>chat = client.chats.create(model=&quot;gemini-2.0-flash-lite&quot;, config=config)
+                    <pre><code class="language-python">chat = client.chats.create(model=&quot;gemini-2.0-flash-lite&quot;, config=config)
 response = chat.send_message(
     &quot;I&#x27;m planning to visit Paris on July 4th at 2 PM. What&#x27;s the weather like there and is that slot available for an appointment?&quot;
 )</code></pre>
@@ -489,7 +497,7 @@ response = chat.send_message(
 
                 </div>
                 <div class="code">
-                    <pre><code>results = {}</code></pre>
+                    <pre><code class="language-python">results = {}</code></pre>
                 </div>
             </div>
             <hr>
@@ -500,7 +508,7 @@ Assumes Gemini will always respond with function calls.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>for fn in response.function_calls:
+                    <pre><code class="language-python">for fn in response.function_calls:
     args_str = &quot;, &quot;.join(f&quot;{key}={val}&quot; for key, val in fn.args.items())
     print(f&quot;{fn.name}({args_str})&quot;)</code></pre>
                 </div>
@@ -512,7 +520,7 @@ Assumes Gemini will always respond with function calls.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>if fn.name == &quot;get_current_temperature&quot;:
+                    <pre><code class="language-python">if fn.name == &quot;get_current_temperature&quot;:
         result = get_current_temperature(**fn.args)
     elif fn.name == &quot;check_appointment_availability&quot;:
         result = check_appointment_availability(**fn.args)
@@ -527,7 +535,7 @@ Assumes Gemini will always respond with function calls.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>results[fn.name] = result
+                    <pre><code class="language-python">results[fn.name] = result
     print(f&quot;Result: {result}\n&quot;)</code></pre>
                 </div>
             </div>
@@ -538,7 +546,7 @@ Assumes Gemini will always respond with function calls.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>function_responses = []
+                    <pre><code class="language-python">function_responses = []
 for fn_name, result in results.items():
     function_responses.append({&quot;name&quot;: fn_name, &quot;response&quot;: result})</code></pre>
                 </div>
@@ -550,7 +558,7 @@ for fn_name, result in results.items():
 
                 </div>
                 <div class="code">
-                    <pre><code>if function_responses:
+                    <pre><code class="language-python">if function_responses:
     print(&quot;Sending all function results back to the model...\n&quot;)
     response = chat.send_message(str(function_responses))
     print(f&quot;Model&#x27;s final response:\n{response.text}&quot;)</code></pre>
@@ -568,7 +576,7 @@ for fn_name, result in results.items():
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai requests</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai requests</span></span>
 </code></pre>
                 </div>
             </div>
@@ -582,7 +590,7 @@ for fn_name, result in results.items():
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python function_calling_weather_calendar.py</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">python function_calling_weather_calendar.py</span></span>
 --- Example 1: Basic Function Calling ---
 Function to call: get_current_temperature
 Arguments: {&#x27;location&#x27;: &#x27;London&#x27;}
@@ -616,7 +624,7 @@ The current temperature in Paris is 18 degrees Celsius. The appointment slot on 
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
         </footer>
     </div>
     <script>

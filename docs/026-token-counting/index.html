@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Counting chat tokens - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
-    <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="geminibyexample.com"
+    src="https://plausible.io/js/script.js"></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css'>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+    </script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
@@ -196,7 +204,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>from google import genai
+                    <pre><code class="language-python">from google import genai
 from google.genai import types
 import os</code></pre>
                 </div>
@@ -208,7 +216,7 @@ import os</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
+                    <pre><code class="language-python">client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
                 </div>
             </div>
             <hr>
@@ -218,7 +226,7 @@ import os</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>chat = client.chats.create(
+                    <pre><code class="language-python">chat = client.chats.create(
     model=&quot;gemini-2.0-flash&quot;,
     history=[
         types.Content(role=&quot;user&quot;, parts=[types.Part(text=&quot;Hey there! I love cats!&quot;)]),
@@ -241,7 +249,7 @@ import os</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>token_count = client.models.count_tokens(
+                    <pre><code class="language-python">token_count = client.models.count_tokens(
     model=&quot;gemini-2.0-flash&quot;, contents=chat.get_history()
 )
 print(f&quot;Tokens in initial chat history: {token_count.total_tokens} tokens&quot;)</code></pre>
@@ -254,7 +262,7 @@ print(f&quot;Tokens in initial chat history: {token_count.total_tokens} tokens&q
 
                 </div>
                 <div class="code">
-                    <pre><code>response = chat.send_message(message=&quot;Tell me more about Ragdoll cats.&quot;)</code></pre>
+                    <pre><code class="language-python">response = chat.send_message(message=&quot;Tell me more about Ragdoll cats.&quot;)</code></pre>
                 </div>
             </div>
             <hr>
@@ -264,7 +272,7 @@ print(f&quot;Tokens in initial chat history: {token_count.total_tokens} tokens&q
 
                 </div>
                 <div class="code">
-                    <pre><code>print(
+                    <pre><code class="language-python">print(
     f&quot;Token usage for the last turn: input_tokens={response.usage_metadata.prompt_token_count}, output_tokens={response.usage_metadata.candidates_token_count}, total_tokens={response.usage_metadata.total_token_count}&quot;
 )</code></pre>
                 </div>
@@ -276,7 +284,7 @@ print(f&quot;Tokens in initial chat history: {token_count.total_tokens} tokens&q
 
                 </div>
                 <div class="code">
-                    <pre><code>extra = types.UserContent(
+                    <pre><code class="language-python">extra = types.UserContent(
     parts=[
         types.Part(
             text=&quot;Do you know Neko the cat?&quot;,
@@ -301,7 +309,7 @@ print(f&quot;Total tokens with additional question: {final_count.total_tokens} t
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai</span></span>
 </code></pre>
                 </div>
             </div>
@@ -315,7 +323,7 @@ print(f&quot;Total tokens with additional question: {final_count.total_tokens} t
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python count_chat_tokens.py</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">python count_chat_tokens.py</span></span>
 Tokens in initial chat history: 24 tokens
 Token usage for the last turn: input_tokens=30, output_tokens=843, total_tokens=873
 Total tokens with additional question: 892 tokens</code></pre>
@@ -337,7 +345,7 @@ Total tokens with additional question: 892 tokens</code></pre>
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
         </footer>
     </div>
     <script>

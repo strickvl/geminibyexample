@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rate limits and retries - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
-    <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="geminibyexample.com"
+    src="https://plausible.io/js/script.js"></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css'>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+    </script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
@@ -196,7 +204,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>def configure_retries(base_delay=1, max_delay=60, max_retries=5):
+                    <pre><code class="language-python">def configure_retries(base_delay=1, max_delay=60, max_retries=5):
     &quot;&quot;&quot;Configures exponential backoff retry strategy.&quot;&quot;&quot;
     return genai.retry.RetryConfig(
         initial_delay=base_delay,
@@ -213,7 +221,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>retry_config = configure_retries()</code></pre>
+                    <pre><code class="language-python">retry_config = configure_retries()</code></pre>
                 </div>
             </div>
             <hr>
@@ -223,7 +231,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(
+                    <pre><code class="language-python">client = genai.Client(
     api_key=os.environ.get(&quot;GEMINI_API_KEY&quot;, &quot;YOUR_API_KEY&quot;), retry_config=retry_config
 )</code></pre>
                 </div>
@@ -235,7 +243,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>model = &quot;gemini-2.0-flash&quot;</code></pre>
+                    <pre><code class="language-python">model = &quot;gemini-2.0-flash&quot;</code></pre>
                 </div>
             </div>
             <hr>
@@ -245,7 +253,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>prompt = &quot;Tell me a funny story about a cat trying to catch a laser pointer.&quot;</code></pre>
+                    <pre><code class="language-python">prompt = &quot;Tell me a funny story about a cat trying to catch a laser pointer.&quot;</code></pre>
                 </div>
             </div>
             <hr>
@@ -256,7 +264,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>try:
+                    <pre><code class="language-python">try:
     response = client.models.generate_content(model=model, contents=prompt)
     print(response.text)
 except genai.errors.APIError as e:
@@ -275,7 +283,7 @@ except genai.errors.APIError as e:
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai backoff</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai backoff</span></span>
 </code></pre>
                 </div>
             </div>
@@ -289,7 +297,7 @@ except genai.errors.APIError as e:
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python text_generation_with_retry.py</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">python text_generation_with_retry.py</span></span>
 Bartholomew Buttersworth the Third, a cat of considerable fluff and even more considerable ego, considered himself a master predator. His domain, the living room, was usually ruled with a sleepy, regal disdain.
 Until the Red Dot appeared.
 It materialized silently on the beige carpet, an insolent crimson speck challenging his authority. Bartholomew&#x27;s eyes, previously half-closed slits of judgment, snapped wide open. His tail gave an involuntary *thwack* against the armchair.
@@ -326,7 +334,7 @@ Finally, defeated and slightly dizzy, Bartholomew stalked over to his food bowl,
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
         </footer>
     </div>
     <script>

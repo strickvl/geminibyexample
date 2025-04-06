@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YouTube video summarization - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
-    <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="geminibyexample.com"
+    src="https://plausible.io/js/script.js"></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css'>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+    </script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
@@ -196,7 +204,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>from google import genai</code></pre>
+                    <pre><code class="language-python">from google import genai</code></pre>
                 </div>
             </div>
             <hr>
@@ -206,7 +214,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)</code></pre>
+                    <pre><code class="language-python">client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)</code></pre>
                 </div>
             </div>
             <hr>
@@ -216,7 +224,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>youtube_url = &quot;https://www.youtube.com/watch?v=tAP1eZYEuKA&quot;
+                    <pre><code class="language-python">youtube_url = &quot;https://www.youtube.com/watch?v=tAP1eZYEuKA&quot;
 prompt = f&quot;Summarize the content of this YouTube video: {youtube_url}&quot;</code></pre>
                 </div>
             </div>
@@ -227,7 +235,7 @@ prompt = f&quot;Summarize the content of this YouTube video: {youtube_url}&quot;
 
                 </div>
                 <div class="code">
-                    <pre><code>response = client.models.generate_content(
+                    <pre><code class="language-python">response = client.models.generate_content(
     model=&quot;gemini-2.0-flash&quot;,
     contents=[
         {
@@ -247,7 +255,7 @@ prompt = f&quot;Summarize the content of this YouTube video: {youtube_url}&quot;
 
                 </div>
                 <div class="code">
-                    <pre><code>print(response.text)</code></pre>
+                    <pre><code class="language-python">print(response.text)</code></pre>
                 </div>
             </div>
             <hr>
@@ -262,7 +270,7 @@ prompt = f&quot;Summarize the content of this YouTube video: {youtube_url}&quot;
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai</span></span>
 </code></pre>
                 </div>
             </div>
@@ -276,7 +284,7 @@ prompt = f&quot;Summarize the content of this YouTube video: {youtube_url}&quot;
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python youtube-summarization.py</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">python youtube-summarization.py</span></span>
 Sure, here is a summary of the video!
 Thomas, the father, is sharing his son Max&#x27;s story of having Alexander Disease, a rare ultra-rare genetic disorder. After having a difficult time conceiving and finally being successful and welcoming Max to their family, they were dealt a devastating blow when Max had his first seizure at a very young age. 
 Because of the seizure, Max had to go through a series of medical tests. Those tests showed that Max had Alexander Disease. After doing some research, the family was heartbroken, as the typical life expectancy for this disease is 5-10 years, and there is no treatment or cure.
@@ -299,7 +307,7 @@ Thomas started researching more in-depth by summarizing scientific papers by usi
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
         </footer>
     </div>
     <script>

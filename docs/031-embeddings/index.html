@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Embeddings generation - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
-    <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="geminibyexample.com"
+    src="https://plausible.io/js/script.js"></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css'>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+    </script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
@@ -196,7 +204,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>from google import genai
+                    <pre><code class="language-python">from google import genai
 import os</code></pre>
                 </div>
             </div>
@@ -207,7 +215,7 @@ import os</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
+                    <pre><code class="language-python">client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))</code></pre>
                 </div>
             </div>
             <hr>
@@ -217,7 +225,7 @@ import os</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>model_name = &quot;gemini-embedding-exp-03-07&quot;</code></pre>
+                    <pre><code class="language-python">model_name = &quot;gemini-embedding-exp-03-07&quot;</code></pre>
                 </div>
             </div>
             <hr>
@@ -227,7 +235,7 @@ import os</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>cats = [&quot;Siamese cat&quot;, &quot;Persian cat&quot;, &quot;cat food&quot;, &quot;cat nap&quot;]</code></pre>
+                    <pre><code class="language-python">cats = [&quot;Siamese cat&quot;, &quot;Persian cat&quot;, &quot;cat food&quot;, &quot;cat nap&quot;]</code></pre>
                 </div>
             </div>
             <hr>
@@ -237,7 +245,7 @@ import os</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>embeddings = []
+                    <pre><code class="language-python">embeddings = []
 for cat in cats:
     result = client.models.embed_content(model=model_name, contents=cat)
     embeddings.append(result.embeddings)</code></pre>
@@ -250,7 +258,7 @@ for cat in cats:
 
                 </div>
                 <div class="code">
-                    <pre><code>for i, embedding in enumerate(embeddings):
+                    <pre><code class="language-python">for i, embedding in enumerate(embeddings):
     embedding_values = embedding[0].values
     print(f&quot;Embedding for &#x27;{cats[i]}&#x27;: Length = {len(embedding_values)}&quot;)
     print(f&quot;First 10 values: {embedding_values[0:10]}&quot;)</code></pre>
@@ -268,7 +276,7 @@ for cat in cats:
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">pip install google-generative-ai</span></span>
 </code></pre>
                 </div>
             </div>
@@ -282,7 +290,7 @@ for cat in cats:
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python embeddings_example.py</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">python embeddings_example.py</span></span>
 Embedding for &#x27;Siamese cat&#x27;: Length = 3072
 First 10 values: [-0.04499451, -0.0024065399, 0.00653481, -0.079863556, -0.03341567, 0.016723568, 0.010078963, -0.012704449, -0.012259528, -0.0072885454]
 Embedding for &#x27;Persian cat&#x27;: Length = 3072
@@ -311,7 +319,7 @@ First 10 values: [-0.024834476, 0.009304642, -0.003533542, -0.08721581, -0.00680
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
         </footer>
     </div>
     <script>

@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Extract structured data from a PDF - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
-    <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="geminibyexample.com"
+    src="https://plausible.io/js/script.js"></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css'>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+    </script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
@@ -196,7 +204,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>import os
+                    <pre><code class="language-python">import os
 import requests
 import json
 import re
@@ -213,7 +221,7 @@ from google.genai import types</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>class Item(BaseModel):
+                    <pre><code class="language-python">class Item(BaseModel):
     name: str
     price_per_kg: Union[float, str] = Field(..., alias=&quot;price/kg&quot;)
     quantity_kg: Union[float, int] = Field(..., alias=&quot;quantity (kg)&quot;)
@@ -237,7 +245,7 @@ For PDFs larger than 20MB, you'll need to use the Files API for uploading</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>pdf_url = &quot;https://www.princexml.com/samples/invoice/invoicesample.pdf&quot;
+                    <pre><code class="language-python">pdf_url = &quot;https://www.princexml.com/samples/invoice/invoicesample.pdf&quot;
 response = requests.get(pdf_url)
 response.raise_for_status()  # Ensure the download was successful
 pdf_data = response.content</code></pre>
@@ -250,7 +258,7 @@ pdf_data = response.content</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=os.environ.get(&quot;GEMINI_API_KEY&quot;, &quot;YOUR_API_KEY&quot;))</code></pre>
+                    <pre><code class="language-python">client = genai.Client(api_key=os.environ.get(&quot;GEMINI_API_KEY&quot;, &quot;YOUR_API_KEY&quot;))</code></pre>
                 </div>
             </div>
             <hr>
@@ -261,7 +269,7 @@ Specify the prompt text.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>model = &quot;gemini-2.5-pro-preview-03-25&quot;
+                    <pre><code class="language-python">model = &quot;gemini-2.5-pro-preview-03-25&quot;
 prompt_text = (
     &quot;Extract the following information from the invoice: &quot;
     &quot;sender, recipient, address, full_total, subtotal, GST, &quot;
@@ -276,7 +284,7 @@ prompt_text = (
 
                 </div>
                 <div class="code">
-                    <pre><code>response = client.models.generate_content(
+                    <pre><code class="language-python">response = client.models.generate_content(
     model=model,
     contents=[
         types.Part.from_bytes(data=pdf_data, mime_type=&quot;application/pdf&quot;),
@@ -294,7 +302,7 @@ Check if the response is a markdown code block and extract the JSON content.</di
 
                 </div>
                 <div class="code">
-                    <pre><code>response_text = response.text
+                    <pre><code class="language-python">response_text = response.text
 json_match = re.search(r&quot;```(?:json)?\n(.*?)```&quot;, response_text, re.DOTALL)
 if json_match:
     json_str = json_match.group(1).strip()
@@ -309,7 +317,7 @@ else:
 
                 </div>
                 <div class="code">
-                    <pre><code>invoice_data = json.loads(json_str)
+                    <pre><code class="language-python">invoice_data = json.loads(json_str)
 invoice = InvoiceContents(**invoice_data)</code></pre>
                 </div>
             </div>
@@ -320,7 +328,7 @@ invoice = InvoiceContents(**invoice_data)</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>print(invoice.model_dump_json(indent=2))</code></pre>
+                    <pre><code class="language-python">print(invoice.model_dump_json(indent=2))</code></pre>
                 </div>
             </div>
             <hr>
@@ -335,7 +343,7 @@ invoice = InvoiceContents(**invoice_data)</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai pydantic requests</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai pydantic requests</span></span>
 </code></pre>
                 </div>
             </div>
@@ -349,7 +357,7 @@ invoice = InvoiceContents(**invoice_data)</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python structured-data-extraction.py</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">python structured-data-extraction.py</span></span>
 {
   &quot;sender&quot;: &quot;SUNNY FARM&quot;,
   &quot;recipient&quot;: &quot;Denny Gunawan&quot;,
@@ -405,7 +413,7 @@ invoice = InvoiceContents(**invoice_data)</code></pre>
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
         </footer>
     </div>
     <script>

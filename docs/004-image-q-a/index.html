@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image question answering - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
-    <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="geminibyexample.com"
+    src="https://plausible.io/js/script.js"></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css'>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+    </script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
@@ -196,7 +204,7 @@
 
                 </div>
                 <div class="code">
-                    <pre><code>from google import genai
+                    <pre><code class="language-python">from google import genai
 from google.genai import types
 import requests
 import base64</code></pre>
@@ -209,7 +217,7 @@ import base64</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)</code></pre>
+                    <pre><code class="language-python">client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)</code></pre>
                 </div>
             </div>
             <hr>
@@ -220,7 +228,7 @@ Load an image of a cat from a URL</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>image_url = &quot;https://cataas.com/cat&quot;
+                    <pre><code class="language-python">image_url = &quot;https://cataas.com/cat&quot;
 image_response = requests.get(image_url)
 image_content = image_response.content</code></pre>
                 </div>
@@ -232,7 +240,7 @@ image_content = image_response.content</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>response = client.models.generate_content(
+                    <pre><code class="language-python">response = client.models.generate_content(
     model=&quot;gemini-2.0-flash&quot;,
     contents=[&quot;What breed of cat is this?&quot;, types.Part.from_bytes(data=image_content, mime_type=&quot;image/jpeg&quot;)]
 )
@@ -248,7 +256,7 @@ Load a local image of a cat and encode it as Base64</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>with open(&quot;cat.jpg&quot;, &quot;rb&quot;) as image_file:
+                    <pre><code class="language-python">with open(&quot;cat.jpg&quot;, &quot;rb&quot;) as image_file:
     encoded_string = base64.b64encode(image_file.read())</code></pre>
                 </div>
             </div>
@@ -259,7 +267,7 @@ Load a local image of a cat and encode it as Base64</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>encoded_string = encoded_string.decode(&#x27;utf-8&#x27;)</code></pre>
+                    <pre><code class="language-python">encoded_string = encoded_string.decode(&#x27;utf-8&#x27;)</code></pre>
                 </div>
             </div>
             <hr>
@@ -269,7 +277,7 @@ Load a local image of a cat and encode it as Base64</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>response = client.models.generate_content(
+                    <pre><code class="language-python">response = client.models.generate_content(
     model=&quot;gemini-2.0-flash&quot;,
     contents=[&quot;Is this cat fluffy?&quot;, types.Part.from_bytes(data=base64.b64decode(encoded_string), mime_type=&quot;image/jpeg&quot;)]
 )
@@ -289,7 +297,7 @@ print(&quot;\nResponse from Base64 Image:\n&quot;, response.text)</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai requests</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai requests</span></span>
 </code></pre>
                 </div>
             </div>
@@ -303,7 +311,7 @@ print(&quot;\nResponse from Base64 Image:\n&quot;, response.text)</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">wget https://cataas.com/cat -O cat.jpg</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">wget https://cataas.com/cat -O cat.jpg</span></span>
 </code></pre>
                 </div>
             </div>
@@ -317,7 +325,7 @@ print(&quot;\nResponse from Base64 Image:\n&quot;, response.text)</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python gemini-cat.py</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">python gemini-cat.py</span></span>
 Response from URL Image:
  This looks like a British Shorthair cat.
 Response from Base64 Image:
@@ -340,7 +348,7 @@ Response from Base64 Image:
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
         </footer>
     </div>
     <script>

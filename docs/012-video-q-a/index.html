@@ -5,7 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video question answering - Gemini by Example</title>
     <meta name="description" content="Learn the Gemini API through annotated examples">
-    <script defer data-domain="geminibyexample.com" src="https://plausible.io/js/script.js"></script>
+    <script defer data-domain="geminibyexample.com"
+    src="https://plausible.io/js/script.js"></script>
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css'>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js'></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            hljs.highlightAll();
+        });
+    </script>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
@@ -197,7 +205,7 @@ Note: For videos larger than 20MB, you must use the File API for uploading.
 
                 </div>
                 <div class="code">
-                    <pre><code>from google import genai
+                    <pre><code class="language-python">from google import genai
 from google.genai import types
 import os
 import requests</code></pre>
@@ -210,7 +218,7 @@ import requests</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+                    <pre><code class="language-python">client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
 
 video_url = &quot;https://download.samplelib.com/mp4/sample-5s.mp4&quot;</code></pre>
                 </div>
@@ -223,7 +231,7 @@ Read the video file as bytes for inline upload.</div>
 
                 </div>
                 <div class="code">
-                    <pre><code>response = requests.get(video_url)
+                    <pre><code class="language-python">response = requests.get(video_url)
 video_bytes = response.content</code></pre>
                 </div>
             </div>
@@ -234,7 +242,7 @@ video_bytes = response.content</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>response = client.models.generate_content(
+                    <pre><code class="language-python">response = client.models.generate_content(
     model=&quot;gemini-2.0-flash&quot;,
     contents=types.Content(
         parts=[
@@ -252,7 +260,7 @@ video_bytes = response.content</code></pre>
 
                 </div>
                 <div class="code">
-                    <pre><code>print(response.text)</code></pre>
+                    <pre><code class="language-python">print(response.text)</code></pre>
                 </div>
             </div>
             <hr>
@@ -267,7 +275,7 @@ video_bytes = response.content</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">pip install google-genai</span></span>
 </code></pre>
                 </div>
             </div>
@@ -281,7 +289,7 @@ video_bytes = response.content</code></pre>
                             <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="currentColor"/>
                         </svg>
                     </div>
-                    <pre><code><span><span class="command-prompt">$ </span><span class="command-text">python video_question_answering.py</span></span>
+                    <pre><code class="language-shell"><span><span class="command-prompt">$ </span><span class="command-text">python video_question_answering.py</span></span>
 Certainly! Here&#x27;s a description of the tone and genre of the video clip:
 **Genre:**  Travel or scenery/ambient video
 **Tone:** Relaxed, peaceful, and observational. The video presents a serene view of a park next to a busy street. The presence of nature with the sounds of the city creates a tranquil atmosphere.</code></pre>
@@ -303,7 +311,7 @@ Certainly! Here&#x27;s a description of the tone and genre of the video clip:
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 5, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
         </footer>
     </div>
     <script>
