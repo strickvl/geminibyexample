@@ -214,9 +214,28 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">from google import genai
+import requests
+from PIL import Image
+from io import BytesIO
+client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)
+prompt = (
+    &quot;Return a bounding box for the cat in this image &quot;
+    &quot;in [ymin, xmin, ymax, xmax] format.&quot;
+)
+image_url = &quot;https://cataas.com/cat&quot;
+response = requests.get(image_url)
+cat_image = Image.open(BytesIO(response.content))
+response = client.models.generate_content(
+    model=&quot;gemini-1.5-pro&quot;, contents=[cat_image, prompt]
+)
+print(response.text)
+y_min = (200 / 1000) * 800  # 160
+x_min = (300 / 1000) * 1000  # 300
+y_max = (700 / 1000) * 800  # 560
+x_max = (800 / 1000) * 1000  # 800
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates how to use the Gemini API to detect an object (a cat) in an image and retrieve its bounding box coordinates.
             </p>
@@ -355,7 +374,7 @@ x_max = (800 / 1000) * 1000  # 800</code></pre>
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

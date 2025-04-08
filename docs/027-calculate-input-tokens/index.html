@@ -214,9 +214,33 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">def calculate_image_tokens(width, height):
+    if width &lt;= 384 and height &lt;= 384:
+        return 258
+    else:
+        tiles_width = (width + 767) // 768
+        tiles_height = (height + 767) // 768
+        return tiles_width * tiles_height * 258
+def calculate_video_tokens(duration_seconds):
+    return duration_seconds * 263
+def calculate_audio_tokens(duration_seconds):
+    return duration_seconds * 32
+image_width = 600
+image_height = 400
+image_tokens = calculate_image_tokens(image_width, image_height)
+print(
+    f&quot;Image with dimensions {image_width}x{image_height} will cost {image_tokens} tokens.&quot;
+)
+
+video_duration = 10  # seconds
+video_tokens = calculate_video_tokens(video_duration)
+print(f&quot;Video with duration {video_duration} seconds will cost {video_tokens} tokens.&quot;)
+
+audio_duration = 30  # seconds
+audio_tokens = calculate_audio_tokens(audio_duration)
+print(f&quot;Audio with duration {audio_duration} seconds will cost {audio_tokens} tokens.&quot;)
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates how to calculate input tokens for different data types when using the Gemini API, including images, video, and audio.
             </p>
@@ -316,7 +340,7 @@ Audio with duration 30 seconds will cost 960 tokens.</code></pre>
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

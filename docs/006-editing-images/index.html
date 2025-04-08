@@ -214,9 +214,33 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">from google import genai
+from google.genai import types
+from PIL import Image
+import requests
+from io import BytesIO
+import os
+client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+image_url = &quot;https://cataas.com/cat&quot;
+response = requests.get(image_url)
+cat_image = Image.open(BytesIO(response.content))
+text_prompt = &quot;Please add a stylish top hat to this cat.&quot;
+model = &quot;gemini-2.0-flash-exp-image-generation&quot;
+response = client.models.generate_content(
+    model=model,
+    contents=[text_prompt, cat_image],
+    config=types.GenerateContentConfig(response_modalities=[&quot;Text&quot;, &quot;Image&quot;]),
+)
+for part in response.candidates[0].content.parts:
+    if part.text is not None:
+        print(part.text)
+    elif part.inline_data is not None:
+        print(f&quot;Received {part.inline_data.mime_type} data&quot;)
+image = Image.open(BytesIO(part.inline_data.data))
+        image.save(&quot;cat_with_hat.png&quot;)
+        print(&quot;\nImage saved as cat_with_hat.png&quot;)
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates how to edit an existing image of a cat to add a hat using the Gemini API.
             </p>
@@ -362,7 +386,7 @@ Image saved as cat_with_hat.png</code></pre>
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

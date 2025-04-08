@@ -214,9 +214,58 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">import os
+import requests
+import json
+import re
+from pydantic import BaseModel, Field
+from typing import List, Union
+from google import genai
+from google.genai import types
+class Item(BaseModel):
+    name: str
+    price_per_kg: Union[float, str] = Field(..., alias=&quot;price/kg&quot;)
+    quantity_kg: Union[float, int] = Field(..., alias=&quot;quantity (kg)&quot;)
+
+
+class InvoiceContents(BaseModel):
+    sender: str
+    recipient: str
+    address: str
+    full_total: Union[float, str]
+    subtotal: Union[float, str]
+    gst_value: Union[float, str] = Field(..., alias=&quot;GST&quot;)
+    items: List[Item]
+pdf_url = &quot;https://www.princexml.com/samples/invoice/invoicesample.pdf&quot;
+response = requests.get(pdf_url)
+response.raise_for_status()  # Ensure the download was successful
+pdf_data = response.content
+client = genai.Client(api_key=os.environ.get(&quot;GEMINI_API_KEY&quot;, &quot;YOUR_API_KEY&quot;))
+model = &quot;gemini-2.5-pro-preview-03-25&quot;
+prompt_text = (
+    &quot;Extract the following information from the invoice: &quot;
+    &quot;sender, recipient, address, full_total, subtotal, GST, &quot;
+    &quot;and a list of items (name, price/kg, quantity (kg)).&quot;
+)
+response = client.models.generate_content(
+    model=model,
+    contents=[
+        types.Part.from_bytes(data=pdf_data, mime_type=&quot;application/pdf&quot;),
+        prompt_text,
+    ],
+    config=genai.types.GenerateContentConfig(temperature=0.0),
+)
+response_text = response.text
+json_match = re.search(r&quot;```(?:json)?\n(.*?)```&quot;, response_text, re.DOTALL)
+if json_match:
+    json_str = json_match.group(1).strip()
+else:
+    json_str = response_text.strip()
+invoice_data = json.loads(json_str)
+invoice = InvoiceContents(**invoice_data)
+print(invoice.model_dump_json(indent=2))
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates how to extract structured data from a PDF invoice using the Gemini API and Pydantic.
             </p>
@@ -435,7 +484,7 @@ invoice = InvoiceContents(**invoice_data)</code></pre>
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

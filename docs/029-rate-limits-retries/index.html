@@ -214,9 +214,31 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">import google.generativeai as genai
+import google.ai.generativelanguage as glm
+import time
+import os
+def configure_retries(base_delay=1, max_delay=60, max_retries=5):
+    &quot;&quot;&quot;Configures exponential backoff retry strategy.&quot;&quot;&quot;
+    return genai.retry.RetryConfig(
+        initial_delay=base_delay,
+        max_delay=max_delay,
+        max_retries=max_retries,
+        retry_on_status_codes=[glm.Code.RESOURCE_EXHAUSTED.value],
+    )
+retry_config = configure_retries()
+client = genai.Client(
+    api_key=os.environ.get(&quot;GEMINI_API_KEY&quot;, &quot;YOUR_API_KEY&quot;), retry_config=retry_config
+)
+model = &quot;gemini-2.0-flash&quot;
+prompt = &quot;Tell me a funny story about a cat trying to catch a laser pointer.&quot;
+try:
+    response = client.models.generate_content(model=model, contents=prompt)
+    print(response.text)
+except genai.errors.APIError as e:
+    print(f&quot;An error occurred: {e}&quot;)
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates generating text with the Gemini API, handling rate limiting errors, and using exponential backoff for retries.
             </p>
@@ -356,7 +378,7 @@ Finally, defeated and slightly dizzy, Bartholomew stalked over to his food bowl,
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

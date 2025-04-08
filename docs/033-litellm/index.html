@@ -214,9 +214,28 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">from litellm import completion
+from pydantic import BaseModel
+import json
+response = completion(
+    model=&quot;gemini/gemini-2.0-flash-lite&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello what is your name?&quot;}],
+)
+print(response.choices[0].message.content)
+class Response(BaseModel):
+    response: str
+    good_response: bool
+response = completion(
+    model=&quot;gemini/gemini-2.0-flash-lite&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello what is your name?&quot;}],
+    response_format={
+        &quot;type&quot;: &quot;json_object&quot;,
+        &quot;response_schema&quot;: Response.model_json_schema(),
+    },
+)
+print(json.loads(response.choices[0].message.content))
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates how to use the LiteLLM library to make calls to the
 Gemini API.
@@ -333,7 +352,7 @@ I am a large language model, trained by Google. I don&#x27;t have a name in the 
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

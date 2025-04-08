@@ -214,9 +214,31 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">from google import genai
+from google.genai import types
+import requests
+import os
+client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+user_agent = &quot;GeminiByExample/1.0 (https://github.com/strickvl/geminibyexample; contact@example.org) python-requests/2.0&quot;
+url = &quot;https://upload.wikimedia.org/wikipedia/commons/1/1f/%22DayBreak%22_with_Jay_Young_on_the_USA_Radio_Network.ogg&quot;
+headers = {&quot;User-Agent&quot;: user_agent}
+response = requests.get(url, headers=headers)
+response.raise_for_status()  # Raise an exception for bad status codes
+audio_bytes = response.content
+response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash&quot;,
+    contents=[
+        &quot;What is this audio about?&quot;,
+        types.Part.from_bytes(
+            data=audio_bytes,
+            mime_type=&quot;audio/ogg&quot;,
+        ),
+    ],
+)
+
+print(response.text)
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates how to summarize the content of an audio file using the Gemini API.
             </p>
@@ -347,7 +369,7 @@ with home base and knowing the location of the American Red Cross in case of eme
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

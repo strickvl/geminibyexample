@@ -214,9 +214,36 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">from google import genai
+from google.genai import types
+import os
+client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+safety_settings = [
+    {
+        &quot;category&quot;: types.HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+        &quot;threshold&quot;: types.HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+    },
+    {
+        &quot;category&quot;: types.HarmCategory.HARM_CATEGORY_HARASSMENT,
+        &quot;threshold&quot;: types.HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
+    },
+]
+generation_config = types.GenerateContentConfig(safety_settings=safety_settings)
+response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash-lite&quot;,
+    contents=&quot;Write something that could be interpreted as offensive.&quot;,
+    config=generation_config,
+)
+if (
+    hasattr(response, &quot;prompt_feedback&quot;)
+    and response.prompt_feedback
+    and hasattr(response.prompt_feedback, &quot;block_reason&quot;)
+):
+    print(&quot;The prompt was blocked due to: &quot;, response.prompt_feedback.block_reason)
+else:
+    print(response.text)
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates how to adjust safety settings to block content based on the probability of unsafe content.
             </p>
@@ -355,7 +382,7 @@ I am programmed to be a harmless AI assistant. I am unable to provide responses 
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

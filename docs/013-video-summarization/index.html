@@ -214,9 +214,27 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">from google import genai
+from google.genai import types
+import os
+import requests
+client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+
+video_url = &quot;https://download.samplelib.com/mp4/sample-5s.mp4&quot;
+response = requests.get(video_url)
+video_bytes = response.content
+response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash&quot;,
+    contents=types.Content(
+        parts=[
+            types.Part(text=&quot;Summarize the content of this video.&quot;),
+            types.Part(inline_data=types.Blob(data=video_bytes, mime_type=&quot;video/mp4&quot;)),
+        ]
+    ),
+)
+print(response.text)
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates how to summarize the content of a video using the Gemini API.
 Note: For videos larger than 20MB, you must use the File API for uploading.
@@ -331,7 +349,7 @@ The video shows a park with trees next to a busy street with cars and buses pass
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

@@ -214,9 +214,52 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">from google import genai
+from google.genai.types import CreateCachedContentConfig, GenerateContentConfig
+import os
+import time
+import requests
+client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+model_id = &quot;gemini-1.5-flash-001&quot;
+response = requests.get(&quot;https://zenml.io/llms.txt&quot;)
+response.raise_for_status()  # Raise an exception for HTTP errors
+api_docs = response.text
+cache = client.caches.create(
+    model=model_id,
+    config=CreateCachedContentConfig(
+        display_name=&quot;ZenML LLMs.txt Documentation Cache&quot;,  # Used to identify the cache
+        system_instruction=(
+            &quot;You are a technical documentation expert. &quot;
+            &quot;Answer questions about the ZenML documentation provided. &quot;
+            &quot;Keep your answers concise and to the point.&quot;
+        ),
+        contents=[api_docs],
+        ttl=&quot;900s&quot;,  # Cache for 15 minutes
+    ),
+)
+print(f&quot;Cache created with name: {cache.name}&quot;)
+print(f&quot;Cached token count: {cache.usage_metadata.total_token_count}&quot;)
+print(f&quot;Cache expires at: {cache.expire_time}&quot;)
+queries = [
+    &quot;What are the recommended use cases for ZenML&#x27;s pipeline orchestration?&quot;,
+    &quot;How does ZenML integrate with cloud providers?&quot;,
+]
+for query in queries:
+    print(f&quot;\nQuery: {query}&quot;)
+response = client.models.generate_content(
+        model=model_id,
+        contents=query,
+        config=GenerateContentConfig(cached_content=cache.name),
+    )
+print(f&quot;Total tokens: {response.usage_metadata.total_token_count}&quot;)
+    print(f&quot;Cached tokens: {response.usage_metadata.cached_content_token_count}&quot;)
+    print(f&quot;Output tokens: {response.usage_metadata.candidates_token_count}&quot;)
+print(f&quot;Response: {response.text}...&quot;)
+
+    time.sleep(1)  # Short delay between requests
+client.caches.delete(name=cache.name)
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates how to use the Gemini API's context caching feature to
 efficiently query a large document multiple times without resending it with each request.
@@ -435,7 +478,7 @@ These components allow you to run pipelines on cloud infrastructure, enabling yo
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

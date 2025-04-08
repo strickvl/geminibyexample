@@ -214,9 +214,21 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">from google import genai
+import requests
+import os
+client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+url = &quot;https://raw.githubusercontent.com/zenml-io/zenml/refs/heads/main/README.md&quot;
+response = requests.get(url)
+text_content = response.text
+prompt = f&quot;Translate the following English text to Chinese: {text_content}&quot;
+model = client.models.generate_content(
+    model=&quot;gemini-2.0-flash-lite&quot;,
+    contents=prompt,
+)
+print(model.text)
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates how to load content from a URL and translate it into
 Chinese using the Gemini API.
@@ -368,7 +380,7 @@ etc...</code></pre>
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

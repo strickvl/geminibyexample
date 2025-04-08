@@ -214,9 +214,63 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">from google import genai
+import os
+import requests
+from PIL import Image
+from io import BytesIO
+import json
+import base64
+client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+prompt = &quot;&quot;&quot;
+Give the segmentation masks for the cat in the image.
+Output a JSON list of segmentation masks where each entry contains the 2D
+bounding box in the key \&quot;box_2d\&quot;, the segmentation mask in key \&quot;mask\&quot;, and
+the text label in the key \&quot;label\&quot;. Use descriptive labels.
+&quot;&quot;&quot;
+image_url = &quot;https://cataas.com/cat&quot;
+response = requests.get(image_url)
+cat_image = Image.open(BytesIO(response.content))
+original_filename = f&quot;cat_original.png&quot;
+cat_image.save(original_filename)
+print(f&quot;Original image saved as: {original_filename}&quot;)
+response = client.models.generate_content(
+    model=&quot;gemini-2.5-pro-exp-03-25&quot;, contents=[cat_image, prompt]
+)
+print(response.text)
+response_text = response.text
+if &quot;```json&quot; in response_text:
+    json_str = response_text.split(&quot;```json&quot;)[1].split(&quot;```&quot;)[0].strip()
+elif &quot;[&quot; in response_text and &quot;]&quot; in response_text:
+    start = response_text.find(&quot;[&quot;)
+    end = response_text.rfind(&quot;]&quot;) + 1
+    json_str = response_text[start:end]
+else:
+    json_str = response_text
+mask_data = json.loads(json_str)
+first_mask = mask_data[0]
+mask_base64 = first_mask.get(&quot;mask&quot;, &quot;&quot;)
+if &quot;base64,&quot; in mask_base64:
+    mask_base64 = mask_base64.split(&quot;base64,&quot;)[1]
+mask_bytes = base64.b64decode(mask_base64)
+mask_image = Image.open(BytesIO(mask_bytes))
+cat_image = cat_image.convert(&quot;RGBA&quot;)
+mask_image = mask_image.convert(&quot;L&quot;)  # Convert mask to grayscale
+overlay = Image.new(
+    &quot;RGBA&quot;, mask_image.size, (255, 0, 255, 128)
+)  # Bright pink, semi-transparent
+overlay.putalpha(mask_image)
+if overlay.size != cat_image.size:
+    overlay = overlay.resize(cat_image.size)
+result = Image.alpha_composite(cat_image, overlay)
+
+mask_filename = f&quot;cat_mask.png&quot;
+mask_image.save(mask_filename)
+
+merged_filename = f&quot;cat_with_mask.png&quot;
+result.save(merged_filename)
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates how to use the Gemini API to perform image segmentation on a picture of a cat.
             </p>
@@ -485,7 +539,7 @@ result.save(merged_filename)</code></pre>
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

@@ -214,9 +214,171 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">import os
+from datetime import datetime
+from google import genai
+from google.genai import types
+def get_current_temperature(location: str) -&gt; dict:
+    &quot;&quot;&quot;Gets the current temperature for a given location.
+
+    Note: This is a simplified mock implementation. In a real application,
+    this function would make an API call to a weather service provider.
+    &quot;&quot;&quot;
+    sample_temperatures = {
+        &quot;London&quot;: 16,
+        &quot;New York&quot;: 23,
+        &quot;Tokyo&quot;: 28,
+        &quot;Sydney&quot;: 20,
+        &quot;Paris&quot;: 18,
+        &quot;Berlin&quot;: 17,
+        &quot;Cairo&quot;: 32,
+        &quot;Moscow&quot;: 10,
+    }
+    temp = sample_temperatures.get(location, 21)
+    return {&quot;location&quot;: location, &quot;temperature&quot;: temp, &quot;unit&quot;: &quot;Celsius&quot;}
+def check_appointment_availability(date: str, time: str) -&gt; dict:
+    &quot;&quot;&quot;Checks if there&#x27;s availability for an appointment at the given date and time.&quot;&quot;&quot;
+    busy_slots = [
+        {&quot;date&quot;: &quot;2024-07-04&quot;, &quot;times&quot;: [&quot;14:00&quot;, &quot;15:00&quot;, &quot;16:00&quot;]},
+        {&quot;date&quot;: &quot;2024-07-05&quot;, &quot;times&quot;: [&quot;09:00&quot;, &quot;10:00&quot;, &quot;11:00&quot;]},
+        {&quot;date&quot;: &quot;2024-07-10&quot;, &quot;times&quot;: [&quot;13:00&quot;, &quot;14:00&quot;]},
+    ]
+
+    try:
+        datetime.strptime(date, &quot;%Y-%m-%d&quot;)
+    except ValueError:
+        return {
+            &quot;available&quot;: False,
+            &quot;error&quot;: &quot;Invalid date format. Please use YYYY-MM-DD.&quot;,
+        }
+
+    try:
+        datetime.strptime(time, &quot;%H:%M&quot;)
+    except ValueError:
+        return {
+            &quot;available&quot;: False,
+            &quot;error&quot;: &quot;Invalid time format. Please use HH:MM in 24-hour format.&quot;,
+        }
+
+    for slot in busy_slots:
+        if slot[&quot;date&quot;] == date and time in slot[&quot;times&quot;]:
+            return {
+                &quot;available&quot;: False,
+                &quot;message&quot;: f&quot;The slot on {date} at {time} is already booked.&quot;,
+            }
+
+    return {
+        &quot;available&quot;: True,
+        &quot;message&quot;: f&quot;The slot on {date} at {time} is available for booking.&quot;,
+    }
+print(&quot;\n--- Example 1: Basic Function Calling ---\n&quot;)
+weather_function = {
+    &quot;name&quot;: &quot;get_current_temperature&quot;,
+    &quot;description&quot;: &quot;Gets the current temperature for a given location.&quot;,
+    &quot;parameters&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;properties&quot;: {
+            &quot;location&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;description&quot;: &quot;The city name, e.g. San Francisco&quot;,
+            },
+        },
+        &quot;required&quot;: [&quot;location&quot;],
+    },
+}
+client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+tools = types.Tool(function_declarations=[weather_function])
+config = types.GenerateContentConfig(tools=[tools])
+response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash-lite&quot;,
+    contents=&quot;What&#x27;s the temperature in London?&quot;,
+    config=config,
+)
+function_call = response.candidates[0].content.parts[0].function_call
+print(f&quot;Function to call: {function_call.name}&quot;)
+print(f&quot;Arguments: {function_call.args}&quot;)
+result = get_current_temperature(**function_call.args)
+print(f&quot;Function result: {result}&quot;)
+response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash&quot;,
+    contents=[
+        {
+            &quot;parts&quot;: [
+                {
+                    &quot;function_response&quot;: {
+                        &quot;name&quot;: function_call.name,
+                        &quot;response&quot;: result,
+                    }
+                }
+            ]
+        }
+    ],
+)
+print(f&quot;Model&#x27;s final response: {response.text}&quot;)
+print(&quot;\n--- Example 2: Parallel Function Calling (Weather and Appointments) ---\n&quot;)
+weather_function = {
+    &quot;name&quot;: &quot;get_current_temperature&quot;,
+    &quot;description&quot;: &quot;Gets the current temperature for a given location.&quot;,
+    &quot;parameters&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;properties&quot;: {
+            &quot;location&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;description&quot;: &quot;The city name, e.g. London&quot;,
+            },
+        },
+        &quot;required&quot;: [&quot;location&quot;],
+    },
+}
+appointment_function = {
+    &quot;name&quot;: &quot;check_appointment_availability&quot;,
+    &quot;description&quot;: &quot;Checks if there&#x27;s availability for an appointment at the given date and time.&quot;,
+    &quot;parameters&quot;: {
+        &quot;type&quot;: &quot;object&quot;,
+        &quot;properties&quot;: {
+            &quot;date&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;description&quot;: &quot;Date to check (YYYY-MM-DD)&quot;,
+            },
+            &quot;time&quot;: {
+                &quot;type&quot;: &quot;string&quot;,
+                &quot;description&quot;: &quot;Time to check (HH:MM) in 24-hour format&quot;,
+            },
+        },
+        &quot;required&quot;: [&quot;date&quot;, &quot;time&quot;],
+    },
+}
+client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+tools = [types.Tool(function_declarations=[weather_function, appointment_function])]
+config = {
+    &quot;tools&quot;: tools,
+    &quot;temperature&quot;: 0.1,
+}
+chat = client.chats.create(model=&quot;gemini-2.0-flash-lite&quot;, config=config)
+response = chat.send_message(
+    &quot;I&#x27;m planning to visit Paris on July 4th at 2 PM. What&#x27;s the weather like there and is that slot available for an appointment?&quot;
+)
+results = {}
+for fn in response.function_calls:
+    args_str = &quot;, &quot;.join(f&quot;{key}={val}&quot; for key, val in fn.args.items())
+    print(f&quot;{fn.name}({args_str})&quot;)
+if fn.name == &quot;get_current_temperature&quot;:
+        result = get_current_temperature(**fn.args)
+    elif fn.name == &quot;check_appointment_availability&quot;:
+        result = check_appointment_availability(**fn.args)
+    else:
+        result = {&quot;error&quot;: f&quot;Unknown function: {fn.name}&quot;}
+results[fn.name] = result
+    print(f&quot;Result: {result}\n&quot;)
+function_responses = []
+for fn_name, result in results.items():
+    function_responses.append({&quot;name&quot;: fn_name, &quot;response&quot;: result})
+if function_responses:
+    print(&quot;Sending all function results back to the model...\n&quot;)
+    response = chat.send_message(str(function_responses))
+    print(f&quot;Model&#x27;s final response:\n{response.text}&quot;)
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates how to use the Gemini API to call external functions.
             </p>
@@ -646,7 +808,7 @@ The current temperature in Paris is 18 degrees Celsius. The appointment slot on 
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

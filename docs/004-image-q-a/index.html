@@ -214,9 +214,31 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">from google import genai
+from google.genai import types
+import requests
+import base64
+client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)
+image_url = &quot;https://cataas.com/cat&quot;
+image_response = requests.get(image_url)
+image_content = image_response.content
+response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash&quot;,
+    contents=[&quot;What breed of cat is this?&quot;, types.Part.from_bytes(data=image_content, mime_type=&quot;image/jpeg&quot;)]
+)
+
+print(&quot;Response from URL Image:\n&quot;, response.text)
+with open(&quot;cat.jpg&quot;, &quot;rb&quot;) as image_file:
+    encoded_string = base64.b64encode(image_file.read())
+encoded_string = encoded_string.decode(&#x27;utf-8&#x27;)
+response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash&quot;,
+    contents=[&quot;Is this cat fluffy?&quot;, types.Part.from_bytes(data=base64.b64decode(encoded_string), mime_type=&quot;image/jpeg&quot;)]
+)
+
+print(&quot;\nResponse from Base64 Image:\n&quot;, response.text)
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates how to use the Gemini API to analyze or understand images of cats, including using image URLs and base64 encoding.
             </p>
@@ -370,7 +392,7 @@ Response from Base64 Image:
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

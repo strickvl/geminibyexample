@@ -214,9 +214,24 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">from google import genai
+client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)
+youtube_url = &quot;https://www.youtube.com/watch?v=tAP1eZYEuKA&quot;
+prompt = f&quot;Summarize the content of this YouTube video: {youtube_url}&quot;
+response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash&quot;,
+    contents=[
+        {
+            &quot;parts&quot;: [
+                {&quot;text&quot;: &quot;Can you summarize this video?&quot;},
+                {&quot;file_data&quot;: {&quot;file_uri&quot;: youtube_url}},
+            ]
+        }
+    ],
+)
+print(response.text)
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates how to summarize a YouTube video using its URL.
             </p>
@@ -329,7 +344,7 @@ Thomas started researching more in-depth by summarizing scientific papers by usi
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

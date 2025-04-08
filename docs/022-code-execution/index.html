@@ -214,9 +214,61 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">from google import genai
+from google.genai import types
+import os
+from rich.console import Console
+from rich.markdown import Markdown
+from rich.syntax import Syntax
+from rich.panel import Panel
+console = Console()
+client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash&quot;,
+    contents=&quot;What is the sum of the first 50 prime numbers? &quot;
+    &quot;Generate and run code for the calculation, and make sure you get all 50.&quot;,
+    config=types.GenerateContentConfig(
+        tools=[types.Tool(code_execution=types.ToolCodeExecution)]
+    ),
+)
+
+
+for part in response.candidates[0].content.parts:
+    if part.text is not None:
+        console.print(Markdown(part.text))
+
+    if part.executable_code is not None:
+        code = part.executable_code.code
+language = (
+            &quot;python&quot;
+            if &quot;def &quot; in code or &quot;import &quot; in code or &quot;print(&quot; in code
+            else &quot;text&quot;
+        )
+        console.print(
+            Panel(
+                Syntax(code, language, theme=&quot;monokai&quot;, line_numbers=True),
+                title=&quot;Code&quot;,
+                border_style=&quot;blue&quot;,
+            )
+        )
+
+    if part.code_execution_result is not None:
+        console.print(
+            Panel(
+                part.code_execution_result.output,
+                title=&quot;Output&quot;,
+                border_style=&quot;green&quot;,
+            )
+        )
+
+    if part.inline_data is not None:
+        console.print(
+            &quot;[yellow]Image data available but cannot be displayed in terminal[/yellow]&quot;
+        )
+
+    console.print(&quot;---&quot;)
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates how to use the Gemini API to execute code
 (agent-style) and calculate the sum of the first 50 prime numbers.
@@ -412,7 +464,7 @@ The sum of the first 50 prime numbers is 5117.
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

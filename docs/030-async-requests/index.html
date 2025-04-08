@@ -214,9 +214,36 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">import concurrent.futures
+from google import genai
+import os
+
+
+client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+def generate_cat_fact(model):
+response = client.models.generate_content(
+        model=model,
+        contents=&quot;Tell me a fun fact about cats.&quot;,
+    )
+    return response.text
+def generate_cat_story(model):
+response = client.models.generate_content(
+        model=model,
+        contents=&quot;Write a ultra-short story about a cat who goes on an adventure.&quot;,
+    )
+    return response.text
+model = &quot;gemini-2.0-flash-lite&quot;
+with concurrent.futures.ThreadPoolExecutor() as executor:
+    fact_future = executor.submit(generate_cat_fact, model)
+    story_future = executor.submit(generate_cat_story, model)
+
+    cat_fact = fact_future.result()
+    cat_story = story_future.result()
+
+print(&quot;Cat Fact:\n&quot;, cat_fact)
+print(&quot;\nCat Story:\n&quot;, cat_story)
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates how to generate text using concurrent.futures to make parallel requests to the Gemini API, with a focus on cat-related prompts.
             </p>
@@ -358,7 +385,7 @@ Cat Fact:
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

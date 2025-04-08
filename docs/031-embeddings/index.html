@@ -214,9 +214,21 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">from google import genai
+import os
+client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+model_name = &quot;gemini-embedding-exp-03-07&quot;
+cats = [&quot;Siamese cat&quot;, &quot;Persian cat&quot;, &quot;cat food&quot;, &quot;cat nap&quot;]
+embeddings = []
+for cat in cats:
+    result = client.models.embed_content(model=model_name, contents=cat)
+    embeddings.append(result.embeddings)
+for i, embedding in enumerate(embeddings):
+    embedding_values = embedding[0].values
+    print(f&quot;Embedding for &#x27;{cats[i]}&#x27;: Length = {len(embedding_values)}&quot;)
+    print(f&quot;First 10 values: {embedding_values[0:10]}&quot;)
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates generating text embeddings for cat-related terms using the Gemini API.
             </p>
@@ -341,7 +353,7 @@ First 10 values: [-0.024834476, 0.009304642, -0.003533542, -0.08721581, -0.00680
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

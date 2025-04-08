@@ -214,9 +214,30 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">from google import genai
+from pydantic import BaseModel
+import os
+class Cat(BaseModel):
+    name: str
+    colour: str
+    special_ability: str
+client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+prompt = &quot;Generate data for 3 cats, including their name, colour and special ability.&quot;
+response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash-lite&quot;,
+    contents=prompt,
+    config={
+        &quot;response_mime_type&quot;: &quot;application/json&quot;,
+        &quot;response_schema&quot;: list[Cat],
+    },
+)
+my_cats: list[Cat] = response.parsed
+for cat in my_cats:
+    print(
+        f&quot;Name: {cat.name}, Colour: {cat.colour}, Special Ability: {cat.special_ability}&quot;
+    )
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example shows how to generate structured data using a pydantic model to represent Cats with name, colour, and special ability.
             </p>
@@ -356,7 +377,7 @@ Name: Moonshine, Colour: black and white, Special Ability: Invisible at night</c
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

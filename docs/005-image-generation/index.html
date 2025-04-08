@@ -214,9 +214,39 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">from google import genai
+from google.genai import types
+from PIL import Image
+from io import BytesIO
+client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)
+contents = (
+    &quot;Hi, can you create a 3D rendered image of a cat wearing a wizard hat, &quot;
+    &quot;casting a spell in a magical forest?&quot;
+)
+
+response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash-exp-image-generation&quot;,
+    contents=contents,
+    config=types.GenerateContentConfig(response_modalities=[&quot;Text&quot;, &quot;Image&quot;]),
+)
+for part in response.candidates[0].content.parts:
+    if part.text is not None:
+        print(part.text)
+    elif part.inline_data is not None:
+        image = Image.open(BytesIO(part.inline_data.data))
+        image.save(&quot;gemini-cat-wizard.png&quot;)
+        image.show()
+response = client.models.generate_images(
+    model=&quot;imagen-3.0-generate-002&quot;,
+    prompt=&quot;A photorealistic image of a cat astronaut floating in space&quot;,
+    config=types.GenerateImagesConfig(number_of_images=2),
+)
+for i, generated_image in enumerate(response.generated_images):
+    image = Image.open(BytesIO(generated_image.image.image_bytes))
+    image.save(f&quot;imagen-cat-astronaut-{i+1}.png&quot;)
+    image.show()
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates generating images using both Gemini 2.0 Flash and Imagen 3 models, focusing on cat-related prompts.
             </p>
@@ -366,7 +396,7 @@ Imagen 3 is only available on the Paid Tier and always includes a SynthID waterm
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

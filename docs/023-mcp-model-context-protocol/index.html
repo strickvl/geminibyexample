@@ -214,9 +214,70 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">import asyncio
+import os
+from datetime import datetime
+from google import genai
+from google.genai import types
+from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+server_params = StdioServerParameters(
+    command=&quot;npx&quot;,  # Executable for the MCP server
+    args=[
+        &quot;-y&quot;,
+        &quot;@philschmid/weather-mcp&quot;,
+    ],  # Arguments for the server (Weather MCP Server)
+    env=None,  # Optional environment variables
+)
+PROMPT = f&quot;What is the weather in Delft in {datetime.now().strftime(&#x27;%Y-%m-%d&#x27;)}?&quot;
+async def run():
+    async with stdio_client(server_params) as (read, write):
+        async with ClientSession(read, write) as session:
+            await session.initialize()
+
+            mcp_tools = await session.list_tools()
+            tools = [
+                types.Tool(
+                    function_declarations=[
+                        {
+                            &quot;name&quot;: tool.name,
+                            &quot;description&quot;: tool.description,
+                            &quot;parameters&quot;: {
+                                k: v
+                                for k, v in tool.inputSchema.items()
+                                if k not in [&quot;additionalProperties&quot;, &quot;$schema&quot;]
+                            },
+                        }
+                    ]
+                )
+                for tool in mcp_tools.tools
+            ]
+
+            response = client.models.generate_content(
+                model=&quot;gemini-2.0-flash&quot;,
+                contents=PROMPT,
+                config=types.GenerateContentConfig(
+                    temperature=0,
+                    tools=tools,
+                ),
+            )
+
+            if response.candidates[0].content.parts[0].function_call:
+                function_call = response.candidates[0].content.parts[0].function_call
+                print(f&quot;Function call: {function_call}&quot;)
+
+                result = await session.call_tool(
+                    function_call.name, arguments=function_call.args
+                )
+                print(f&quot;Tool Result: {result.content[0].text}&quot;)
+
+            else:
+                print(&quot;No function call found in the response.&quot;)
+                print(response.text)
+asyncio.run(run())
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates using a local MCP server with Gemini to get weather information.
             </p>
@@ -384,7 +445,7 @@ Tool Result: {&quot;2025-04-05T00:00&quot;:11.4,&quot;2025-04-05T01:00&quot;:10.
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

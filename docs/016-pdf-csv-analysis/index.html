@@ -214,9 +214,41 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">from google import genai
+from google.genai import types
+import httpx
+import os
+client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+pdf_url = &quot;https://www.princexml.com/samples/invoice/invoicesample.pdf&quot;
+pdf_data = httpx.get(pdf_url).content
+pdf_prompt = (
+    &quot;Identify the main companies or entities mentioned in this invoice. &quot;
+    &quot;Summarize the data.&quot;
+)
+pdf_response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash&quot;,
+    contents=[
+        types.Part.from_bytes(data=pdf_data, mime_type=&quot;application/pdf&quot;),
+        pdf_prompt,
+    ],
+)
+print(&quot;PDF Analysis Result:\n&quot;, pdf_response.text)
+csv_url = &quot;https://gist.githubusercontent.com/suellenstringer-hye/f2231b3383538bcb1a5b051c7908f5b7/raw/0f4e0733a434733cda8e749bbbf33a93c2b5bbde/test.csv&quot;
+csv_data = httpx.get(csv_url).content
+csv_prompt = &quot;Analyze this data and tell me about the contents. Summarize the data.&quot;
+csv_response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash&quot;,
+    contents=[
+        types.Part.from_bytes(
+            data=csv_data,
+            mime_type=&quot;text/csv&quot;,
+        ),
+        csv_prompt,
+    ],
+)
+print(&quot;\nCSV Analysis Result:\n&quot;, csv_response.text)
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates how to use the Gemini API to analyze data from PDF and CSV files.
             </p>
@@ -415,7 +447,7 @@ The data includes the following fields for each person:
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

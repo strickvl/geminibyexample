@@ -214,9 +214,26 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">from google import genai
+from google.genai.types import Tool, GenerateContentConfig, GoogleSearch
+import os
+client = genai.Client(api_key=os.getenv(&quot;GEMINI_API_KEY&quot;))
+model_id = &quot;gemini-2.0-flash&quot;
+google_search_tool = Tool(google_search=GoogleSearch())
+query = &quot;What films are showing in Delft on April 5, 2025, particularly at Filmhuis Lumen and Pathe cinemas?&quot;
+response = client.models.generate_content(
+    model=model_id,
+    contents=query,
+    config=GenerateContentConfig(
+        tools=[google_search_tool],
+        response_modalities=[&quot;TEXT&quot;],
+    ),
+)
+for each in response.candidates[0].content.parts:
+    print(each.text)
+print(response.candidates[0].grounding_metadata.search_entry_point.rendered_content)
+</div>
+                </div>            </div>
             <p style="margin: 20px 0 40px 0; color: #444; line-height: 1.6; font-size: 1.1em;">
                 This example demonstrates how to use the Gemini API with the Search tool to
 get grounded responses.
@@ -403,7 +420,7 @@ etc...</code></pre>
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>

@@ -214,9 +214,15 @@
                         </svg>
                         Copy All Python
                     </button>
-                    <div id="all-python-code" style="display: none;">{escape(all_python_code)}</div>
-                </div>
-            </div>
+                    <div id="all-python-code" style="display: none;">from google import genai
+client = genai.Client(api_key=&quot;YOUR_API_KEY&quot;)
+
+response = client.models.generate_content(
+    model=&quot;gemini-2.0-flash&quot;, contents=&quot;Explain how AI works in a few words&quot;
+)
+print(response.text)
+</div>
+                </div>            </div>
             <div class="row">
                 <div class="docs">
                     <div style='font-size: 0.9em; color: #666;'>Our first example demonstrates how to use the Gemini API
@@ -295,7 +301,7 @@ AI works by learning patterns from data, then using those patterns to make predi
             </div>
         </main>
         <footer>
-            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 6, 2025</span></p>
+            <p>by <a href="https://linkedin.com/in/strickvl">Alex Strick van Linschoten</a> | <a href="https://mlops.systems">Blog</a> | <a href="https://github.com/strickvl/geminibyexample">Source</a> | <span style="color: #888; font-size: 0.9em;">Last updated: April 8, 2025</span></p>
         </footer>
     </div>
     <script>
